@@ -9,6 +9,18 @@ function y=calculate_y(resonator)
     
     for j = 1 : length (resonator.mode)
         
-       % y   =   y + 1 ./( 1i * 2 * pi * 
+        mot_branch = calculate_mot_branch(resonator,j);
+        
+        Lm      =   mot_branch.Lm ;
+        Cm      =   mot_branch.Cm ;
+        Rm      =   mot_branch.Rm ;
+        
+        z_mot   =   ( 1i * 2 * pi * f * Lm ) + 1 ./ ( 1i * 2 * pi * f * Cm ) + Rm ;
+        
+        y       =   y + 1./z_mot ;
+        
     end
+    
+    y   = y + 1./ rs ;
+    
 end

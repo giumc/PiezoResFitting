@@ -25,12 +25,15 @@ classdef resonator < handle
             obj.mode.qres    =   1000;%default
             obj.mode.kt2     =   0.05;%default
         end
+        
     end
     
     methods % tools
+        
         y   =   calculate_y (resonator);
         z   =   calculate_z (resonator);
         m  =    calculate_mot_branch(resonator,index);
+        
     end
             
     methods % for dependent properties 
