@@ -33,7 +33,7 @@ classdef resonator < handle
         y   =   calculate_y (resonator);
         z   =   calculate_z (resonator);
         m  =    calculate_mot_branch(resonator,index);
-        
+        assign_touchstone(resonator);
     end
             
     methods % for dependent properties 
