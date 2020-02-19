@@ -1,0 +1,2 @@
+function assign_touchstone(resonator)
+end
