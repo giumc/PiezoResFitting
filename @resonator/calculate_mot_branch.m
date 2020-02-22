@@ -1,7 +1,7 @@
 function mot_branch=calculate_mot_branch(resonator,index)
-    fres    =   mode(index).fres;
-    q       =   mode(index).q;
-    kt2     =   mode(index). kt2;
+    fres    =   resonator.mode(index).fres;
+    q       =   resonator.mode(index).q;
+    kt2     =   resonator.mode(index). kt2;
     c0      =   resonator.c0;
     
     mot_branch.Lm   =   pi^2 / 8  / (2*pi*fres)^2 / c0 / kt2 ;

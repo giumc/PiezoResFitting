@@ -1,5 +1,11 @@
 function assign_touchstone(resonator)
 
-choice=uigetfile({'*.s1p';'*.s2p'},'Select Sparameter file');
-keyboard;
+choice=uigetfile('*.*','Select Sparameter file');
+if choice==0
+    return;
+end
+if contains(choice,'.s1p')||contains(choice,'.s2p')
+    resonator.touchstone_file=choice;
+end
+
 end
