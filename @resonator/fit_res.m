@@ -7,7 +7,7 @@ function fit_res(res)
     problem.options.Algorithm                   ='interior-point';
     problem.options.FiniteDifferenceType        ='central';
     problem.options.FunctionTolerance           =1e-6;
-    problem.options.StepTolerance               =1e-9;
+    problem.options.StepTolerance               =1e-12;
     %problem.options.OutputFcn=@(x,y,z) outputfmincon(x,y,z,circ);
 
     problem.options.UseParallel                 =0;

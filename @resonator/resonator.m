@@ -7,6 +7,7 @@ classdef resonator < handle
         rs;
         mode;
         smoothing_data=0;
+        max_samples = 20001;
     end
        
     properties (Dependent)     
@@ -104,10 +105,14 @@ classdef resonator < handle
         end
      
         function f  =   get.freq(resonator)
+            
             if isempty(resonator.touchstone_file)
                 f   =  ( 0.9 : 0.001 : 1.1 ) *1e9 ;%default
             else
                 f   =   resonator.sparam.Frequencies;
+                if length(f)>resonator.max_samples
+                    f   =   downsample(f, ceil(length(f)/resonator.max_samples));
+                end
             end
         end
         

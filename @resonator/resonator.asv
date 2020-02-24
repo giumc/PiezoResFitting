@@ -7,6 +7,7 @@ classdef resonator < handle
         rs;
         mode;
         smoothing_data=0;
+        max_samples = 1001;
     end
        
     properties (Dependent)     
@@ -21,7 +22,6 @@ classdef resonator < handle
     
     properties (Hidden, Dependent) %optimization
         opt_boundaries;
-        opt_array;
     end
     
     properties (Hidden)%graphic
@@ -52,16 +52,16 @@ classdef resonator < handle
     end
     
     methods %Tools
-
         prompt_touchstone(resonator);
-        x   =   error_function(resonator);
         fit_multimode(resonator);
         setup_plot(resonator);
         plot_data(resonator);
         c0  =   fit_c0(resonator);
         fit_res(resonator);
-        guess_coarse(resonator);
-        
+        guess_coarse(resonator);     
+        y   =   error_function(resonator,x0);
+        array_to_variables(resonator,x0);
+        x0   = variables_to_array(resonator);
     end
 
     methods (Static)
@@ -71,7 +71,7 @@ classdef resonator < handle
         end
         
         function y = normalize(x,xmin,xmax)
-            y   =   x ./ (xmax-xmin) + xmin ./ (xmax-xmin) ;
+            y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
         end
 
         function y = denormalize(x,xmin,xmax)
@@ -109,6 +109,9 @@ classdef resonator < handle
                 f   =  ( 0.9 : 0.001 : 1.1 ) *1e9 ;%default
             else
                 f   =   resonator.sparam.Frequencies;
+                if length(f)>resonator.max_samples
+                    f   =   downsample(f, ceil(length(f)/resonator.max_samples));
+                end
             end
         end
         

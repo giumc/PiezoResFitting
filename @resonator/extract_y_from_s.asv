@@ -11,8 +11,9 @@ adm_meas =[];
             adm_meas = - rfparam(ypar, 2, 1);
         end
     end
-
-    if length(adm_meas)>resonator.max_samples
-        adm_meas = downsample(adm_meas,ceil(length(adm_meas)/resonator.max_samples));
-    end
+    
+    Nmax= 1001;
+    
+    if length(adm_meas)>Nmax
+        
 end
