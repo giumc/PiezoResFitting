@@ -6,8 +6,7 @@ if choice==0
 end
 if contains(choice,'.s1p')||contains(choice,'.s2p')
     resonator.touchstone_file   =   choice;
-    y_meas                      =   resonator.y_meas;
-    freq                        =   resonator.freq;
+    resonator.guess_coarse;
     
 end
 

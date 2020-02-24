@@ -1,42 +1,9 @@
 function fit_singlemode(res)
 
-if isempty(res.sparam)
-    return;
-end
 
-freq    =   res.freq;
-if (res.smoothing_data==0)
 
-    y_meas  =   res.y_meas;
-else 
-        y_meas = res.y_smooth;
-end
-
-[~,i_max,q ] = findpeaks(abs(y_meas).^2,...
-                'WidthReference','halfheight',...
-                'SortStr','descend',...
-                'NPeaks',1);
-            
-c0_init     =   imag(y_meas(1))/(2*pi*freq(1));
-c0_min      =   1/(2*pi*mean(freq))/c0_init/50;
-c0_max      =   1/(2*pi*mean(freq))/c0_init*50;
-
-fres_init   =   freq(i_max);
-fres_max    =   max(freq);
-fres_min    =   min(freq);
-
-q_init      =   q * (freq(2)-freq(1));
-q_min       =   10;
-q_max       =   10e3;
-
-kt2_init    =   res.calculate_kt2(freq(i_max),freq(i_min));
-kt2_min     =   0;
-kt2_max     =   1;
-
-%continue from here
-
-%F = @(x) sum(abs(Yfit(x) - Ydata)).^2;
-% %F = @(x) sum(abs(20*log10(abs(Yfit(x))) - 20*log10(abs(Ydata)))).^2;
+% F = @(x) sum(abs(Yfit(x) - Ydata)).^2;
+% F = @(x) sum(abs(20*log10(abs(Yfit(x))) - 20*log10(abs(Ydata)))).^2;
 % F = @(x) sum(abs(angle(Yfit(x)) - angle(Ydata))).^2;
 % 
 % %% Optimization
