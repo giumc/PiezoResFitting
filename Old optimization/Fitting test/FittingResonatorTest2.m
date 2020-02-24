@@ -7,7 +7,10 @@ clc
 
 %[filename1, pathname] = uigetfile('.s2p','Select the S-parameter file');
 %filename = strcat(pathname, filename1);
-filename = '/Users/lcolombo/Desktop/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
+currentFolder = pwd;
+
+filename = '\Old optimization\Fitting test\R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
+filename = strcat(currentFolder,filename)
 data = read(rfdata.data, filename);
 
 freq = data.freq;

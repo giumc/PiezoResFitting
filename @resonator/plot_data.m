@@ -8,7 +8,8 @@ freq    =   r.freq;
 
 y_calc  =   r.y_calc; 
 
-y_meas  =   r.y_meas;
+y_meas  =   r.y_smooth;
+
 
 if isempty(r.figure)
     r.setup_plot;

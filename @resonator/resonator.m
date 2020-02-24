@@ -139,8 +139,6 @@ classdef resonator < handle
         end
                     
     end
-        
-        
-    
+           
 end
 
