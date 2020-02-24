@@ -8,8 +8,7 @@ classdef resonator < handle
         mode;
         smoothing_data=0;
     end
-    
-    
+       
     properties (Dependent)     
         freq;
         y_calc;

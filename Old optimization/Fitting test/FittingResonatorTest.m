@@ -7,7 +7,9 @@ clc
 
 %[filename1, pathname] = uigetfile('.s2p','Select the S-parameter file');
 %filename = strcat(pathname, filename1);
-filename = '/Users/lcolombo/Desktop/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
+currentFolder = pwd;
+filename = '\Old optimization\Fitting test\R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
+filename = strcat(currentFolder,filename)
 data = read(rfdata.data, filename);
 
 freq = data.freq;
@@ -52,7 +54,7 @@ Yfit = @(x) 1i*om*C0(x) + 1./(Rm(x) + 1i*om*Lm(x) + 1./(1i*om*Cm(x)));
 
 %F = @(x) sum(abs(Yfit(x) - Ydata)).^2;
 %F = @(x) sum(abs(20*log10(abs(Yfit(x))) - 20*log10(abs(Ydata)))).^2;
-F = @(x) sum(abs(angle(Yfit(x)) - angle(Ydata))).^2;
+%F = @(x) sum(abs(angle(Yfit(x)) - angle(Ydata))).^2;
 
 %% Optimization
 
