@@ -137,6 +137,7 @@ classdef resonator < handle
                     y_smooth    =   smooth(real(y_smooth),smoothing_index) + ...
                             1i* smooth(imag(y_smooth),smoothing_index) ;
                 end
+        end
                     
     end
         
