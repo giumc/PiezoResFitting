@@ -25,4 +25,5 @@ function y=calculate_y(resonator)
     z_t =  z_b + rs ;
     y   =  1./z_t;
     
+
 end

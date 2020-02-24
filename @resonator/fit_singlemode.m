@@ -5,8 +5,13 @@ if isempty(res.sparam)
 end
 
 freq    =   res.freq;
-y_meas  =   res.y_meas;
+if (res.smoothingdata==0)
 
+    y_meas  =   res.y_meas;
+
+    else 
+        y_meas = res.y_smooth;
+end
 res.c0  =   res.fit_c0;
 
 %possible better implementation for this is to write a fit_r0,

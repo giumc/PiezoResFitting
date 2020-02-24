@@ -2,6 +2,7 @@ function setup_plot(res)
 
 %% Figure
 
+pause (2);
 if isobject(res.figure) && isvalid(res.figure)
     delete(res.figure);
     res.figure=[];

@@ -6,7 +6,9 @@ classdef resonator < handle
         r0;
         rs;
         mode;
+        smoothing_data=0;
     end
+    
     
     properties (Dependent)     
         freq;
@@ -14,7 +16,8 @@ classdef resonator < handle
         z_calc;
         sparam;
         y_meas;
-        z_meas;       
+        z_meas;
+        y_smooth;
     end
     
     properties (Hidden)
@@ -44,16 +47,8 @@ classdef resonator < handle
         
     end
     
-    methods % Tools for Dependent Definitions
-        
-        y   =   calculate_y (resonator);
-        z   =   calculate_z (resonator);
-        m   =   calculate_mot_branch(resonator,index);
-        m   =   calculate_all_mot(resonator);
-        y   =   extract_y_from_s(resonator);
-    end
-    
     methods %Tools
+
         prompt_touchstone(resonator);
         x   =   error_function(resonator);
         fit_multimode(resonator);
@@ -61,9 +56,9 @@ classdef resonator < handle
         plot_data(resonator);
         c0  =   fit_c0(resonator);
         fit_singlemode(resonator);
-        
+
     end
-    
+
     methods (Static)
         
         function y = db(x)
@@ -79,11 +74,20 @@ classdef resonator < handle
         end
 
         function y = calculate_kt2(fseries,fshunt)
-            y   =   pi^2/4*(fshunt-fseries)/fseries;
+            y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
    
- end
+ end %Mathematical Functions
     
+    methods % Tools for Dependent Definitions
+        
+        y   =   calculate_y (resonator);
+        z   =   calculate_z (resonator);
+        m   =   calculate_mot_branch(resonator,index);
+        m   =   calculate_all_mot(resonator);
+        y   =   extract_y_from_s(resonator);
+    end
+
     methods % Dependent Properties Definitions
         
         function y  =   get.y_calc(resonator)
@@ -123,8 +127,20 @@ classdef resonator < handle
                 return ;
             end
         end
-        
+
+        function y_smooth =   get.y_smooth(resonator)
+            smoothing_index     =   resonator.smoothing_data;
+            y_smooth              =   resonator.y_meas;
+                if (smoothing_index==0) || isempty (y_smooth)
+                    return ;
+                else
+                    y_smooth    =   smooth(real(y_smooth),smoothing_index) + ...
+                            1i* smooth(imag(y_smooth),smoothing_index) ;
+                end
+                    
     end
+        
+        
     
 end
 
