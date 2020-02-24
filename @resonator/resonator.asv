@@ -51,8 +51,7 @@ classdef resonator < handle
         m   =   calculate_mot_branch(resonator,index);
         m   =   calculate_all_mot(resonator);
         y   =   extract_y_from_s(resonator);
-    end
-    
+end
     methods %Tools
         prompt_touchstone(resonator);
         x   =   error_function(resonator);
@@ -61,7 +60,7 @@ classdef resonator < handle
         plot_data(resonator);
         c0  =   fit_c0(resonator);
         fit_singlemode(resonator);
-        
+
     end
     
     methods (Static)

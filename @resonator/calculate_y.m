@@ -5,7 +5,7 @@ function y=calculate_y(resonator)
     r0  =   resonator.r0;
     rs  =   resonator.rs;
     
-    y   =   2 * pi * f * c0 + 1 / r0 ;
+    y   =   1i * 2 * pi * f * c0 + 1 / r0 ;
     
     for j = 1 : length (resonator.mode)
         
@@ -21,6 +21,8 @@ function y=calculate_y(resonator)
         
     end
     
-    y   = y + 1./ rs ;
+    z_b =  1./y ;
+    z_t =  z_b + rs ;
+    y   =  1./z_t;
     
 end

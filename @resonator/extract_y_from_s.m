@@ -8,7 +8,7 @@ adm_meas =[];
             adm_meas = rfparam(ypar, 1, 1);
         end
         if resonator.sparam.NumPorts==2
-            adm_meas = rfparam(ypar, 2, 1);
+            adm_meas = - rfparam(ypar, 2, 1);
         end
     end
 end
