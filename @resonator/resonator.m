@@ -62,6 +62,7 @@ classdef resonator < handle
         y   =   error_function(resonator,x0);
         array_to_variables(resonator,x0);
         x0   = variables_to_array(resonator);
+        stop    =   out_optim(resonator,x,flag,state);
     end
 
     methods (Static)
@@ -152,8 +153,7 @@ classdef resonator < handle
         function opt_boundaries     =   get.opt_boundaries(resonator)
                 opt_boundaries = set_boundaries(resonator);
         end
-        
-                    
+                           
     end
            
 end

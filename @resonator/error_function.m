@@ -13,9 +13,6 @@ function y = error_function(res,x0)
         y           =   ( mag_err + mag_phase ) ./ 2;
     end
     
-    
-
-        
     function y = norm_error(func,r)
         y = sum ( ...
             abs ( func( r.y_meas ) - func(r.y_calc) ) .^2  )...
