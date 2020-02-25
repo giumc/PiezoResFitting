@@ -7,7 +7,7 @@ classdef resonator < handle
         rs;
         mode;
         smoothing_data=0;
-        max_samples = 1001;
+        max_samples = 20001;
     end
        
     properties (Dependent)     
@@ -62,6 +62,7 @@ classdef resonator < handle
         y   =   error_function(resonator,x0);
         array_to_variables(resonator,x0);
         x0   = variables_to_array(resonator);
+        stop    =   out_optim(resonator,x,flag,state);
     end
 
     methods (Static)
@@ -71,6 +72,8 @@ classdef resonator < handle
         end
         
         function y = normalize(x,xmin,xmax)
+            if x<xmin || x>xmax
+                fprintf('
             y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
         end
 
@@ -92,8 +95,9 @@ classdef resonator < handle
         m   =   calculate_all_mot(resonator);
         y   =   extract_y_from_s(resonator);
         opt_boundaries =  set_boundaries(resonator);
+        
     end
-
+    
     methods % Dependent Properties Definitions
         
         function y  =   get.y_calc(resonator)
@@ -105,6 +109,7 @@ classdef resonator < handle
         end
      
         function f  =   get.freq(resonator)
+            
             if isempty(resonator.touchstone_file)
                 f   =  ( 0.9 : 0.001 : 1.1 ) *1e9 ;%default
             else
@@ -151,8 +156,7 @@ classdef resonator < handle
         function opt_boundaries     =   get.opt_boundaries(resonator)
                 opt_boundaries = set_boundaries(resonator);
         end
-        
-                    
+                           
     end
            
 end

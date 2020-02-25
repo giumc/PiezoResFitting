@@ -20,19 +20,20 @@ classdef resonator < handle
         y_smooth;
     end
     
-    properties (Hidden, Dependent) %optimization
+    properties (Hidden, Dependent) 
         opt_boundaries;
-    end
+    end%optimization
     
-    properties (Hidden)%graphic
+    properties (Hidden)
         figure;
         mag_axis;
         phase_axis;
         mag_legend;
-        phase_legend;     
-    end
+        phase_legend;
+        values_table;
+    end %graphic
     
-    methods %Constructor/Destructor
+    methods 
         
         function obj =  resonator()
             obj.mode.fres   =   1e9;%default
@@ -49,13 +50,11 @@ classdef resonator < handle
             end        
         end
         
-    end
+    end %Constructor/Destructor
     
-    methods %Tools
+    methods 
         prompt_touchstone(resonator);
         fit_multimode(resonator);
-        setup_plot(resonator);
-        plot_data(resonator);
         c0  =   fit_c0(resonator);
         fit_res(resonator);
         guess_coarse(resonator);     
@@ -63,7 +62,13 @@ classdef resonator < handle
         array_to_variables(resonator,x0);
         x0   = variables_to_array(resonator);
         stop    =   out_optim(resonator,x,flag,state);
-    end
+    end %Tools
+    
+    methods
+        setup_plot(resonator);
+        plot_data(resonator);
+        update_table(resonator);
+    end %graphic
 
     methods (Static)
         
@@ -72,20 +77,28 @@ classdef resonator < handle
         end
         
         function y = normalize(x,xmin,xmax)
+            if x<xmin || x>xmax
+                fprintf('Out of Bounds!\n');
+            else
             y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
+            end
         end
 
         function y = denormalize(x,xmin,xmax)
+            if x<0 || x>1
+                fprintf(' x is not normalized to 1 !\n');
+            else
             y   =   xmin + x * (xmax - xmin) ;
+            end
         end
 
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
    
- end %Mathematical Functions
+    end %Mathematical Functions
     
-    methods % Tools for Dependent Definitions
+    methods 
         
         y   =   calculate_y (resonator);
         z   =   calculate_z (resonator);
@@ -93,9 +106,10 @@ classdef resonator < handle
         m   =   calculate_all_mot(resonator);
         y   =   extract_y_from_s(resonator);
         opt_boundaries =  set_boundaries(resonator);
-    end
-
-    methods % Dependent Properties Definitions
+        
+    end % Tools for Dependent Definitions
+    
+    methods 
         
         function y  =   get.y_calc(resonator)
             y   =  calculate_y(resonator);
@@ -154,7 +168,7 @@ classdef resonator < handle
                 opt_boundaries = set_boundaries(resonator);
         end
                            
-    end
+    end % Dependent Properties Definitions
            
 end
 

@@ -6,8 +6,9 @@ function fit_res(res)
     problem.options.MaxIterations               =50e3;
     problem.options.Algorithm                   ='interior-point';
     problem.options.FiniteDifferenceType        ='central';
-    problem.options.FunctionTolerance           =1e-6;
-    problem.options.StepTolerance               =1e-15;
+    problem.options.FunctionTolerance           =1;
+    problem.options.StepTolerance               =1e-12;
+    problem.options.ConstraintTolerance         =1e-15;
     problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
 
     problem.options.UseParallel                 =0;

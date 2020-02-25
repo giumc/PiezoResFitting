@@ -1,28 +1,26 @@
 function y = error_function(res,x0)
     y=[];
-    
     res.array_to_variables(x0);
+    y_meas =  res.y_smooth;
+    y_calc =  res.y_calc;
+    freq   =  res.freq;
     
-    if isempty(res.y_meas) || isempty(res.y_calc)
+    if isempty(y_meas) || isempty(y_calc)
         return;
     else
+        angle_deg   =   @(x) 180*angle(x);
+        mag_err     =   norm_error(@res.db);
+        phase_err   =   norm_error(angle_deg);
         
-        mag_err     =   norm_error(@res.db,res);
-        mag_phase   =   norm_error(@angle,res);
-        
-        y           =   ( mag_err + mag_phase ) ./ 2;
+        y           =   ( mag_err + phase_err ) ./ 2;
     end
     
-    function y = norm_error(func,r)
+      
+    function y = norm_error(func)
         y = sum ( ...
-            abs ( func( r.y_meas ) - func(r.y_calc) ) .^2  )...
-                         ./ length(r.freq)   ;
+            abs ( (func( y_meas ) - func(y_calc))./(func(y_meas )) .^2  ));
     end
 
-    function y = max_error(func,r)
-        y = max ( ...
-            abs ( func( r.y_meas ) - func(r.y_calc) ) .^2 ) ;
-    end
 
 end
 

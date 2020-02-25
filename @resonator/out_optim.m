@@ -3,6 +3,7 @@ function stop   =     out_optim (res, x, flag,state)
     if strcmp(state,'iter')
         res.array_to_variables(x);
         res.plot_data;
-        keyboard();
+        pause(1)
     end
+    
 end
