@@ -1,0 +1,5 @@
+function table_res(res)
+    if ~isempty(res.values_table)
+        if isa( res.values_table,'matlab.ui.control.Table') && isvalid(res.values_table)
+            table = res.values_table'
+end

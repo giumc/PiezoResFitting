@@ -8,13 +8,10 @@ end
 freq    =   res.freq;
 y_meas  =   res.y_meas;
 
-c0_init =   imag(y_meas(1))/(2*pi*freq(1));
-Z0_init =   1./ (2*pi*freq(1))/c0_init;
+res.c0  =   imag(y_meas(1))/(2*pi*freq(1));
 
-Z0_min  =   Z0_init/50;
-Z0_max  =   Z0_init*50;
-c0_min  =   1/(2*pi*mean(freq))/Z0_max;
-c0_max  =   1/(2*pi*mean(freq))/Z0_min;
+c0_min  =   res.opt_boundaries.c0.min;
+c0_max  =   res.opt_boundaries.c0.max;
 
 norm    =   @(x) res.normalize(x,c0_min,c0_max);
 denorm  =   @(x) res.denormalize(x,c0_min,c0_max);
