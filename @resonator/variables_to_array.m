@@ -8,7 +8,7 @@ function x0 = variables_to_array(res)
    %kt2
    %q
    
-   bounds   =   res.opt_boundaries;
+   bounds   =   res.boundaries;
    x0(1)    =   res.normalize( res.c0, bounds.c0.min, bounds.c0.max);
   
    x0(2)    =   res.normalize( res.r0, bounds.r0.min, bounds.r0.max);
@@ -20,5 +20,6 @@ function x0 = variables_to_array(res)
        x0   =  [x0 res.normalize( res.mode(i).kt2   , bounds.kt2.min    , bounds.kt2.max)   ];
        x0   =  [x0 res.normalize( res.mode(i).q     , bounds.q.min      , bounds.q.max)     ];
    end
+
    
 end 

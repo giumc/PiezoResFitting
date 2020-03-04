@@ -3,7 +3,6 @@ classdef resonator < handle
     properties (Hidden)
         max_samples = 20001;
         smoothing_data = 10;
-        center_bound;
     end
     
     properties

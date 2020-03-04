@@ -1,4 +1,4 @@
-function fit_res(res)
+function xa = fit_res(res)
     
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='iter-detailed';
@@ -21,8 +21,8 @@ function fit_res(res)
 
     problem.solver                              ='fmincon';
     
-    xmin                                        =fmincon(problem);
-    res.array_to_variables( xmin );
+    xa                                          =fmincon(problem);
+    res.array_to_variables( xa );
     res.plot_data;
 
 end

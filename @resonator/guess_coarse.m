@@ -19,9 +19,14 @@ function guess_coarse(res)
         'NPeaks',1);
     
             res.c0  =   res.fit_c0;
+            res.init_fit.c0         =   res.c0;
             
             res.mode(1).fres    =   freq(i_max);
+            res.init_fit.fres       =   res.mode(1).fres;
+            
             res.mode(1).q       =   q * (freq(2)-freq(1));
+            res.init_fit.q          =   res.mode(1).q;
+            
             res.mode(1).kt2     =   res.calculate_kt2(freq(i_max),freq(i_min));
             
             res.r0              =   1./ (2*pi*res.mode(1).fres*res.c0) / 0.01;

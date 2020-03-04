@@ -1,12 +1,12 @@
 function y = error_function(res,x0)
     y=[];
     res_cp=res;
-    res.array_to_variables(x0);
-    res.plot_data;
-    res.table_res;
-    y_meas =  res.y_smooth;
-    y_calc =  res.y_calc;
-    freq   =  res.freq;
+    res_cp.array_to_variables(x0);
+    res_cp.plot_data;
+    res_cp.table_res;
+    y_meas =  res_cp.y_smooth;
+    y_calc =  res_cp.y_calc;
+    freq   =  res_cp.freq;
     
     if isempty(y_meas) || isempty(y_calc)
         fprintf('y_meas or y_calc is empty, abort\n');
@@ -14,9 +14,9 @@ function y = error_function(res,x0)
     else
         angle_deg   =   @(x) 180/pi*angle(x);
         mag_err     =   sum ( ...
-             abs ( (res.db( y_meas ) - res.db(y_calc))./(res.db(y_calc )) .^2  ));
-        phase_err   =   sum ( ...
-             abs ( (angle_deg( y_meas ) - angle_deg(y_calc))./(angle_deg(y_calc )) .^2  ));
+             abs ( (res_cp.db( y_meas ) - res_cp.db(y_calc))./(res_cp.db(y_calc )) .^2  ));
+        phase_err   =   ( ...
+             abs ( (angle( y_meas ) - res_cp.db(y_calc))./(res_cp.db(y_calc )) .^2  ));
         
         y           =   ( mag_err + phase_err ) ./ 2;
     end

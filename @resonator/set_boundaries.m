@@ -8,7 +8,7 @@ function opt_boundaries=set_boundaries(res)
 
     freq    =   res.freq;
     
-    c0_init                    =   res.c0;
+    c0_init                    =   res.fit_c0;
     opt_boundaries.c0.min      =   c0_init*0.2;
     opt_boundaries.c0.max      =   c0_init*5;
 
@@ -27,9 +27,9 @@ function opt_boundaries=set_boundaries(res)
     opt_boundaries.kt2.min     =   0;
     opt_boundaries.kt2.max     =   1;
 
-    r0_init                    =   res.r0;
-    opt_boundaries.r0.min      =   0.2*r0_init;
-    opt_boundaries.r0.max      =   5*r0_init;
+    r0_init                    =   50e3;
+    opt_boundaries.r0.min      =   0.1*r0_init;
+    opt_boundaries.r0.max      =   10*r0_init;
 
     opt_boundaries.rs.min      =   0.1;
     opt_boundaries.rs.max      =   100;
