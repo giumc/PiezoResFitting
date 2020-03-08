@@ -16,10 +16,12 @@ function x0 = variables_to_array(res)
    x0(3)    =   res.normalize( res.rs, bounds.rs.min, bounds.rs.max);
    
    for i=1:length(res.mode)
-       x0   =  [x0 res.normalize( res.mode(i).fres  , bounds.fres.min   , bounds.fres.max)  ];
-       x0   =  [x0 res.normalize( res.mode(i).kt2   , bounds.kt2.min    , bounds.kt2.max)   ];
-       x0   =  [x0 res.normalize( res.mode(i).q     , bounds.q.min      , bounds.q.max)     ];
+       x0   =  [x0 res.normalize( res.mode(i).fres  ,...
+           bounds.mode(i).fres.min   , bounds.mode(i).fres.max)  ];
+       x0   =  [x0 res.normalize( res.mode(i).kt2   ,...
+           bounds.mode(i).kt2.min    , bounds.mode(i).kt2.max)   ];
+       x0   =  [x0 res.normalize( res.mode(i).q     ,...
+           bounds.mode(i).q.min      , bounds.mode(i).q.max)     ];
    end
-
    
 end 

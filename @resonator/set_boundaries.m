@@ -1,37 +1,45 @@
-function opt_boundaries=set_boundaries(res)
-    opt_boundaries=[];
+function boundaries=set_boundaries(res)
+    boundaries=[];
     if isempty(res.y_meas)
         return;
-    else 
-        y_meas =    res.y_smooth;
     end
 
     freq    =   res.freq;
     
-    c0_init                    =   res.fit_c0;
-    opt_boundaries.c0.min      =   c0_init*0.2;
-    opt_boundaries.c0.max      =   c0_init*5;
-
-    opt_boundaries.fres.max    =   max(freq);
-    opt_boundaries.fres.min    =   min(freq);
-
-    opt_boundaries.q.min       =   100;
-    opt_boundaries.q.max       =   10e3;
+    if isempty (boundaries)
+        boundaries.center_bound   = struct();
+        boundaries.center_bound.c0     =   res.c0;
+        boundaries.center_bound.r0     =   res.r0;
+        boundaries.center_bound.rs     =   res.rs;
+        boundaries.center_bound.mode   =   res.mode;
+    end
     
-    if res.mode(1).q < opt_boundaries.q.min || res.mode(1).q > opt_boundaries.q.max
-        opt_boundaries.q.min    =   res.mode(1).q*0.2;
-        opt_boundaries.q.max    =   res.mode(1).q*5;
+    c0_init                    =   boundaries.center_bound.c0;
+    boundaries.c0.min      =   c0_init*0.2;
+    boundaries.c0.max      =   c0_init*5;
+       
+    for i=1:length(res.mode)
+    
+        boundaries.mode(i).q.min       =   0.01*...
+                                        boundaries.center_bound.mode(i).q;
+        boundaries.mode(i).q.max       =   100*...
+                                        boundaries.center_bound.mode(i).q;
+
+        boundaries.mode(i).kt2.min     =   0;
+        boundaries.mode(i).kt2.max     =   1;
+
+        boundaries.mode(i).fres.max    =   max(freq);
+        boundaries.mode(i).fres.min    =   min(freq);
+        
     end
 
-        
-    opt_boundaries.kt2.min     =   0;
-    opt_boundaries.kt2.max     =   1;
+    r0_init                    =   boundaries.center_bound.r0;
+    boundaries.r0.min      =   0.1*r0_init;
+    boundaries.r0.max      =   10*r0_init;
 
-    r0_init                    =   50e3;
-    opt_boundaries.r0.min      =   0.1*r0_init;
-    opt_boundaries.r0.max      =   10*r0_init;
-
-    opt_boundaries.rs.min      =   0.1;
-    opt_boundaries.rs.max      =   100;
+    rs_init                    =   boundaries.center_bound.rs;
+    boundaries.rs.min      =   0.1*rs_init;
+    boundaries.rs.max      =   10*rs_init;
+    res.boundaries         =    boundaries;
 
 end

@@ -1,5 +1,4 @@
-function y=calculate_y(resonator)
-
+function y= calculate_y(resonator)
     f   =   resonator.freq;
     c0  =   resonator.c0;
     r0  =   resonator.r0;
@@ -25,5 +24,4 @@ function y=calculate_y(resonator)
     z_t =  z_b + rs ;
     y   =  1./z_t;
     
-
 end

@@ -1,32 +1,32 @@
 classdef resonator < handle
     
-    properties (Hidden)
+    properties (Hidden,SetObservable,AbortSet)
         max_samples = 20001;
-        smoothing_data = 10;
-        center_bound;
+        smoothing_data = 0;
     end
     
-    properties
+    properties (SetObservable,AbortSet)
         touchstone_file;
-        c0;
-        r0;
-        rs;
-        mode;   
+        boundaries;
     end
-       
-    properties (Dependent)
-        freq;
-        y_calc;
-        z_calc;
+    
+    properties (SetAccess=private)
         sparam;
         y_meas;
-        z_meas;
         y_smooth;
     end
     
-    properties (Hidden, Dependent) 
-        boundaries;
-    end%optimization
+    properties (Dependent)
+        y_calc;
+    end
+    
+    properties
+        c0          =   1e-12;%default
+        r0          =   1e5;%default
+        rs          =   2;%default;
+        mode;
+        freq        =   (0.9:0.0002:1.1)*1e9;
+    end
     
     properties (Hidden)
         figure;
@@ -43,9 +43,11 @@ classdef resonator < handle
             obj.mode.fres   =   1e9;%default
             obj.mode.q      =   1000;%default
             obj.mode.kt2    =   0.05;%default
-            obj.c0          =   1e-12;%default
-            obj.r0          =   1e5;%default
-            obj.rs          =   2;%default
+            addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
+            addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
+            addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
+            addlistener(obj,'boundaries','PostSet',@obj.update_bounds);
+            
         end
         
         function delete(obj)
@@ -56,22 +58,45 @@ classdef resonator < handle
         
     end %Constructor/Destructor
     
-    methods 
+    methods
+        
         prompt_touchstone(resonator);
         c0      =   fit_c0(resonator);
-        xmin    =  fit_res(resonator);
-        guess_coarse(resonator);     
-        y       =   error_function(resonator,x0);
+        fit_res(resonator);
+        guess_coarse(resonator);   
+        
         array_to_variables(resonator,x0);
-        x0      = variables_to_array(resonator);
+        arr     = variables_to_array(resonator);
+        
         stop    =   out_optim(resonator,x,flag,state);
-    end %Tools
+        err     =   error_function(resonator,x0);
+        
+        y       =   calculate_y (resonator); 
+        
+        function y = get.y_calc(resonator)
+            y=calculate_y(resonator);
+            
+            return;
+        end
+        
+        set_freq(resonator);
+        set_sparam(resonator);
+        extract_y_from_s(resonator);
+        
+        m   =   calculate_mot_branch(resonator,index);     
+        m   =   calculate_all_mot(resonator);
+       
+        set_boundaries(resonator);
+        
+        add_mode(resonator);
+         
+    end % Object Tools
     
     methods
         setup_plot(resonator);
         plot_data(resonator);
         table_res(resonator);
-    end %graphic
+    end % Graphic Tools
 
     methods (Static)
         
@@ -80,16 +105,20 @@ classdef resonator < handle
         end
         
         function y = normalize(x,xmin,xmax)
+            y=0.5;
             if x<xmin || x>xmax
                 fprintf(' x is Out of Bounds!\n');
+                keyboard();
             else
             y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
             end
         end
 
         function y = denormalize(x,xmin,xmax)
+            y=xmin+0.5*(xmax-xmin);
             if x<0 || x>1
                 fprintf(' x is not normalized to 1 !\n');
+                keyboard();
             else
             y   =   xmin + x * (xmax - xmin) ;
             end
@@ -99,79 +128,22 @@ classdef resonator < handle
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
    
-    end %Mathematical Functions
+        [scaled_values,label,exp]= scale_magnitude(values);
+    end %Mathematical Tools
+   
+    methods (Static)
+        function update_sparam(~,event)
+            res=event.AffectedObject;
+            res.set_sparam;
+            res.set_freq;
+            res.extract_y_from_s;
+        end
+        
+        function update_bounds(~,event)
+            res=event.AffectedObject;
+            res.set_boundaries;
+        end
+        
+    end %Listeners callback
     
-    methods 
-        
-        y   =   calculate_y (resonator);
-        z   =   calculate_z (resonator);
-        m   =   calculate_mot_branch(resonator,index);
-        m   =   calculate_all_mot(resonator);
-        y   =   extract_y_from_s(resonator);
-        opt_boundaries =  set_boundaries(resonator);
-        
-    end % Tools for Dependent Definitions
-    
-    methods 
-        
-        function y  =   get.y_calc(resonator)
-            y   =  calculate_y(resonator);
-        end  
-        
-        function z  =   get.z_calc(resonator)
-            z   =   calculate_z(resonator);
-        end
-     
-        function f  =   get.freq(resonator)
-            
-            if isempty(resonator.touchstone_file)
-                f   =  ( 0.9 : 0.001 : 1.1 ) * 1e9 ;%default
-            else
-                f   =   resonator.sparam.Frequencies;
-                if length(f)>resonator.max_samples
-                    f   =   downsample(f, ceil(length(f)/resonator.max_samples));
-                end
-            end
-        end
-        
-        function sparam   =   get.sparam(resonator)
-            if isempty(resonator.touchstone_file)
-                sparam      =    [];
-            else
-                sparam  =   sparameters(resonator.touchstone_file);
-            end
-        end
-        
-        function y_meas   =   get.y_meas(resonator)
-            y_meas    =   extract_y_from_s(resonator);
-        end
-        
-        function z_meas   =   get.z_meas(resonator)
-            z_meas= [] ;
-            if isempty(resonator.adm_meas)
-                return ;
-            else
-                z_meas = 1./resonator.y_meas;
-                return ;
-            end
-        end
-
-        function y_smooth =   get.y_smooth(resonator)
-            smoothing_index     =   resonator.smoothing_data;
-            y_smooth              =   resonator.y_meas;
-                if (smoothing_index==0) || isempty (y_smooth)
-                    return ;
-                else
-                    y_smooth    =   smooth(real(y_smooth),smoothing_index) + ...
-                            1i* smooth(imag(y_smooth),smoothing_index) ;
-                end
-        end
-        
-        function boundaries     =   get.boundaries(resonator)
-                boundaries = set_boundaries(resonator);
-        end
-                           
-    end % Dependent Properties Definitions
-           
 end
-

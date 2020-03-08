@@ -25,32 +25,8 @@ mag_axis    =   r.mag_axis;
 phase_axis  =   r.phase_axis;
 
 
-%% detect frequency order of magnitude
-
-for i=0:3:12 
-    if mean(freq)/10^(i) < 1e3 && mean(freq)/10^(i) >= 1
-        switch i
-            case 0
-                scale   =   'Hz';
-                break;
-            case 3
-                scale   =   'KHz';
-                break;
-            case 6
-                scale   =   'MHz';
-                break;
-            case 9
-                scale   =   'GHz';
-                break;
-            case 12
-                scale   =   'THz';
-                break;
-        end
-        break;
-    end
-end
-    freq    =   freq./10^(i); 
-    freq_label  =   strcat('Frequency',{' ['},scale,']');
+    [freq,scale] =  r.scale_magnitude(freq);
+    freq_label  =   strcat('Frequency',{' ['},scale,{'Hz]'});
 
     phase_axis.XLabel.String=freq_label;
     mag_axis.XLabel.String=freq_label;

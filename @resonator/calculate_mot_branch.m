@@ -8,5 +8,5 @@ function mot_branch=calculate_mot_branch(resonator,index)
 
     mot_branch.Cm   =   8 / pi^2 * c0 * kt2 ;
 
-    mot_branch.Rm   =   pi^2 /8 / (2*pi*fres) / c0 / kt2 /q ;
+    mot_branch.Rm   =   pi^2 /8 / (2*pi*fres) / c0 / kt2 / q ;
 end

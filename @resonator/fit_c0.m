@@ -10,8 +10,8 @@ y_meas  =   res.y_meas;
 
 res.c0  =   imag(y_meas(1))/(2*pi*freq(1));
 
-c0_min  =   res.boundaries.c0.min;
-c0_max  =   res.boundaries.c0.max;
+c0_min  =   res.c0/10;
+c0_max  =   res.c0*10;
 
 norm    =   @(x) res.normalize(x,c0_min,c0_max);
 denorm  =   @(x) res.denormalize(x,c0_min,c0_max);

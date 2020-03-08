@@ -1,7 +1,7 @@
 function xa = fit_res(res)
-    
+    res.set_boundaries;
     problem.options                             =optimoptions('fmincon');
-    problem.options.Display                     ='iter-detailed';
+    problem.options.Display                     ='iter';
     problem.options.MaxFunctionEvaluations      =10e3;
     problem.options.MaxIterations               =50e3;
     problem.options.Algorithm                   ='interior-point';
