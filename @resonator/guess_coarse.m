@@ -12,16 +12,31 @@ function guess_coarse(res)
     if isempty(res.y_meas)
         fprintf('No measured SParam was found,so no coarse fitting can be generated\n');
         return;
-    else 
+    else
+        
         y_meas =    res.y_smooth;
+    end
+    
+    if isempty(res.mode)
+        fprintf('The resonator has no modes, use set_number_modes(X) method to add one\n');
+        return
     end
 
     freq    =   res.freq;
-    
-    [~,i_max,q ] = findpeaks(abs(y_meas).^2,...
+    %from first mode, take peak from lincurve
+    %so to get also q
+    [~,i_max_1,q ] = findpeaks(abs(y_meas).^2,...
                 'WidthReference','halfheight',...
                 'SortStr','descend',...
-                'NPeaks',length(res.mode));
+                'NPeaks',max([1,length(res.mode)]));
+    %for other modes, take peaks from dbcurve
+    [~,i_max_2 ] = findpeaks(res.db(y_meas),...
+            'SortStr','descend',...
+            'MinPeakProminence',5,...
+            'NPeaks',max([1,length(res.mode)]));
+    i_max_1=i_max_1(1);
+    i_max_2(1)=[];
+    i_max=[i_max_1; i_max_2];
             
     [~,i_min] = findpeaks(res.db(1./y_meas),...
         'WidthReference','halfheight',...
@@ -29,8 +44,12 @@ function guess_coarse(res)
         'NPeaks',1);
     
             res.c0  =   res.fit_c0;
-     
-            for i=1:length(res.mode)
+            
+            res.mode(1).fres=1e9;
+            res.mode(1).q=1e3;
+            res.mode(1).kt2=0.1;
+            
+            for i=1:length(i_max)
                 if i==1
                     res.mode(i).fres        =   freq(i_max(i));
 
@@ -38,11 +57,11 @@ function guess_coarse(res)
 
                     res.mode(i).kt2         =   res.calculate_kt2(freq(i_max(1)),freq(i_min))/i;
                 else
-                     res.mode(i).fres        =   freq(i_max(i));
+                    res.mode(i).fres        =   freq(i_max(i));
 
-                    res.mode(i).q           =   100;
+                    res.mode(i).q           =   1000;
 
-                    res.mode(i).kt2         =   0.01;
+                    res.mode(i).kt2         =   res.mode(1).kt2/10;
                 end
             end
             

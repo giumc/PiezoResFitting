@@ -4,6 +4,8 @@ function [scaled_values,label,exp]=scale_magnitude(values)
     exp=0;
     for i=-15:3:15 
         if mean(values)/10^(i) <= 1e3 && mean(values)/10^(i) > 1
+            scaled_values    =   values./10^(i); 
+            exp = i;
             switch i
                 case -15
                     label   =   'f';
@@ -39,6 +41,5 @@ function [scaled_values,label,exp]=scale_magnitude(values)
             break;
         end
     end
-        scaled_values    =   values./10^(i); 
-        exp = i;
+        
 end

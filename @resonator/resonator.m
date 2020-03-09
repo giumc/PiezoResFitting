@@ -40,9 +40,12 @@ classdef resonator < handle
     methods 
         
         function obj =  resonator()
+            resonator.set_number_modes(1);
+            
             obj.mode.fres   =   1e9;%default
             obj.mode.q      =   1000;%default
             obj.mode.kt2    =   0.05;%default
+            
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
@@ -88,7 +91,7 @@ classdef resonator < handle
        
         set_boundaries(resonator);
         
-        add_mode(resonator);
+        set_number_modes(resonator,number);
          
     end % Object Tools
     

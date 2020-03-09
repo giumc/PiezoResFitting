@@ -36,23 +36,32 @@ phase_axis  =   r.phase_axis;
     phase_axis.NextPlot='replacechildren';
     
     if ~isempty(y_calc)
-        p1=plot(mag_axis,freq,r.db(y_calc));
-        p1.DisplayName=fit_name;
+        
+        p(1)=plot(mag_axis,freq,r.db(y_calc));
+        p(1).DisplayName=fit_name;
         mag_axis.NextPlot='add';
-        p2=plot(phase_axis,freq,180/pi*angle(y_calc));
-        p2.DisplayName=fit_name;
-        phase_axis.NextPlot='add';       
+        p(2)=plot(phase_axis,freq,180/pi*angle(y_calc));
+        p(2).DisplayName=fit_name;
+        phase_axis.NextPlot='add';     
     end
     
-    if ~isempty(y_meas)
-        p3=plot(mag_axis,freq,r.db(y_meas));
-        p3.DisplayName=meas_name;
+    if ~isempty(y_meas) 
+        p(3)=plot(mag_axis,freq,r.db(y_meas));
+        p(3).DisplayName=meas_name;
         mag_axis.NextPlot='add';
-        p4=plot(phase_axis,freq,180/pi*angle(y_meas));
-        p4.DisplayName=meas_name;
-        phase_axis.NextPlot='add';
+        p(4)=plot(phase_axis,freq,180/pi*angle(y_meas));
+        p(4).DisplayName=meas_name;
+        phase_axis.NextPlot='add';    
     end
-    
+   
+    %adjust plots
+    for i=1:length(p)
+        p(i).LineWidth=1.5;
+        p(i).Marker='none';
+    end
+    uistack(p(1));
+    uistack(p(2));
+
     %adjust axis lim
     mag_axis.XLim   =   [min(freq) max(freq)];
     mag_axis.XTick  =   [min(freq):(max(freq)-min(freq))/10:max(freq)];   
