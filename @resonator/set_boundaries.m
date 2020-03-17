@@ -1,5 +1,5 @@
 function boundaries=set_boundaries(res)
-    fprintf('\nSetting boundaries.\n');
+    fprintf('\nSetting default boundaries.\n');
     boundaries=[];
     if isempty(res.y_meas)
         fprintf('Empty measure: No bounds generated\n');

@@ -3,22 +3,25 @@ classdef resonator < handle
     properties (Hidden,SetObservable,AbortSet)
         max_samples = 20001;
         smoothing_data = 0;
-    end
+    end%s-par modifiers
     
     properties (SetObservable,AbortSet)
         touchstone_file;
         boundaries;
-    end
+    end%trigger reaction vars
     
-    properties (SetAccess=private)
+    properties
         sparam;
         y_meas;
         y_smooth;
-    end
+    end % measured vars
     
     properties (Dependent)
         y_calc;
-    end
+    end% calcualted when prompted
+    properties (Dependent,Hidden)
+        n_param;
+    end% calcualted when prompted
     
     properties
         c0          =   1e-12;%default
@@ -26,7 +29,7 @@ classdef resonator < handle
         rs          =   2;%default;
         mode;
         freq        =   (0.9:0.0002:1.1)*1e9;
-    end
+    end % physical parameters
     
     properties (Hidden)
         figure;
@@ -36,7 +39,9 @@ classdef resonator < handle
         phase_legend;
         values_table;
         boundaries_bars;
-    end %graphic
+        boundaries_edit;
+        param_labels;
+    end % graphic objects
     
     methods 
         
@@ -50,7 +55,7 @@ classdef resonator < handle
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
-            addlistener(obj,'boundaries','PostSet',@obj.update_bounds);
+            addlistener(obj,'boundaries','PostSet',@obj.check_bounds);
             
         end
         
@@ -74,26 +79,29 @@ classdef resonator < handle
         m   =   calculate_all_mot(resonator);
         prompt_touchstone(resonator);
         c0      =   fit_c0(resonator);
-        add_bars(resonator);
-    end
+        set_boundaries(resonator);
+    end % internal functions
     
     methods
-        
         fit_res(resonator);
         guess_coarse(resonator);   
-        set_boundaries(resonator);
+        
         function y = get.y_calc(resonator)
             y=calculate_y(resonator);          
             return;
         end
         set_number_modes(resonator,number);
-         
-    end % Object Tools
+        function n = get.n_param(resonator)
+            n = length(resonator.mode)*3+3;
+        end
+    end % main tools
     
     methods
         setup_plot(resonator);
         plot_data(resonator);
         table_res(resonator);
+        add_bars(resonator);
+        populate_bars(resonator);
     end % Graphic Tools
 
     methods (Static)
@@ -142,10 +150,14 @@ classdef resonator < handle
             res.table_res;
         end
         
-        function update_bounds(~,event)
+        function check_bounds(~,event)
             res=event.AffectedObject;
-%             res.set_boundaries;
+            check_boundaries(res);
+%           
         end
+        
+        check_boundaries(resonator);
+        bar_callback(src_event,event,resonator);       
         
     end %Listeners callback
     

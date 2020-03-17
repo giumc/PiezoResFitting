@@ -62,7 +62,7 @@ function table_res(res)
         end
         tab.ColumnName=column_names;
         format(previousFormat)   
-        tab.Position(1:2)=[0.6 0.5];
+        tab.Position(1:2)=[0.55 0.8];
         tab.Position(3:4)=tab.Extent(3:4);
         
 %         function [norm_values,label,exp]=samescale_magnitude(values)
