@@ -1,28 +1,28 @@
 function plot_data(r)
 
+    
+    fit_name='Fit';
+    meas_name='Meas';
 
-fit_name='Fit';
-meas_name='Meas';
+    freq    =   r.freq;
 
-freq    =   r.freq;
+    y_calc  =   r.y_calc; 
 
-y_calc  =   r.y_calc; 
-
-y_meas  =   r.y_smooth;
+    y_meas  =   r.y_smooth;
 
 
-if isempty(r.figure)
-    r.setup_plot;
-else
-    if isobject(r.figure)
-        if ~isvalid(r.figure)
-            r.setup_plot;
+    if isempty(r.figure)
+        r.setup_plot;
+    else
+        if isobject(r.figure)
+            if ~isvalid(r.figure)
+                r.setup_plot;
+            end
         end
     end
-end
 
-mag_axis    =   r.mag_axis;
-phase_axis  =   r.phase_axis;
+    mag_axis    =   r.mag_axis;
+    phase_axis  =   r.phase_axis;
 
 
     [freq,scale] =  r.scale_magnitude(freq);
@@ -30,7 +30,6 @@ phase_axis  =   r.phase_axis;
 
     phase_axis.XLabel.String=freq_label;
     mag_axis.XLabel.String=freq_label;
-%% populate plots
 
     mag_axis.NextPlot='replacechildren';
     phase_axis.NextPlot='replacechildren';

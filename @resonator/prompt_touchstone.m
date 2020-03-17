@@ -6,6 +6,7 @@ if choice==0
 end
 if contains(choice,'.s1p')||contains(choice,'.s2p')
     resonator.touchstone_file   =   choice; 
+    fprintf('S-Param data added\n');
 end
 
 end

@@ -1,8 +1,9 @@
 function set_number_modes(res,n)
     n_new=ceil(n);
-
+    
     n_old     =   length(res.mode);
     
+    fprintf('\nChanging number of modes from %d to %d.\n',n_old,n_new);
     if n_old==0
         if n_new>0
             res.mode(1).fres=1e9;
@@ -28,6 +29,9 @@ function set_number_modes(res,n)
         end 
     end
     res.guess_coarse;
-    res.boundaries.center_bound.mode=res.mode;
     res.set_boundaries;
+    fprintf('\nPlotting Data.\n');
+    res.plot_data;
+    fprintf('\nPlotting Table.\n');
+    res.table_res;
 end

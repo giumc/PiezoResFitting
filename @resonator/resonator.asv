@@ -35,7 +35,6 @@ classdef resonator < handle
         mag_legend;
         phase_legend;
         values_table;
-        boundaries_bars;
     end %graphic
     
     methods 
@@ -62,30 +61,38 @@ classdef resonator < handle
         
     end %Constructor/Destructor
     
-    methods (Access=private, Hidden)
+    methods (Private)
         array_to_variables(resonator,x0);
+        
         stop    =   out_optim(resonator,x,flag,state);
-        err     =   error_function(resonator,x0);  
+        err     =   error_function(resonator,x0);
+        
         y       =   calculate_y (resonator); 
-        set_freq(resonator);
-        set_sparam(resonator);
-        extract_y_from_s(resonator);
-        m   =   calculate_mot_branch(resonator,index);     
-        m   =   calculate_all_mot(resonator);
-        prompt_touchstone(resonator);
-        c0      =   fit_c0(resonator);
-        add_bars(resonator);
     end
-    
     methods
         
+        prompt_touchstone(resonator);
+        c0      =   fit_c0(resonator);
         fit_res(resonator);
         guess_coarse(resonator);   
-        set_boundaries(resonator);
+        
+        array_to_variables(resonator,x0);
+        arr     = variables_to_array(resonator);
+                
         function y = get.y_calc(resonator)
             y=calculate_y(resonator);          
             return;
         end
+        
+        set_freq(resonator);
+        set_sparam(resonator);
+        extract_y_from_s(resonator);
+        
+        m   =   calculate_mot_branch(resonator,index);     
+        m   =   calculate_all_mot(resonator);
+       
+        set_boundaries(resonator);
+        
         set_number_modes(resonator,number);
          
     end % Object Tools

@@ -8,6 +8,8 @@ function guess_coarse(res)
     %  NOTE:
     %  these values are also used as center points for the optimizer
     %  boundaries
+    
+    fprintf('\nResonator parameters estimation.\n');
 
     if isempty(res.y_meas)
         fprintf('No measured SParam was found,so no coarse fitting can be generated\n');
@@ -68,5 +70,5 @@ function guess_coarse(res)
             res.r0                  =   1./ (2*pi*res.mode(1).fres*res.c0) / 0.01;
             
             res.rs                  =   1;
-
+            
 end

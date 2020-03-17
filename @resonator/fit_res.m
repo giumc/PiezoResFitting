@@ -1,5 +1,9 @@
 function fit_res(res)
-    res.set_boundaries;
+
+    if (isempty(res.boundaries))
+        res.set_boundaries;
+    end
+    
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='none';
     problem.options.MaxFunctionEvaluations      =10e3;
