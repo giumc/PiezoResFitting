@@ -8,26 +8,26 @@ function set_boundary(r,index,value,type)
     switch index
         case 1
            if strcmp(type,'min')
-            r.boundaries.c0.min=value;
+            r.c0.set_min(value);
             else
                 if strcmp(type,'max')
-                    r.boundaries.c0.max=value;
+                    r.c0.set_max(value);
                 end
             end
         case 2
             if strcmp(type,'min')
-            r.boundaries.r0.min=value;
+            r.r0.set_min(value);
             else
                 if strcmp(type,'max')
-                    r.boundaries.r0.max=value;
+                    r.r0.set_max(value);
                 end
             end
         case 3
            if strcmp(type,'min')
-            r.boundaries.rs.min=value;
+            r.rs.set_min(value);
             else
                 if strcmp(type,'max')
-                    r.boundaries.rs.max=value;
+                    r.rs.set_max(value);
                 end
             end
 
@@ -37,26 +37,26 @@ function set_boundary(r,index,value,type)
             switch k
                 case 0
                         if strcmp(type,'min')
-                            r.boundaries.mode(n).fres.min=value;
+                            r.mode(n).fres.set_min(value);
                         else
                             if strcmp(type,'max')
-                                r.boundaries.mode(n).fres.max=value;
+                                r.mode(n).fres.set_max(value);
                             end
                         end
                 case 1                      
                     if strcmp(type,'min')
-                            r.boundaries.mode(n).q.min=value;
+                            r.mode(n).q.set_min(value);
                     else
                         if strcmp(type,'max')
-                            r.boundaries.mode(n).q.max=value;
+                            r.mode(n).q.set_max(value);
                         end
                     end
                 case 2
                     if strcmp(type,'min')
-                            r.boundaries.mode(n).kt2.min=value;
+                            r.mode(n).kt2.set_min(value);
                     else
                         if strcmp(type,'max')
-                            r.boundaries.mode(n).kt2.max=value;
+                            r.mode(n).kt2.set_max(value);
                         end
                     end
             end

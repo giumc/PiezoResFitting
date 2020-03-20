@@ -3,7 +3,7 @@ function set_number_modes(res,n)
     
     n_old     =   length(res.mode);
     
-    %wfprintf('\nChanging number of modes from %d to %d.\n',n_old,n_new);
+    %fprintf('\nChanging number of modes from %d to %d.\n',n_old,n_new);
     if n_old==0
         if n_new>0
             res.mode(1).fres=1e9;

@@ -7,19 +7,19 @@ if ~isnumeric(i)||i<=0
 end
     switch i 
         case 1
-            min=r.boundaries.c0.min;
-            max=r.boundaries.c0.max;
+            min=r.c0.min;
+            max=r.c0.max;
         case 2
-            min=r.boundaries.r0.min;
-            max=r.boundaries.r0.max;
+            min=r.r0.min;
+            max=r.r0.max;
         case 3
-            min=r.boundaries.rs.min;
-            max=r.boundaries.rs.max;
+            min=r.rs.min;
+            max=r.rs.max;
 
         otherwise
             index=mod(i-1,3);
             n=floor((i-1)/3);
-            boundmode=r.boundaries.mode(n);
+            boundmode=r.mode(n);
             mode=r.mode(n);
             
             switch index

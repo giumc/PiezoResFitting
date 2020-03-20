@@ -7,7 +7,6 @@ classdef resonator < handle
     
     properties (SetObservable,AbortSet)
         touchstone_file;
-        boundaries;
     end%vars w/ trigger
     
     properties (Access=private,Constant)
@@ -34,11 +33,13 @@ classdef resonator < handle
     end% calcualted when prompted
     
     properties
-        c0;
-        r0;
-        rs;
-        mode;
-        freq;
+        c0 opt_param;
+        r0 opt_param;
+        rs opt_param;
+        mode = struct ('fres',opt_param,...
+                       'q',opt_param,...
+                       'kt2',opt_param);
+        freq ;
     end % physical parameters
     
     properties (Hidden)
@@ -56,19 +57,17 @@ classdef resonator < handle
     methods 
         
         function obj =  resonator()
-        
-            obj.set_number_modes(1);
             obj.set_default_param;
-            obj.set_freq;
+            keyboard();
+%             obj.set_freq;
             
-            addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
-            addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
-            addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
-            addlistener(obj,'boundaries','PostSet',@obj.check_bounds);
-            
-            %to be removed
-            obj.touchstone_file='./Old optimization/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
-            obj.smoothing_data=5;
+%             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
+%             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
+%             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
+%             
+%             %to be removed
+%             obj.touchstone_file='./Old optimization/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
+%             obj.smoothing_data=5;
         end
         
         function delete(obj)
@@ -96,6 +95,9 @@ classdef resonator < handle
         prompt_touchstone(resonator);
         c0      =   fit_c0(resonator);
         
+        add_mode(resonator,varargin);
+        remove_mode(resonator,varargin);
+        
         set_param(resonator,index,value);
         num =   get_param(resonator,index);
         
@@ -121,7 +123,6 @@ classdef resonator < handle
             return;
         end
         
-        set_number_modes(resonator,number);
         set_default_param(resonator);
         set_default_boundaries(resonator);
         
@@ -146,36 +147,15 @@ classdef resonator < handle
             y = 20 .* log10 ( abs(x) );
         end
         
-        function y = normalize(x,xmin,xmax)
-            y=0.5;
-            if x<xmin || x>xmax
-                fprintf(' x is Out of Bounds!\n');
-                keyboard();
-            else
-            y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
-            end
-        end
-
-        function y = denormalize(x,xmin,xmax)
-            y=xmin+0.5*(xmax-xmin);
-            if x<0 || x>1
-                fprintf(' x is not normalized to 1 !\n');
-                keyboard();
-            else
-            y   =   xmin + x * (xmax - xmin) ;
-            end
-        end
-
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
-   
-        [scaled_values,label,exp] = num2str_sci(values);
         
         [value, exp] = str2num_sci(string);
     end %Mathematical Functions
    
     methods (Static)
+        
         function update_sparam(~,event)
             res=event.AffectedObject;
             res.set_sparam;
@@ -183,13 +163,6 @@ classdef resonator < handle
             res.extract_y_from_s;
         end
         
-        function check_bounds(~,event)
-            res=event.AffectedObject;
-            res.check_boundaries(res);
-%           
-        end
-        
-        check_boundaries(resonator);
         bar_callback(src_event,event,resonator);       
         edit_callback(src_event,event,resonator);
         

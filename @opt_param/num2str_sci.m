@@ -1,7 +1,11 @@
-function [scaled_values,label,exp]=num2str_sci(values)
-    scaled_values=values;
+function [scaled_values,label,exp]=num2str_sci(opt_param)
+    
+    values=opt_param.value;
+    
     label='';
+    
     exp=0;
+    
     for i=-15:3:15 
         if mean(values)/10^(i) <= 1e3 && mean(values)/10^(i) > 1
             scaled_values    =   values./10^(i); 

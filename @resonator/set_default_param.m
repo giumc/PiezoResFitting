@@ -1,11 +1,33 @@
 function set_default_param(r)
-    r.c0    =   1e-12;
-    r.r0    =   1e4;
-    r.rs    =   1; 
+
+    i=1;
+    r.c0 = opt_param(100e-15);
+    r.c0.label=r.get_param_name(i);
+    r.c0.unit=r.get_unit(i);
     
-    for i=1:length(r.mode)
-        r.mode(i).fres  =   1e9;
-        r.mode(i).q     =   1e3;
-        r.mode(i).kt2   =   0.03;
-    end
+    i=2;
+    r.r0 = opt_param(100e3);
+    r.r0.label=r.get_param_name(i);
+    r.r0.unit=r.get_unit(i);
+    
+    i=3;
+    r.rs = opt_param(1);
+    r.rs.label=r.get_param_name(i);
+    r.rs.unit=r.get_unit(i);
+    
+    i=4;
+    r.mode.fres = opt_param(1e9);
+    r.mode.fres.label=r.get_param_name(i);
+    r.mode.fres.unit=r.get_unit(i);
+    
+    i=5;
+    r.mode.q = opt_param(1e3);
+    r.mode.q.label=r.get_param_name(i);
+    r.mode.q.unit=r.get_unit(i);
+    
+    i=6;
+    r.mode.kt2 = opt_param(0.1);
+    r.mode.kt2.label=r.get_param_name(i);
+    r.mode.kt2.unit=r.get_unit(i);
+    
 end
