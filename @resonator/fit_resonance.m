@@ -1,6 +1,7 @@
-function fit_res(res)
-
-    if (isempty(res.boundaries))
+function fit_resonance(res)
+    clc
+    
+    if isempty(res.boundaries)
         res.set_boundaries;
     end
     
@@ -11,7 +12,7 @@ function fit_res(res)
     problem.options.Algorithm                   ='interior-point';
 %     problem.options.FiniteDifferenceType        ='central';
     problem.options.FunctionTolerance           =1;
-    problem.options.StepTolerance               =1e-6;
+    problem.options.StepTolerance               =1e-4;
     problem.options.ConstraintTolerance         =1e-15;
     problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
 
@@ -27,7 +28,7 @@ function fit_res(res)
     
     xa                                          =fmincon(problem);
     res.array_to_variables( xa );
-    res.plot_data;
+    res.update_fig;
 
 end
 

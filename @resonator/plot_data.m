@@ -10,7 +10,6 @@ function plot_data(r)
 
     y_meas  =   r.y_smooth;
 
-
     if isempty(r.figure)
         r.setup_plot;
     else
@@ -25,7 +24,7 @@ function plot_data(r)
     phase_axis  =   r.phase_axis;
 
 
-    [freq,scale] =  r.scale_magnitude(freq);
+    [freq,scale] =  r.num2str_sci(freq);
     freq_label  =   strcat('Frequency',{' ['},scale,{'Hz]'});
 
     phase_axis.XLabel.String=freq_label;

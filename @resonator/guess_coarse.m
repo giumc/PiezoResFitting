@@ -45,12 +45,9 @@ function guess_coarse(res)
         'SortStr','descend',...
         'NPeaks',1);
     
-            res.c0  =   res.fit_c0;
-            
-            res.mode(1).fres=1e9;
-            res.mode(1).q=1e3;
-            res.mode(1).kt2=0.1;
-            
+    res.set_default_param;
+    res.c0  =   res.fit_c0;
+
             for i=1:length(i_max)
                 if i==1
                     res.mode(i).fres        =   freq(i_max(i));
@@ -67,8 +64,10 @@ function guess_coarse(res)
                 end
             end
             
-            res.r0                  =   1./ (2*pi*res.mode(1).fres*res.c0) / 0.01;
-            
-            res.rs                  =   1;
-            
+    res.r0                  =   1./ (2*pi*res.mode(1).fres*res.c0) / 0.01;
+
+    res.rs                  =   1;
+    
+    res.set_default_boundaries;
+
 end

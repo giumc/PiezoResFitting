@@ -1,7 +1,9 @@
-function set_sparam(resonator)
-    if isempty(resonator.touchstone_file)
-        resonator.sparam      =    [];
+function set_sparam(r)
+    if isempty(r.touchstone_file)
+        r.sparam    =   [];
+        r.y_meas    =   [];
+        r.y_smooth  =   [];
     else
-        resonator.sparam  =   sparameters(resonator.touchstone_file);
+        r.sparam  =   sparameters(r.touchstone_file);
     end
 end

@@ -8,23 +8,23 @@ function array_to_variables(res,x0)
    %kt2
    %q
 
-   bounds=res.boundaries;
-   res.c0   =   res.denormalize(x0(1),bounds.c0.min,bounds.c0.max);
-   res.r0   =   res.denormalize(x0(2),bounds.r0.min,bounds.r0.max);
-   res.rs   =   res.denormalize(x0(3),bounds.rs.min,bounds.rs.max);
+   %add unoptimized Fres
+   insert = @(a, x, n) cat(2,  x(1:n), a, x(n+1:end));
    
-   x0([1,2,3])= [];
-   
-   for i=1:length(res.mode)
-       res.mode(i).fres     =   res.denormalize(...
-           x0(1),bounds.mode(i).fres.min,bounds.mode(i).fres.max);
-       res.mode(i).kt2      =   res.denormalize(...
-           x0(2),bounds.mode(i).kt2.min,bounds.mode(i).kt2.max);
-       res.mode(i).q        =   res.denormalize(...
-           x0(3),bounds.mode(i).q.min,bounds.mode(i).q.max);
-       x0([1,2,3])=[];
+   for i=1:res.n_param
+       if strcmp('Fres',res.get_param_name(i))
+           [ min max ] = res.get_boundary(i);
+           x0=insert(res.normalize(res.get_param(i),min,max),...
+                     x0,i-1);
+       end
    end
-
+   
+   for i=1:res.n_param
+       [ min max ] = res.get_boundary(i);
        
+        res.set_param(i,res.denormalize(x0(i),min,max));
        
+   end
+  
+   
 end

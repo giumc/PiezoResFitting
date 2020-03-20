@@ -1,9 +1,9 @@
 function c0=fit_c0(res)
 
+c0      =   1e-12;
 if isempty(res.sparam)
     return;
 end
-
 
 freq    =   res.freq;
 y_meas  =   res.y_meas;

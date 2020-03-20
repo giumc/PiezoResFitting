@@ -8,20 +8,22 @@ function x0 = variables_to_array(res)
    %kt2
    %q
    
-   bounds   =   res.boundaries;
-   x0(1)    =   res.normalize( res.c0, bounds.c0.min, bounds.c0.max);
-  
-   x0(2)    =   res.normalize( res.r0, bounds.r0.min, bounds.r0.max);
-   
-   x0(3)    =   res.normalize( res.rs, bounds.rs.min, bounds.rs.max);
-   
-   for i=1:length(res.mode)
-       x0   =  [x0 res.normalize( res.mode(i).fres  ,...
-           bounds.mode(i).fres.min   , bounds.mode(i).fres.max)  ];
-       x0   =  [x0 res.normalize( res.mode(i).kt2   ,...
-           bounds.mode(i).kt2.min    , bounds.mode(i).kt2.max)   ];
-       x0   =  [x0 res.normalize( res.mode(i).q     ,...
-           bounds.mode(i).q.min      , bounds.mode(i).q.max)     ];
+   x0 = 0.5* ones(1,res.n_param);
+   for i=1:res.n_param
+       [ min max ] = res.get_boundary(i);
+       
+       x0(i)    =   res.normalize(...
+           res.get_param(i),min,max);
+       
    end
+   
+   %don't optimize fres
+   index_fres=[];
+   for i=1:res.n_param
+       if strcmp('Fres',res.get_param_name(i))
+           index_fres=[ index_fres i];
+       end
+   end
+   x0(index_fres)=[];
    
 end 

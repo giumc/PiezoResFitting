@@ -1,4 +1,4 @@
-function [scaled_values,label,exp]=scale_magnitude(values)
+function [scaled_values,label,exp]=num2str_sci(values)
     scaled_values=values;
     label='';
     exp=0;
@@ -26,7 +26,7 @@ function [scaled_values,label,exp]=scale_magnitude(values)
                     label   =   '';
                     break;
                 case 3
-                    label   =   'K';
+                    label   =   'k';
                     break;
                 case 6
                     label   =   'M';
