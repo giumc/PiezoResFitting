@@ -1,11 +1,13 @@
 classdef resonator < matlab.mixin.Copyable & handle
     
     %% properties
-    properties %(Access=Private,Hidden)
+    
+    properties (Access=private,Hidden)
         optimizer_setup;
     end % optimization options
+   
     properties (Hidden,SetObservable,AbortSet)
-        max_samples = 20001;
+        max_samples = 16001;
         smoothing_data = 0;
     end%s-par modifiers
     
@@ -53,7 +55,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_calc;
     end% calculated when prompted
     
-    properties %(Hidden)
+    properties (SetAccess=private,Hidden)
         c0 opt_param;
         r0 opt_param;
         rs opt_param;
@@ -64,7 +66,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_smooth;
     end % physical parameters
     
-    properties %(Hidden)
+    properties (Hidden)
         figure;
         mag_axis;
         phase_axis;
@@ -93,7 +95,7 @@ classdef resonator < matlab.mixin.Copyable & handle
 %             
 %             %to be removed
             obj.touchstone_file='./Old optimization/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
-            obj.smoothing_data=5;
+            obj.smoothing_data=0;
             obj.guess_coarse;
             obj.set_default_boundaries;
             obj.setup_plot;
@@ -116,14 +118,14 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end %Constructor/Destructor
     
-    methods %(Access=private)
+    methods (Access=private)
         
         x0      =   optim_array(resonator);
         transform_resonator(resonator,x0);
         stop    =   out_optim(resonator,x,flag,state);
         err     =   error_function(resonator,x0);  
         y       =   calculate_y (resonator);
-        guess_mode(resonator);
+        guess_mode(resonator,index);
         set_freq(resonator);
         set_sparam(resonator);
         
@@ -155,7 +157,7 @@ classdef resonator < matlab.mixin.Copyable & handle
     
     methods
         fit_routine(resonator);
-        fit_resonance(resonator);
+        flag=fit_resonance(resonator);
         guess_coarse(resonator);   
         
         function y = get.y_calc(resonator)
@@ -180,7 +182,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         setup_buttons(resonator);
     end % Graphic Tools
 
-    methods (Static)%Access=private
+    methods (Static,Access=private)
         
         function y = db(x)
             y = 20 .* log10 ( abs(x) );
@@ -192,7 +194,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end %Mathematical Functions
    
-    methods (Static)
+    methods (Static,Access=private,Hidden)
         
         function update_sparam(~,event)
             res=event.AffectedObject;

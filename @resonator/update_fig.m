@@ -4,5 +4,5 @@ r.populate_bars;
 r.populate_boundaries_edit;
 r.populate_labels;
 r.populate_checkbox;
-clc;
+
 end

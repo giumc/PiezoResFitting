@@ -1,11 +1,7 @@
-function fit_resonance(res)
+function flag=fit_resonance(res)
     clc
-    tobedeactivated=[1 2 3 5 6 7];
-    for i=1:length(tobedeactivated)
-        
-        res.action_buttons(tobedeactivated(i)).Enable='off'; 
-    end
-    res.action_buttons(4).Enable='on';  %enable stop button
+    
+    
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='none';
 %     problem.options.MaxIterations               =50e3;
@@ -30,14 +26,10 @@ function fit_resonance(res)
     res.optimizer_setup                         =problem;
     res.optimizer_setup.stop                    =0;
     
-    xa                                          =fmincon(res.optimizer_setup);
+    [xa,~,flag]                                 =fmincon(res.optimizer_setup);
     res.transform_resonator(xa);
     res.update_fig;
-    for i=1:length(tobedeactivated)
-        
-        res.action_buttons(tobedeactivated(i)).Enable='on'; 
-    end
-    res.action_buttons(4).Enable='off';  %disable stop button
+    
 
 end
 
