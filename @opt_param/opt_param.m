@@ -1,14 +1,11 @@
-classdef opt_param < handle
+classdef opt_param < matlab.mixin.Copyable % handle
+    
+    %% properties
     
     properties (SetAccess=private)
-        value double ;
+        value double;
         min double;
         max double;
-    end
-    
-    properties(SetAccess=private,Hidden)
-        str_sci string;
-        prefix string;       
     end
         
     properties
@@ -17,40 +14,45 @@ classdef opt_param < handle
         unit string;
     end
     
+    %% methods
+    
     methods
         
         function obj=opt_param(varargin)
-            obj.value=0.5;
-            obj.min=0;
-            obj.max=1;
+            
+            obj.override_value(0.5);
             obj.optimizable=true;
-            obj.prefix='';
             obj.unit='';
             obj.label='Default';
+            
             if ~isempty(varargin)
                 if isnumeric(varargin{1})
-                    obj.value   =   varargin{1};
-                    obj.min     =   obj.value/2;
-                    obj.max     =   obj.value*2;
-                    obj.set_value(obj.value);
+                    obj.override_value(varargin{1});
                 end
             end
+            
         end
         
     end %Constructor
 
     methods 
         
-        normalize(obj);
-        denormalize(obj);
-        [scaled_values,label,exp] = num2str_sci(obj);
+        x = normalize(obj);
+        x = denormalize(obj,x0);
         
     end %Math
     
     methods
-        set_value(obj,value);
+        set_value(obj,value,varargin);
         set_min(obj,value);
         set_max(obj,value);
-    end% SET functions
-
+        override_value(obj,value);
+        str= convert2sci(obj,num);
+    end %SET functions
+    
+    methods (Static)
+        [scaled_values,label,exp] = num2str_sci(num);
+        num = str2num_sci(str);
+    end
+    
 end

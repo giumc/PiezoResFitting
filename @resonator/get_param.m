@@ -1,27 +1,44 @@
-function num=get_param(r,index)
-    num=0;
-    if ~isnumeric(index)||index<1
+function num=get_param(r,tag)
+    index=[];
+    
+    if ischar(tag)||isstring(tag)
+        for i=1:r.n_param
+            names{i}=r.param_name(i);
+            if strcmp(names{i},tag)
+                index=i;
+                break
+            end
+        end
+    else
+        if isnumeric(tag)
+            if tag>0
+                index=tag;
+            end
+        end
+    end
+    
+    if isempty(index)
         fprintf('\nCannot get parameter.\n');
         return
     end
     
     switch index
         case 1
-            num=r.c0.value;
+            num=r.c0;
         case 2
-            num=r.r0.value;
+            num=r.r0;
         case 3
-            num=r.rs.value;
+            num=r.rs;
         otherwise
             k=mod(index-1,3);
             n=floor((index-1)/3);
             switch k
                 case 0
-                    num=r.mode(n).fres.value;
+                    num=r.mode(n).fres;
                 case 1
-                    num=r.mode(n).q.value;
+                    num=r.mode(n).q;
                 case 2
-                    num=r.mode(n).kt2.value;
+                    num=r.mode(n).kt2;
             end
     end
             

@@ -1,14 +1,14 @@
 function fit_resonance(res)
     clc
-    
-    if isempty(res.boundaries)
-        res.set_boundaries;
+    tobedeactivated=[1 2 3 5 6 7];
+    for i=1:length(tobedeactivated)
+        
+        res.action_buttons(tobedeactivated(i)).Enable='off'; 
     end
-    
+    res.action_buttons(4).Enable='on';  %enable stop button
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='none';
-    problem.options.MaxFunctionEvaluations      =10e3;
-    problem.options.MaxIterations               =50e3;
+%     problem.options.MaxIterations               =50e3;
     problem.options.Algorithm                   ='interior-point';
 %     problem.options.FiniteDifferenceType        ='central';
     problem.options.FunctionTolerance           =1;
@@ -20,15 +20,24 @@ function fit_resonance(res)
 
     problem.objective                           =@(x) res.error_function(x);
 
-    problem.x0                                  =res.variables_to_array;
+    problem.x0                                  =res.optim_array;
     problem.lb                                  =zeros(1,length(problem.x0));
     problem.ub                                  =ones(1,length(problem.x0));
 
     problem.solver                              ='fmincon';
     
-    xa                                          =fmincon(problem);
-    res.array_to_variables( xa );
+    
+    res.optimizer_setup                         =problem;
+    res.optimizer_setup.stop                    =0;
+    
+    xa                                          =fmincon(res.optimizer_setup);
+    res.transform_resonator(xa);
     res.update_fig;
+    for i=1:length(tobedeactivated)
+        
+        res.action_buttons(tobedeactivated(i)).Enable='on'; 
+    end
+    res.action_buttons(4).Enable='off';  %disable stop button
 
 end
 

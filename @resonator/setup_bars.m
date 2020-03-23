@@ -1,46 +1,51 @@
 function setup_bars(r)
 
-    x0norm= r.x0norm;
-    y0norm= r.y0norm;
-    dx= r.dx;
-    dy= r.dy;
+    x0=r.x0fig;
+    y0=r.y0fig;
+    dxbars= r.dxbar;
+    dybars= r.dybar;
+    
+    spacing=r.button_spacing;
     
     dxlabel = r.dxlabel;
     dylabel = r.dylabel;
     
+    x0labels=x0+r.dxfig-dxlabel/2;
+    y0labels=y0+2*r.dyfig-3*dylabel;
+    
+    x0bars=x0labels+3*dxlabel+3*spacing;
+    y0bars=y0labels;
+    
+    pos_bars=@(i) [x0bars y0bars-dybars*(i-1) dxbars dybars];
+    pos_min=@(i)  [x0bars-dxlabel y0bars-(i-1)*dybars]; 
+    pos_max=@(i)  [x0bars+dxbars y0bars-(i-1)*dybars];
+    pos_name=@(i) [x0labels y0bars-(i-1)*dybars];
+    pos_value=@(i)[x0labels+dxlabel+spacing y0bars-(i-1)*dybars];  
+    pos_checkbox=@(i)[x0bars+dxbars+spacing+dxlabel y0bars-(i-1)*dybars];
     if (~isempty(r.boundaries_bars))
         delete(r.boundaries_bars)
         r.boundaries_bars=[];
     end
-    %% define bars
+%% define bars
     for i=1:r.n_param
         b(i)=uicontrol();
         b(i).Parent=r.figure;
         b(i).Style='slider';
         b(i).Units='normalized';
-        b(i).Position=[x0norm y0norm-dy*(i-1) dx dy];
+        b(i).Position=pos_bars(i);
         b(i).SliderStep=[2.5e-3 5e-2];
         b(i).Min=0;
         b(i).Max=1;
         b(i).Value=0.5;
-        b(i).String=r.get_param_name(i);
-        b(i).Tag=assign_name_order(r,i);
+        opt_param=r.get_param(i);
+        b(i).String=opt_param.label;
+        b(i).Tag=b(i).String;
         b(i).BackgroundColor=rgb('LightCoral');  
         b(i).Callback={@r.bar_callback,r};
-        
-        if i==r.n_param %define heading
-            
-            p(1)    =   uicontrol();
-            p(1).Parent =   r.figure;
-            p(1).Style  =   'text';
-            p(1).Units  =   'normalized';
-            p(1).FontSize = 10;
-            p(1).BackgroundColor=rgb('LightBlue');
-            p(1).Position   =   [x0norm y0norm+dy dx dy];
-            p(1).String =   'Control';
-        end
+       
     end
     r.boundaries_bars=b; 
+    
 %% define editable text (min / max) 
     
     if (~isempty(r.boundaries_edit))
@@ -59,30 +64,16 @@ function setup_bars(r)
         t1(i).BackgroundColor=rgb('LightGreen');
         t1(i).Callback={@r.edit_callback,r};
         t1(i).Position([3,4])=[dxlabel dylabel];
-        t1(i).Position([1,2])=[x0norm-dxlabel y0norm-(i-1)*dy];    
+        t1(i).Position([1,2])=pos_min(i);
         t2(i)=copyobj(t1(i),r.figure);
         t2(i).String='1';
         t2(i).Callback={@r.edit_callback,r};
-        t2(i).Position([1,2])=[x0norm+dx y0norm-(i-1)*dy];
-        t1(i).Tag=strcat(assign_name_order(r,i),'min');
-        t2(i).Tag=strcat(assign_name_order(r,i),'max');
+        t2(i).Position([1,2])=pos_max(i);
+        opt_param=r.get_param(i);
+        t1(i).Tag=strcat(opt_param.label,'min');
+        t2(i).Tag=strcat(opt_param.label,'max');
         r.boundaries_edit{i}=[t1(i) t2(i)];
-        
-        if i==r.n_param %define heading
-            
-            p(2)=   copyobj(p(1),r.figure);
-            
-            p(2).Position([3,4])=[dxlabel dylabel];
-            p(2).Position([1,2])=[x0norm-dxlabel y0norm+dy];  
-            p(2).String =   'Min';
-            
-            p(3)=   copyobj(p(1),r.figure);
-            p(3).Position([3,4])=[dxlabel dylabel];
-            p(3).Position([1,2])=[x0norm+dx y0norm+dy];  
-            p(3).String =   'Max';
-            
-        end
-        
+
     end
     
 %% add name labels
@@ -104,31 +95,21 @@ function setup_bars(r)
         l1(i).FontSize=10;
         l1(i).BackgroundColor=rgb('LightGrey');
         l1(i).Position([3,4])=[dxlabel dylabel];
-        l1(i).Position([1,2])=[x0norm-4*dxlabel y0norm-(i-1)*dy];  
-        l1(i).String=r.get_param_name(i);
-        l1(i).Tag=l1(i).String;
-        unit = r.get_unit(i);
-        if ~isempty(unit)
-            l1(i).String=strcat(l1(i).String,' [',unit,']');
-        else
-            l1(i).String=strcat(l1(i).String,' [',']');
-        end
+        l1(i).Position([1,2])=pos_name(i);
+        opt_param=r.get_param(i);
+        l1(i).String=opt_param.label;
         
-        if i==r.n_param %define heading
-            
-            p(4)= copyobj(p(1),r.figure);
-            p(4).Position([3,4])=[dxlabel dylabel];
-            p(4).Position([1,2])=[x0norm-4*dxlabel y0norm+dy];  
-            p(4).String =   'Param';
-            
-            p(5)= copyobj(p(1),r.figure);
-            p(5).Position([3,4])=[dxlabel dylabel];
-            p(5).Position([1,2])=[x0norm-2.5*dxlabel y0norm+dy];  
-            p(5).String =   'Value';
-            
-        end
+        l1(i).Tag=l1(i).String;
+%         unit = opt_param.unit;
+%         if ~isempty(unit)
+%             l1(i).String=strcat(l1(i).String,' [',unit,']');
+%         else
+%             l1(i).String=strcat(l1(i).String,' [',']');
+%         end
+       
     end
-    r.param_name_labels=[l1 p]; 
+    r.param_name_labels=l1;
+    
     
 %% add value labels
  
@@ -149,27 +130,75 @@ function setup_bars(r)
         l2(i).FontSize=10;
         l2(i).BackgroundColor=rgb('LightGrey');
         l2(i).Position([3,4])=[dxlabel dylabel];
-        l2(i).Position([1,2])=[x0norm-2.5*dxlabel y0norm-(i-1)*dy];  
-        l2(i).String=r.get_param_name(i);
+        l2(i).Position([1,2])=pos_value(i);
+        opt_param=r.get_param(i);
+        l2(i).String=opt_param.label;
         l2(i).Tag=l2(i).String;
-        unit =r.get_unit(i);
-        if ~isempty(unit)
-            l2(i).String=strcat(l2(i).String,' [',unit,']');
-        else
-            l2(i).String=strcat(l2(i).String,' [',']');
-        end
+%         unit =opt_param.unit;
+%         if ~isempty(unit)
+%             l2(i).String=strcat(l2(i).String,' [',unit,']');
+%         else
+%             l2(i).String=strcat(l2(i).String,' [',']');
+%         end
     end
     r.param_value_labels=l2; 
-end
-%% adds mode number to name 
-function name=assign_name_order(r,k)
-    name=[];
-    if k<=3
-        name=r.get_param_name(k);
-    else
-        mode=floor((k-1)/3);
-        name=strcat(...
-            r.get_param_name(k),...
-            sprintf('_%d',mode));
+    
+%% add optimizable checkbox
+
+    if (~isempty(r.optim_checkbox))
+        
+        delete(r.optim_checkbox)
+        r.optim_checkbox=[];
+        
     end
+    
+    for i=1:r.n_param
+        c(i)=uicontrol();
+        c(i).Parent=r.figure;
+        c(i).Units='normalized';
+        c(i).Style='radiobutton';
+        c(i).Position([1,2])=pos_checkbox(i);
+        c(i).Position([3,4])=[dylabel/3 dylabel];
+        c(i).String='';%strcat('Test',num2str(i));
+        c(i).Tag=r.param_name(i);
+        c(i).Min=0;
+        c(i).Max=1;
+        c(i).Value=r.get_param(i).optimizable;
+        c(i).BackgroundColor=rgb('GoldenRod');
+        c(i).Callback={@r.checkbox_callback,r};
+        c(i).Tag=r.param_name(i);
+    end
+    r.optim_checkbox=c;
+%% add headings
+
+names=r.name_headings;
+
+    if (~isempty(r.headings))
+        
+        delete(r.headings)
+        r.headings=[];
+        
+    end
+
+for i=1:length(names)
+    
+    p(i)    =   uicontrol();
+    p(i).Parent =   r.figure;
+    p(i).Style  =   'text';
+    p(i).Units  =   'normalized';
+    p(i).FontSize = 10;
+    p(i).BackgroundColor=rgb('LightBlue');
+    p(i).Position([3 4])   = [dxlabel dylabel];
+    p(i).String =   names{i};
+    
+end
+p(1).Position=  [x0bars y0bars+dybars dxbars dybars];
+p(2).Position([1,2])=[x0bars-dxlabel y0bars+dybars];  
+p(3).Position([1,2])=[x0bars+dxbars y0bars+dybars];  
+p(4).Position([1,2])=[x0labels y0bars+dybars];  
+p(5).Position([1,2])=[x0labels+dxlabel+spacing y0bars+dybars];  
+p(6).Position([1,2])=[x0bars+dxbars+spacing+dxlabel y0bars+dybars];
+p(6).Position([3 4])=[0.01 dylabel];
+    r.headings=p;
+        drawnow;
 end

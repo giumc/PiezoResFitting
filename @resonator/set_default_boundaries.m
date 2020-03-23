@@ -1,39 +1,38 @@
 function set_default_boundaries(res)
     %fprintf('\nSetting default boundaries.\n');
-    boundaries=[];
+    
     if isempty(res.y_meas)
         fprintf('Empty measure: No bounds generated\n');
         return;
     end
+    down=0.5;
+    up=1.5;
+    res.c0.set_min(     res.c0.value*down    );
+    res.c0.set_max(     res.c0.value*up      );
     
-    boundaries.c0.min      =   res.c0*0.2;
-    boundaries.c0.max      =   res.c0*5;
-    
-    boundaries.r0.min      =   0.1*res.r0;
-    boundaries.r0.max      =   10*res.r0;
+    res.r0.set_min(     res.r0.value*down     );
+    res.r0.set_max(     res.r0.value*up       );
 
-    boundaries.rs.min      =   0.1*res.rs;
-    boundaries.rs.max      =   10*res.rs;
+    res.rs.set_min(     res.rs.value*down     );
+    res.rs.set_max(     res.rs.value*up       );
        
     for i=1:length(res.mode)
     
-        boundaries.mode(i).q.min       =   0.2*...
-                                            res.mode(i).q;
-        boundaries.mode(i).q.max       =   5*...
-                                            res.mode(i).q;
-
-        boundaries.mode(i).kt2.min     =   0.5*...
-                                            res.mode(i).kt2;
-        boundaries.mode(i).kt2.max     =   2*...
-                                            res.mode(i).kt2;
-
-        boundaries.mode(i).fres.min    =   0.75*...
-                                            res.mode(i).fres;
-        boundaries.mode(i).fres.max    =   1.5*...
-                                            res.mode(i).fres;
-       
+        res.mode(i).q.set_min(  down*...
+                                res.mode(i).q.value   );
+        res.mode(i).q.set_max(  up*...
+                                res.mode(i).q.value   );
+        
+        res.mode(i).kt2.set_min(  down*...
+                                res.mode(i).kt2.value   );
+        res.mode(i).kt2.set_max(  up*...
+                                res.mode(i).kt2.value   );
+        
+        res.mode(i).fres.set_min(  down*...
+                                res.mode(i).fres.value   );
+        res.mode(i).fres.set_max(  up*...
+                                res.mode(i).fres.value   );
+               
     end
-
-    res.boundaries         =    boundaries;
-    clc;
+    
 end

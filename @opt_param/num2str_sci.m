@@ -1,6 +1,4 @@
-function [scaled_values,label,exp]=num2str_sci(opt_param)
-    
-    values=opt_param.value;
+function [scaled_values,label,exp]=num2str_sci(values)
     
     label='';
     

@@ -10,9 +10,9 @@ function edit_callback(src,~,res)
             return
         end
     end
-        
-    src_id=res.get_id_param(tag);
-    res.set_boundary(src_id,res.str2num_sci(src.String),caller_type);
+    param=res.get_param(tag);
+    res.set_boundary(...
+        param,param.str2num_sci(src.String),caller_type);
     res.populate_bars;
     res.populate_boundaries_edit;
 end

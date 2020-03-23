@@ -1,34 +1,32 @@
-function set_number_modes(res,n)
-    n_new=ceil(n);
-    
-    n_old     =   length(res.mode);
-    
-    %fprintf('\nChanging number of modes from %d to %d.\n',n_old,n_new);
-    if n_old==0
-        if n_new>0
-            res.mode(1).fres=1e9;
-            res.mode(1).kt2=0.1;
-            res.mode(1).q=1e3;
-            if n_new>=2
-                for k=2:length(n_new)
-                    res.mode(k)=res.mode(k-1);
-                end
-                res.guess_coarse;
-            end
-        return
+function remove_mode(res,varargin)
+    n=1;
+    if ~isempty(varargin)
+        if isnumeric(varargin{1})
+            n=floor(varargin{1});
         end
     end
     
-    if n_new < n_old
-        res.mode((n_new+1):n_old)=[];
-    else    
-        if n_new > n_old
-            for k=n_old:1:(n_new-1)
-                res.mode(k+1)=res.mode(k);
-            end
-        end 
+    n_old     =   length(res.mode);
+    for i=0:(n-1)
+        if length(res.mode)==1
+            break
+        else
+            res.mode(n_old-i)=[];
+            delete(res.boundaries_bars(end-2:end));
+            res.boundaries_bars(end-2:end)=[];
+            delete([res.boundaries_edit{end-2:end}]);
+            res.boundaries_edit(end-2:end)=[];
+            delete(res.param_name_labels(end-2:end));
+            res.param_name_labels(end-2:end)=[];
+            delete(res.param_value_labels(end-2:end));
+            res.param_value_labels(end-2:end)=[];
+            delete(res.optim_checkbox(end-2:end));
+            res.optim_checkbox(end-2:end)=[];
+            drawnow;
+        end
+        
     end
-%     res.guess_coarse;
-    res.set_default_boundaries;
-    res.update_fig;
+    
+    %remove graphics
+    
 end

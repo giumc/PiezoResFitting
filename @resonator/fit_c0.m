@@ -8,20 +8,18 @@ end
 freq    =   res.freq;
 y_meas  =   res.y_meas;
 
-res.c0  =   imag(y_meas(1))/(2*pi*freq(1));
+res.c0.set_value(imag(y_meas(1))/(2*pi*freq(1)),'override');
 
-c0_min  =   res.c0/10;
-c0_max  =   res.c0*10;
+res.c0.set_min(res.c0.value/10);
+res.c0.set_max(res.c0.value*10);
 
-norm    =   @(x) res.normalize(x,c0_min,c0_max);
-denorm  =   @(x) res.denormalize(x,c0_min,c0_max);
 
 y_c0    =   @(x) 1i * 2 * pi * freq * x;
 
 obj     =   @(x) sum(...
-                    abs(res.db(y_c0(denorm(x)))...
+                    abs(res.db(y_c0(res.c0.denormalize(x)))...
                     -res.db((y_meas))).^2)/length(freq);
-x0      =   norm(res.c0);
+x0      =   res.c0.normalize;
 
 options =   optimoptions('fmincon');
 options.Algorithm='interior-point';
@@ -33,6 +31,6 @@ problem.objective=@(x) obj(x);
 problem.solver='fmincon';
 problem.x0=x0;
 problem.options=options;
-c0      =   denorm( fmincon(problem) );
-res.c0  =   c0;
+c0      =   res.c0.denormalize(( fmincon(problem) ));
+res.c0.set_value(   c0  );
 end

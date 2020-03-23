@@ -1,9 +1,6 @@
 classdef resonator < matlab.mixin.Copyable & handle
     
     %% properties
-    properties %(Access=Private,Hidden)
-        optimizer_setup;
-    end % optimization options
     properties (Hidden,SetObservable,AbortSet)
         max_samples = 20001;
         smoothing_data = 0;
@@ -16,32 +13,23 @@ classdef resonator < matlab.mixin.Copyable & handle
     properties (Access=private,Constant)
         dxfig= 0.4;
         dyfig= 0.35;
-        x0fig=0;
-        y0fig=0.3;
-        dxbar= 0.075;
-        dybar= 0.03;
-        dxlabel = 0.04;
+        x0fig=0.1;
+        y0fig=0.1;
+        x0norm= 0.7;
+        y0norm= 0.9;
+        dx= 0.2;
+        dy= 0.03;
+        dxlabel = 0.05;
         dylabel = 0.03;
         
-        dxbutton = 0.1;
-        dybutton = 0.05;
-        button_spacing = 0.001;
+        dxbutton = 0.3;
+        dybu
         
-        buttons_name={...
-            "Add Mode",...
+        buttons_name={"Add Mode",...
             "Remove Mode",...
             "Start Fit",...
             "Stop Fit",...
-            "Reset to Default",...
-            "Guess Shape",...
-            "Rescale Boundaries"};
-        name_headings={...
-            "Control",...
-            "Min",...
-            "Max",...
-            "Param",...
-            "Value",...
-            "O"};
+            "Reset to Default"};
     end %graphic positioners
     
     properties
@@ -53,7 +41,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_calc;
     end% calculated when prompted
     
-    properties %(Hidden)
+    properties (Hidden)
         c0 opt_param;
         r0 opt_param;
         rs opt_param;
@@ -64,7 +52,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_smooth;
     end % physical parameters
     
-    properties %(Hidden)
+    properties (Hidden)
         figure;
         mag_axis;
         phase_axis;
@@ -75,8 +63,6 @@ classdef resonator < matlab.mixin.Copyable & handle
         param_name_labels;
         param_value_labels;
         action_buttons;
-        optim_checkbox;
-        headings;
     end % graphic objects
 
     %% methods 
@@ -96,23 +82,29 @@ classdef resonator < matlab.mixin.Copyable & handle
             obj.smoothing_data=5;
             obj.guess_coarse;
             obj.set_default_boundaries;
-            obj.setup_plot;
-            obj.setup_buttons;
-            obj.setup_bars;
             obj.update_fig;
         end
         
         function delete(r)
             if ~isempty(r.figure)
-                if isobject(r.figure)
-                    if isvalid(r.figure)
-                        delete(r.figure)
-                    end
+                if isvalid(r.figure)
+                    delete(r.figure)
                 end
             end        
         end
         
-        reset(r);
+        function reset(r)
+            if ~isempty(r.figure)
+                if isvalid(r.figure)
+                    delete(r.figure)
+                end
+            end
+            while length(r.mode)>1
+                r.remove_mode;
+            end
+            r.set_default_param;
+            r.update_fig;
+        end
         
     end %Constructor/Destructor
     
@@ -175,12 +167,11 @@ classdef resonator < matlab.mixin.Copyable & handle
         populate_bars(resonator);
         populate_boundaries_edit(resonator);
         populate_labels(resonator);
-        populate_checkbox(resonator);
         update_fig(resonator);
         setup_buttons(resonator);
     end % Graphic Tools
 
-    methods (Static)%Access=private
+    methods (Access=private,Static)
         
         function y = db(x)
             y = 20 .* log10 ( abs(x) );
@@ -204,7 +195,6 @@ classdef resonator < matlab.mixin.Copyable & handle
         bar_callback(src_event,event,resonator);       
         edit_callback(src_event,event,resonator);
         button_callback(src_event,event,resonator);
-        checkbox_callback(src_event,event,resonator);
     end %Listeners callback
     
 end

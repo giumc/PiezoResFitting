@@ -1,14 +1,26 @@
 function setup_plot(res)
 
+dxfig= res.dxfig;
+dyfig= res.dyfig;
+x0fig= res.x0fig;
+y0fig= res.y0fig;
+spacing=res.button_spacing;
 %% Figure
 
-pause (2);
-if isobject(res.figure) && isvalid(res.figure)
-    delete(res.figure);
-    res.figure=[];
+if ~isempty(res.figure)
+    if isobject(res.figure) 
+        if isvalid(res.figure)
+            delete(res.figure.Children);
+        else
+            res.figure=figure;
+        end
+    else
+        res.figure=figure;
+    end
+else
+    res.figure=figure;
 end
 
-    res.figure=figure;
     res.figure.Name='Resonator Optimizer';
     res.figure.Units='normalized';
     res.figure.OuterPosition=[0 0 1 1];
@@ -19,10 +31,9 @@ end
 mag_axis_name   = 'Y Magnitude';
 phase_axis_name = 'Y Phase';
 
-figure(res.figure);
 mag_axis                =   axes(res.figure);
 mag_axis.Title.String   =   mag_axis_name;
-mag_axis.Position       =   [0.1 0.6 0.4 0.35];
+mag_axis.OuterPosition       =   [x0fig y0fig+dyfig+spacing dxfig dyfig];
 mag_axis.YLabel.String  =   '[dB]';
 mag_axis.NextPlot       =   'replace';
 mag_axis.Color          =   rgb('white');
@@ -37,7 +48,7 @@ mag_legend.Location     =   'southeast';
 figure(res.figure);
 phase_axis              =   axes(res.figure);
 phase_axis.Title.String =   phase_axis_name;
-phase_axis.Position     =   [0.1 0.15 0.4 0.35];
+phase_axis.OuterPosition     =   [x0fig y0fig dxfig dyfig];
 phase_axis.YLabel.String=   '[\circ]';
 phase_axis.NextPlot     =   'replace';
 phase_axis.Color        =   rgb('white');

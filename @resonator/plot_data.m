@@ -23,10 +23,8 @@ function plot_data(r)
     mag_axis    =   r.mag_axis;
     phase_axis  =   r.phase_axis;
 
-
-    [freq,scale] =  r.num2str_sci(freq);
+    [freq,scale] =  r.c0.num2str_sci(freq);
     freq_label  =   strcat('Frequency',{' ['},scale,{'Hz]'});
-
     phase_axis.XLabel.String=freq_label;
     mag_axis.XLabel.String=freq_label;
 
