@@ -123,7 +123,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         stop    =   out_optim(resonator,x,flag,state);
         err     =   error_function(resonator,x0);  
         y       =   calculate_y (resonator);
-        
+        guess_mode(resonator);
         set_freq(resonator);
         set_sparam(resonator);
         
