@@ -1,14 +1,22 @@
 function [scaled_values,label,exp]=num2str_sci(values)
     
     label='';
-    
+    if values==0
+        scaled_values=0;
+        label='';
+        exp=0;
+        return
+    end
     exp=0;
     
-    for i=-15:3:15 
+    for i=-18:3:15 
         if mean(values)/10^(i) <= 1e3 && mean(values)/10^(i) > 1
             scaled_values    =   values./10^(i); 
             exp = i;
             switch i
+                case -18
+                    label   =   'z';
+                    break;
                 case -15
                     label   =   'f';
                     break;

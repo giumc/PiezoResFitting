@@ -16,17 +16,14 @@ function guess_coarse(res)
     
     res.c0.set_value(   res.fit_c0  , tag );
     
-    res.r0.set_value(...
-        1/(2*pi*res.mode(1).fres.value*res.c0.value)/0.001,tag);
-
-    res.rs.set_value(2,tag);
-    
     for i=1:length(res.mode)
         res.guess_mode(i);
     end
     
-    
-            
+    res.r0.set_value(...
+        1/(2*pi*res.mode(1).fres.value*res.c0.value)/0.01,tag);
+
+    res.rs.set_value(2,tag);         
     res.set_default_boundaries;
     
 end

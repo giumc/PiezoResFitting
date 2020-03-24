@@ -16,7 +16,7 @@ function guess_mode(r,i)
             'NPeaks',max([1,length(r.mode)]));
     i_max_1=i_max_1(1);
     i_max_2(1)=[];
-    i_max=[i_max_1  i_max_2];
+    i_max=[i_max_1  ; i_max_2];
             
     [~,i_min] = findpeaks(r.db(1./y_meas),...
         'WidthReference','halfheight',...
@@ -35,9 +35,9 @@ function guess_mode(r,i)
     else
         r.mode(i).fres.set_value(freq(i_max(i)),tag);
 
-        r.mode(i).q.set_value(r.mode(i-1).q.value,tag);
+        r.mode(i).q.set_value(1000,tag);
 
-        r.mode(i).kt2.set_value(r.mode(i-1).kt2.value,tag);
+        r.mode(i).kt2.set_value(0.01,tag);
     end
 
     

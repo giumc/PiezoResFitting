@@ -15,6 +15,7 @@ function y = error_function(res,x0)
         phase_err   =   norm_error(angle_deg);
 
         y           =   ( mag_err + phase_err ) ./ 2;
+        y=mag_err;
     end
 
     function y = norm_error(func)

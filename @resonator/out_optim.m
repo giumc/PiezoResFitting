@@ -1,7 +1,8 @@
 function stop   =     out_optim (res, x,flag,state)
     drawnow;
     stop=res.optimizer_setup.stop;
-    tobedeactivated=[1 2 3 5 6 7];
+    tobedeactivated=[1 2 3 5 6 7 8];
+    
     if strcmp(state,'init')
         
         for i=1:length(tobedeactivated)

@@ -11,6 +11,8 @@ function set_param(r,param,value,varargin)
         end
     end
     
+    %cap params
+    
     param.set_value(value,override_tag);
     
 end

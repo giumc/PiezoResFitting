@@ -19,7 +19,13 @@ function add_mode(res,varargin)
             opt_param=res.get_param(k);
             opt_param.label=name;
         end
-            
+        
+        %by default,make new mode optimizable
+        for k=res.n_param-2:res.n_param
+            name=res.param_name(k);
+            opt_param=res.get_param(k);
+            opt_param.optimizable=true;
+        end
         res.guess_mode(new_mode);
         
     end        

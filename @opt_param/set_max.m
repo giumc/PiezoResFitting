@@ -1,23 +1,26 @@
-function set_max(opt_param,max)
+function set_max(opt_param,local_max)
 %callback function, triggered when one attempts to modify boundaries
     
-min=opt_param.min;
+local_min=opt_param.min;
 v=opt_param.value;
 
 %prevent weird cases
-
-if max < min
-    opt_param.min=max;
-    opt_param.value=max;
+if local_max < local_min
+    opt_param.min=local_max;
+    opt_param.value=local_max;
 end
 
-%adjust 
+if local_max > opt_param.global_max
+    opt_param.max=opt_param.global_max;
+end
 
-if v > max
-    opt_param.value=max;
-    opt_param.max=max;
+%adjust
+
+if v > local_max
+    opt_param.value=local_max;
+    opt_param.max=min([local_max opt_param.global_max]);
 else
-    opt_param.max=max;
+    opt_param.max=min([local_max opt_param.global_max]);
 end
 
  

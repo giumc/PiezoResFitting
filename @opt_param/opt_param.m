@@ -4,10 +4,15 @@ classdef opt_param < matlab.mixin.Copyable % handle
     
     properties (SetAccess=private)
         value double;
-        min double;
-        max double;
+        min double = 0;
+        max double = 1;
     end
-        
+    
+    properties (Hidden)
+        global_max double = 1e20;
+        global_min double = 0;
+    end
+    
     properties
         label string;
         optimizable double;
@@ -20,14 +25,14 @@ classdef opt_param < matlab.mixin.Copyable % handle
         
         function obj=opt_param(varargin)
             
-            obj.override_value(0.5);
+            obj.set_value(0.5);
             obj.optimizable=true;
             obj.unit='';
             obj.label='Default';
             
             if ~isempty(varargin)
                 if isnumeric(varargin{1})
-                    obj.override_value(varargin{1});
+                    obj.set_value(0.5,'override');
                 end
             end
             

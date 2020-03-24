@@ -29,9 +29,13 @@ function button_callback(caller,~,r)
                     r.set_default_boundaries;
                     r.update_fig;
                     break
+                case 8
+                    for i=1:r.n_param
+                        r.get_param(i).optimizable=true;
+                    end
+                    r.update_fig;
             end
         end
     end
-    clc
-    
+        
 end

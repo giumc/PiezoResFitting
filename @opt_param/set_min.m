@@ -6,6 +6,9 @@ v=opt_param.value;
 
 %prevent weird cases
 
+if min < opt_param.global_min
+    opt_param.min=opt_param.global_min;
+end
 if min > max
     opt_param.max=min;
     opt_param.value=min;

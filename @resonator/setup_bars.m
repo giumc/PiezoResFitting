@@ -109,8 +109,7 @@ function setup_bars(r)
        
     end
     r.param_name_labels=l1;
-    
-    
+        
 %% add value labels
  
     if ~isempty(r.param_value_labels)
@@ -169,6 +168,7 @@ function setup_bars(r)
         c(i).Tag=r.param_name(i);
     end
     r.optim_checkbox=c;
+
 %% add headings
 
 names=r.name_headings;
@@ -192,13 +192,68 @@ for i=1:length(names)
     p(i).String =   names{i};
     
 end
+dxcheckbox=0.01;
 p(1).Position=  [x0bars y0bars+dybars dxbars dybars];
 p(2).Position([1,2])=[x0bars-dxlabel y0bars+dybars];  
 p(3).Position([1,2])=[x0bars+dxbars y0bars+dybars];  
 p(4).Position([1,2])=[x0labels y0bars+dybars];  
 p(5).Position([1,2])=[x0labels+dxlabel+spacing y0bars+dybars];  
 p(6).Position([1,2])=[x0bars+dxbars+spacing+dxlabel y0bars+dybars];
-p(6).Position([3 4])=[0.01 dylabel];
+p(6).Position([3 4])=[dxcheckbox dylabel];
     r.headings=p;
         drawnow;
+        
+%% second column
+
+bars_per_column=r.bars_per_column+1;
+
+dx=4*dxlabel+dxbars+dxcheckbox+8*spacing;
+if r.n_param>bars_per_column
+    
+    %move labels
+    labels2=copyobj(r.headings,r.figure);
+    for i=1:length(labels2)
+        labels2(i).Position([1 2])=labels2(i).Position([1 2])+[dx 0];
+    end
+    r.headings=[r.headings labels2.'];
+    
+    %move bars
+    for i=bars_per_column:r.n_param
+        
+        %move bars
+        pos0=pos_bars(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        r.boundaries_bars(i).Position([1,2])=...
+            [x0 y0]+[dx 0];
+        %move editable
+        edits=r.boundaries_edit{i};
+        min_edit=edits(1);
+        max_edit=edits(2);
+        pos0=pos_min(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        min_edit.Position([1,2])=[x0 y0]+[dx 0];
+        pos0=pos_max(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        max_edit.Position([1,2])=[x0 y0]+[dx 0];
+        
+        %move labels
+        pos0=pos_name(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        r.param_name_labels(i).Position([1 2])=[x0 y0]+[dx 0];
+        pos0=pos_value(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        r.param_value_labels(i).Position([1 2])=[x0 y0]+[dx 0];
+        
+        %move checkbox
+        pos0=pos_checkbox(mod(i+1,bars_per_column));
+        x0=pos0(1);
+        y0=pos0(2);
+        r.optim_checkbox(i).Position([1 2])=[x0 y0]+[dx 0];
+    end
 end
+
