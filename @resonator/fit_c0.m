@@ -5,10 +5,10 @@ if isempty(res.sparam)
     return;
 end
 
-freq    =   res.freq;
-y_meas  =   res.y_meas;
+freq    =   res.freq_smooth;
+y_smooth  =   res.y_smooth;
 
-res.c0.set_value(imag(y_meas(1))/(2*pi*freq(1)),'override');
+res.c0.set_value(imag(y_smooth(1))/(2*pi*freq(1)),'override');
 
 res.c0.set_min(res.c0.value/10);
 res.c0.set_max(res.c0.value*10);
@@ -18,7 +18,7 @@ y_c0    =   @(x) 1i * 2 * pi * freq * x;
 
 obj     =   @(x) sum(...
                     abs(res.db(y_c0(res.c0.denormalize(x)))...
-                    -res.db((y_meas))).^2)/length(freq);
+                    -res.db((y_smooth))).^2)/length(freq);
 x0      =   res.c0.normalize;
 
 options =   optimoptions('fmincon');

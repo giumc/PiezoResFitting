@@ -1,5 +1,5 @@
 function y= calculate_y(resonator)
-    f   =   resonator.freq;
+    f   =   resonator.freq_smooth;
     c0  =   resonator.c0.value;
     r0  =   resonator.r0.value;
     rs  =   resonator.rs.value;

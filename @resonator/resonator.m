@@ -7,9 +7,10 @@ classdef resonator < matlab.mixin.Copyable & handle
     end % optimization options
    
     properties (Hidden,SetObservable,AbortSet)
-        max_samples = 16001;
-        smoothing_data = 0;
-    end%s-par modifiers
+        max_samples double = 16001;
+        smoothing_data double = 0;
+        interp_points double =  0;
+    end %s-par modifiers
     
     properties (SetObservable,AbortSet)
         touchstone_file;
@@ -62,8 +63,9 @@ classdef resonator < matlab.mixin.Copyable & handle
         mode = struct ('fres',opt_param,...
                        'q',opt_param,...
                        'kt2',opt_param);
-        freq ;
-        y_smooth;
+        freq double;
+        freq_smooth double;
+        y_smooth double;
     end % physical parameters
     
     properties (Hidden)
@@ -92,8 +94,10 @@ classdef resonator < matlab.mixin.Copyable & handle
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
-%             
+            addlistener(obj,'interp_points','PostSet',@obj.update_sparam);  
 %             %to be removed
+            cd(fileparts(which('resonator.m')));
+            cd ..
             obj.touchstone_file='./Old optimization/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
             obj.smoothing_data=0;
             obj.guess_coarse;
@@ -118,7 +122,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end %Constructor/Destructor
     
-    methods (Access=private)
+    methods %(Access=private)
         
         x0      =   optim_array(resonator);
         transform_resonator(resonator,x0);

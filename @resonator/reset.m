@@ -20,7 +20,11 @@ function reset(r)
             r.param_value_labels=[];
             delete(r.action_buttons);
             r.action_buttons=[];
-
+            
+            r.set_sparam;
+            r.set_freq;
+            r.extract_y_from_s;
+            
             r.set_default_param;
             r.guess_coarse;
             r.setup_plot;

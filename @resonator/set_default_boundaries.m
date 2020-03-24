@@ -5,8 +5,8 @@ function set_default_boundaries(res)
         fprintf('Empty measure: No bounds generated\n');
         return;
     end
-    down=0.25;
-    up=4;
+    down=0.5;
+    up=1.5;
     res.c0.set_min(     res.c0.value*down    );
     res.c0.set_max(     res.c0.value*up      );
     

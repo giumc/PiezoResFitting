@@ -56,7 +56,7 @@ while loop
                 if i==length(x0)
                     r.add_mode();
                     subloop=false;
-                    if length(r.mode)==6
+                    if length(r.mode)>8
                         loop=false;
                         
                     end

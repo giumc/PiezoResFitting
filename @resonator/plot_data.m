@@ -3,12 +3,12 @@ function plot_data(r)
     
     fit_name='Fit';
     meas_name='Meas';
-
-    freq    =   r.freq;
-
-    y_calc  =   r.y_calc; 
-
+   
+    freq     =   r.freq_smooth;
+    
     y_meas  =   r.y_smooth;
+    
+    y_calc  =   r.y_calc; 
 
     if isempty(r.figure)
         r.setup_plot;
@@ -23,6 +23,8 @@ function plot_data(r)
     mag_axis    =   r.mag_axis;
     phase_axis  =   r.phase_axis;
 
+    delete(mag_axis.Children);
+    delete(phase_axis.Children);
     [freq,scale] =  r.c0.num2str_sci(freq);
     freq_label  =   strcat('Frequency',{' ['},scale,{'Hz]'});
     phase_axis.XLabel.String=freq_label;
@@ -60,7 +62,7 @@ function plot_data(r)
 
     %adjust axis lim
     mag_axis.XLim   =   [min(freq) max(freq)];
-    mag_axis.XTick  =   [min(freq):(max(freq)-min(freq))/10:max(freq)];   
+    mag_axis.XTick  =   min(freq):((max(freq)-min(freq))/10):max(freq);   
     phase_axis.XLim =   mag_axis.XLim;
     phase_axis.XTick=   mag_axis.XTick;
     

@@ -1,6 +1,6 @@
 function guess_mode(r,i)
     y_meas =    r.y_smooth;
-    freq    =   r.freq;
+    freq    =   r.freq_smooth;
     
     tag = 'override'; % override previous values / bounds
     
@@ -16,7 +16,7 @@ function guess_mode(r,i)
             'NPeaks',max([1,length(r.mode)]));
     i_max_1=i_max_1(1);
     i_max_2(1)=[];
-    i_max=[i_max_1; i_max_2];
+    i_max=[i_max_1  i_max_2];
             
     [~,i_min] = findpeaks(r.db(1./y_meas),...
         'WidthReference','halfheight',...
