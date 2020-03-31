@@ -1,31 +1,46 @@
-function extract_y_from_s(resonator)
+function extract_y_from_s(r)
 adm_meas =[];
-    if isempty(resonator.sparam)|| ~isa(resonator.sparam,'sparameters')
+    if isempty(r.sparam)|| ~isa(r.sparam,'sparameters')
         return ;
     else
-        ypar = yparameters(resonator.sparam);
-        if resonator.sparam.NumPorts==1
+        ypar = yparameters(r.sparam);
+        if r.sparam.NumPorts==1
             adm_meas = rfparam(ypar, 1, 1);
         end
-        if resonator.sparam.NumPorts==2
+        if r.sparam.NumPorts==2
             adm_meas = - rfparam(ypar, 2, 1);
         end
     end
 
-    if length(adm_meas)>resonator.max_samples
-        adm_meas = downsample(adm_meas,ceil(length(adm_meas)/resonator.max_samples));
+    if length(adm_meas)>r.max_samples
+        adm_meas = downsample(adm_meas,ceil(length(adm_meas)/r.max_samples));
     end
-    
-    resonator.y_meas    =   adm_meas;
+       
+    r.y_meas    =   adm_meas;
 
-    smoothing_index     =   resonator.smoothing_data;
+    smoothing_index     =   r.smoothing_data;
     
-    resonator.y_smooth              =   resonator.y_meas;
-        if (smoothing_index==0) || isempty (resonator.y_smooth )
+    interp_points       =   r.interp_points;
+    
+    r.y_smooth              =   r.y_meas;
+        if (smoothing_index==0&&interp_points==0) || isempty (r.y_smooth )
             return ;
         else
-            resonator.y_smooth    =   smooth(real(resonator.y_smooth ),...
-                smoothing_index) + ...
-                    1i* smooth(imag(resonator.y_smooth ),smoothing_index) ;
+            if smoothing_index>0
+                r.y_smooth    =   smooth(real(r.y_smooth ),...
+                    smoothing_index) + ...
+                        1i* smooth(imag(r.y_smooth ),smoothing_index) ;
+            end
+            if interp_points>0
+                
+                r.y_smooth =   interp1(...
+                    r.freq,...
+                    r.y_smooth,...
+                    r.freq_smooth,...
+                    'spline');
+            end
+                                 
         end
+        
 end
+

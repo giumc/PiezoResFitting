@@ -6,8 +6,8 @@ if ~isnan(num)
     return
 end
 
-prefix=["f","p","n","u","m","k","M","G","T"];
-exponents=[ -15 -12 -9 -6 -3 3 6 9 12 15];
+prefix=["z","f","p","n","u","m","k","M","G","T"];
+exponents=[-18 -15 -12 -9 -6 -3 3 6 9 12 15];
 
 tags=zeros(length(prefix),1);
 for i=1:length(prefix)

@@ -1,10 +1,11 @@
-function name=get_param_name(k)
+function name=param_name(k)
         
         name=[];
         if ~isnumeric(k)||k<=0
             fprintf('\nCannot get param name.\n');
             return
         end
+        
         switch k
                 case 1
                     name='C0';
@@ -13,14 +14,16 @@ function name=get_param_name(k)
                 case 3
                     name='Rs';
             otherwise
-                    n=mod(k-1,3);
-                    switch n
+                    n=floor((k-1)/3);
+                    index=mod(k-1,3);
+                    switch index
                         case 0
-                            name='Fres';
+                            name=strcat('Fres_',num2str(n));
                         case 1
-                            name='Q';
+                            name=strcat('Q_',num2str(n));
                         case 2
-                            name='kt2';
+                            name=strcat('kt2_',num2str(n));
                     end
         end
+        
      end

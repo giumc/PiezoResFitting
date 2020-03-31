@@ -1,6 +1,6 @@
 function y = error_function(res,x0)
     y=[];
-    res.array_to_variables(x0);
+    res.transform_resonator(x0);
     y_meas =  res.y_smooth;
     y_calc =  res.y_calc;
     freq   =  res.freq;
@@ -15,6 +15,7 @@ function y = error_function(res,x0)
         phase_err   =   norm_error(angle_deg);
 
         y           =   ( mag_err + phase_err ) ./ 2;
+        y=mag_err;
     end
 
     function y = norm_error(func)

@@ -1,23 +1,21 @@
 function populate_boundaries_edit(r)
 
-    if length(r.boundaries_edit)~=r.n_param
+if isempty(r.boundaries_edit)
+    r.setup_bars;
+else
+    if any(~isvalid([r.boundaries_edit{:}]))
         r.setup_bars;
     end
-    
+end
     for i=1:length(r.boundaries_edit)
 
-        [min,max]   =   r.get_boundary(i);
-
-        [scaled_min,min_label,~]=r.num2str_sci(min); 
-        [scaled_max,max_label,~]=r.num2str_sci(max);
-
+        name=r.param_name(i);
+        opt_param=r.get_param(name);
 
         edits=r.boundaries_edit{i};
-        edits(1).String=strcat(...
-            sprintf('%.1f%',scaled_min),'',...
-            min_label);
-        edits(2).String=strcat(...
-            sprintf('%.1f%',scaled_max),'',...
-         max_label);
+        
+        edits(1).String=opt_param.convert2sci(opt_param.min);
+        edits(2).String=opt_param.convert2sci(opt_param.max);
+        
     end
 end

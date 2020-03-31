@@ -1,28 +1,18 @@
-function set_param(r,index,value)
+function set_param(r,param,value,varargin)
 
-    if ~isnumeric(index)||~isnumeric(value)
+    if isempty(param)
         fprintf('\nCannot set parameter\n');
     end
 
-    switch index
-        case 1
-            r.c0=value;
-        case 2
-            r.r0=value;
-        case 3
-            r.rs=value;
-        otherwise
-            k=mod(index-1,3);
-            n=floor((index-1)/3);
-            switch k
-                case 0
-                    r.mode(n).fres=value;
-                case 1
-                    r.mode(n).q=value;
-                case 2
-                    r.mode(n).kt2=value;
-            end
+    override_tag='';
+    if ~isempty(varargin)
+        if strcmp(varargin{1},'override')
+            override_tag='override';
+        end
     end
-                    
-
+    
+    %cap params
+    
+    param.set_value(value,override_tag);
+    
 end

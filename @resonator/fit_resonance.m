@@ -1,17 +1,13 @@
-function fit_resonance(res)
+function flag=fit_resonance(res)
     clc
     
-    if isempty(res.boundaries)
-        res.set_boundaries;
-    end
     
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='none';
-    problem.options.MaxFunctionEvaluations      =10e3;
-    problem.options.MaxIterations               =50e3;
+%     problem.options.MaxIterations               =50e3;
     problem.options.Algorithm                   ='interior-point';
 %     problem.options.FiniteDifferenceType        ='central';
-    problem.options.FunctionTolerance           =1;
+    problem.options.FunctionTolerance           =50;
     problem.options.StepTolerance               =1e-4;
     problem.options.ConstraintTolerance         =1e-15;
     problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
@@ -20,15 +16,20 @@ function fit_resonance(res)
 
     problem.objective                           =@(x) res.error_function(x);
 
-    problem.x0                                  =res.variables_to_array;
+    problem.x0                                  =res.optim_array;
     problem.lb                                  =zeros(1,length(problem.x0));
     problem.ub                                  =ones(1,length(problem.x0));
 
     problem.solver                              ='fmincon';
     
-    xa                                          =fmincon(problem);
-    res.array_to_variables( xa );
+    
+    res.optimizer_setup                         =problem;
+    res.optimizer_setup.stop                    =0;
+    
+    [xa,~,flag]                                 =fmincon(res.optimizer_setup);
+    res.transform_resonator(xa);
     res.update_fig;
+    
 
 end
 

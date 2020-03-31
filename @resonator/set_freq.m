@@ -1,11 +1,20 @@
-function set_freq(resonator)
-    if isempty(resonator.touchstone_file)
-        resonator.freq   =  ( 0.9 : 0.001 : 1.1 ) * 1e9 ;%default
+function set_freq(r)
+
+    if isempty(r.touchstone_file)
+        r.freq   =  ( 0.9 : 0.001 : 1.1 ) * 1e9 ;%default
     else
-        resonator.freq   =   resonator.sparam.Frequencies;
-        if length(resonator.freq)>resonator.max_samples
-            resonator.freq   =   downsample(resonator.freq,...
-                ceil(length(resonator.freq)/resonator.max_samples));
+        r.freq   =   r.sparam.Frequencies;
+        if length(r.freq)>r.max_samples
+            r.freq   =   downsample(r.freq,...
+                ceil(length(r.freq)/r.max_samples));
         end
     end
+    
+    if r.interp_points>0
+        r.freq_smooth = interp1(...
+            r.freq,1:1/r.interp_points:length(r.freq));
+    else
+        r.freq_smooth = r.freq;
+    end
+    
 end

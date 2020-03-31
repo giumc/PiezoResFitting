@@ -1,6 +1,23 @@
-function num=get_param(r,index)
-    num=0;
-    if ~isnumeric(index)||index<1
+function num=get_param(r,tag)
+    index=[];
+    
+    if ischar(tag)||isstring(tag)
+        for i=1:r.n_param
+            names{i}=r.param_name(i);
+            if strcmp(names{i},tag)
+                index=i;
+                break
+            end
+        end
+    else
+        if isnumeric(tag)
+            if tag>0
+                index=tag;
+            end
+        end
+    end
+    
+    if isempty(index)
         fprintf('\nCannot get parameter.\n');
         return
     end

@@ -1,44 +1,73 @@
-classdef resonator < handle
+classdef resonator < matlab.mixin.Copyable & handle
     
+    %% properties
+    
+    properties (Access=private,Hidden)
+        optimizer_setup;
+    end % optimization options
+   
     properties (Hidden,SetObservable,AbortSet)
-        max_samples = 20001;
-        smoothing_data = 0;
-    end%s-par modifiers
+        max_samples double = 16001;
+        smoothing_data double = 0;
+        interp_points double =  0;
+    end %s-par modifiers
     
     properties (SetObservable,AbortSet)
         touchstone_file;
-        boundaries;
     end%vars w/ trigger
     
     properties (Access=private,Constant)
-        x0norm= 0.7;
-        y0norm= 0.9;
-        dx= 0.2;
-        dy= 0.03;
+        dxfig= 0.4;
+        dyfig= 0.35;
+        x0fig=0;
+        y0fig=0.3;
+        dxbar= 0.075;
+        dybar= 0.03;
         dxlabel = 0.04;
         dylabel = 0.03;
+        
+        dxbutton = 0.1;
+        dybutton = 0.05;
+        button_spacing = 0.001;
+        
+        buttons_name={...
+            "Add Mode",...
+            "Remove Mode",...
+            "Start Fit",...
+            "Stop Fit",...
+            "Reset",...
+            "Guess Shape",...
+            "Rescale Boundaries",...
+            "OptimizeAll"};
+        name_headings={...
+            "Control",...
+            "Min",...
+            "Max",...
+            "Param",...
+            "Value",...
+            "O"};
+        bars_per_column=30;
     end %graphic positioners
     
     properties
         sparam;
         y_meas;
-        y_smooth;
     end % measured vars
     
     properties (Dependent)
         y_calc;
     end% calculated when prompted
-   
-    properties (Dependent,Access=private)
-        n_param;
-    end% calcualted when prompted
     
-    properties
-        c0;
-        r0;
-        rs;
-        mode;
-        freq;
+    properties (SetAccess=private,Hidden)
+        c0 opt_param;
+        r0 opt_param;
+        rs opt_param;
+        mode = struct ('fres',opt_param,...
+                       'q',opt_param,...
+                       'kt2',opt_param);
+        freq double;
+        freq_smooth double;
+        y_smooth double;
     end % physical parameters
     
     properties (Hidden)
@@ -51,42 +80,58 @@ classdef resonator < handle
         boundaries_edit;
         param_name_labels;
         param_value_labels;
+        action_buttons;
+        optim_checkbox;
+        headings;
     end % graphic objects
+
+    %% methods 
     
     methods 
         
         function obj =  resonator()
-        
-            obj.set_number_modes(1);
             obj.set_default_param;
             obj.set_freq;
             
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
-            addlistener(obj,'boundaries','PostSet',@obj.check_bounds);
-            
-            %to be removed
+            addlistener(obj,'interp_points','PostSet',@obj.update_sparam);  
+%             %to be removed
+            cd(fileparts(which('resonator.m')));
+            cd ..
             obj.touchstone_file='./Old optimization/Fitting test/R3C5_80MHz_140MHz_Pm20dB_vacuum.s2p';
-            obj.smoothing_data=5;
+            obj.smoothing_data=0;
+            obj.guess_coarse;
+            obj.set_default_boundaries;
+            obj.setup_plot;
+            obj.setup_buttons;
+            obj.setup_bars;
+            obj.update_fig;
         end
         
-        function delete(obj)
-            if isobject(obj.figure)
-                delete(obj.figure)
+        function delete(r)
+            if ~isempty(r.figure)
+                if isobject(r.figure)
+                    if isvalid(r.figure)
+                        delete(r.figure)
+                    end
+                end
             end        
         end
+        
+        reset(r);
         
     end %Constructor/Destructor
     
     methods (Access=private)
         
-        array_to_variables(resonator,x0);
-        x0      =   variables_to_array(resonator,x0);
+        x0      =   optim_array(resonator);
+        transform_resonator(resonator,x0);
         stop    =   out_optim(resonator,x,flag,state);
         err     =   error_function(resonator,x0);  
         y       =   calculate_y (resonator);
-        
+        guess_mode(resonator,index);
         set_freq(resonator);
         set_sparam(resonator);
         
@@ -96,24 +141,31 @@ classdef resonator < handle
         prompt_touchstone(resonator);
         c0      =   fit_c0(resonator);
         
-        set_param(resonator,index,value);
+        add_mode(resonator,varargin);
+        remove_mode(resonator,varargin);
+        
+        set_param(resonator,index,value,varargin);
         num =   get_param(resonator,index);
         
         [min,max]   =   get_boundary(resonator,index);
         set_boundary(resonator,index,value,type);
         
-    end % internal functions
-    
-    methods (Access=private,Static,Hidden)
-        string  = get_param_name(index);
-        string  = get_unit(index);
-        num     = get_id_param(name);
+        function y = n_param(resonator)
+            y= length(resonator.mode)*3+3;
+        end
         
     end % internal functions
     
+    methods (Static) %const definition
+        str= param_name(index);
+        str= param_unit(index);
+        n  = param_global_min(index) ;
+        n  = param_global_max(index) ;
+    end
+    
     methods
         fit_routine(resonator);
-        fit_resonance(resonator);
+        flag=fit_resonance(resonator);
         guess_coarse(resonator);   
         
         function y = get.y_calc(resonator)
@@ -121,13 +173,9 @@ classdef resonator < handle
             return;
         end
         
-        set_number_modes(resonator,number);
         set_default_param(resonator);
         set_default_boundaries(resonator);
         
-        function n = get.n_param(resonator)
-            n = length(resonator.mode)*3+3;
-        end
     end % main tools
     
     methods
@@ -137,45 +185,25 @@ classdef resonator < handle
         populate_bars(resonator);
         populate_boundaries_edit(resonator);
         populate_labels(resonator);
+        populate_checkbox(resonator);
         update_fig(resonator);
+        setup_buttons(resonator);
     end % Graphic Tools
 
-    methods (Static)
+    methods (Static,Access=private)
         
         function y = db(x)
             y = 20 .* log10 ( abs(x) );
         end
         
-        function y = normalize(x,xmin,xmax)
-            y=0.5;
-            if x<xmin || x>xmax
-                fprintf(' x is Out of Bounds!\n');
-                keyboard();
-            else
-            y   =   x ./ (xmax-xmin) - xmin ./ (xmax-xmin) ;
-            end
-        end
-
-        function y = denormalize(x,xmin,xmax)
-            y=xmin+0.5*(xmax-xmin);
-            if x<0 || x>1
-                fprintf(' x is not normalized to 1 !\n');
-                keyboard();
-            else
-            y   =   xmin + x * (xmax - xmin) ;
-            end
-        end
-
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
-   
-        [scaled_values,label,exp] = num2str_sci(values);
         
-        [value, exp] = str2num_sci(string);
     end %Mathematical Functions
    
-    methods (Static)
+    methods (Static,Access=private,Hidden)
+        
         function update_sparam(~,event)
             res=event.AffectedObject;
             res.set_sparam;
@@ -183,16 +211,10 @@ classdef resonator < handle
             res.extract_y_from_s;
         end
         
-        function check_bounds(~,event)
-            res=event.AffectedObject;
-            res.check_boundaries(res);
-%           
-        end
-        
-        check_boundaries(resonator);
         bar_callback(src_event,event,resonator);       
         edit_callback(src_event,event,resonator);
-        
+        button_callback(src_event,event,resonator);
+        checkbox_callback(src_event,event,resonator);
     end %Listeners callback
     
 end

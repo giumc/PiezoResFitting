@@ -1,8 +1,8 @@
 function y= calculate_y(resonator)
-    f   =   resonator.freq;
-    c0  =   resonator.c0;
-    r0  =   resonator.r0;
-    rs  =   resonator.rs;
+    f   =   resonator.freq_smooth;
+    c0  =   resonator.c0.value;
+    r0  =   resonator.r0.value;
+    rs  =   resonator.rs.value;
     
     y   =   1i * 2 * pi * f * c0 + 1 / r0 ;
     

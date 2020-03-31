@@ -1,16 +1,20 @@
 function populate_labels(r)
 
-    l=r.param_value_labels;
     
-    if length(l)~=r.n_param
+if isempty(r.param_value_labels)
+    r.setup_bars;
+else
+    if any(~isvalid(r.param_value_labels))
         r.setup_bars;
     end
+end
+
+l=r.param_value_labels;
     
-    for i=1:length(l)
-        
-        [value_num,value_lab,~]=r.num2str_sci(r.get_param(i));
-        l(i).String=strcat(sprintf('%.2f',value_num),value_lab);
-        
+    for i=1:r.n_param
+        name=r.param_name(i);
+        opt_param=r.get_param(name);
+        l(i).String=opt_param.convert2sci(opt_param.value);
     end
     
 end

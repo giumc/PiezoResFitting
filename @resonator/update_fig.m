@@ -3,5 +3,6 @@ r.plot_data;
 r.populate_bars;
 r.populate_boundaries_edit;
 r.populate_labels;
-clc;
+r.populate_checkbox;
+
 end
