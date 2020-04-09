@@ -187,6 +187,7 @@ classdef resonator < matlab.mixin.Copyable & handle
     
     methods
         setup_gui(r);
+        setup_minimal_gui(r);
         setup_plot(r);
         setup_bars(r);
         setup_boundaries_edit(r);
