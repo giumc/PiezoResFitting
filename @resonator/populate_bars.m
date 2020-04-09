@@ -1,11 +1,15 @@
 function populate_bars(r)
 
 if isempty(r.boundaries_bars)
-    r.setup_bars;
+    return
 else
     if any(~isvalid(r.boundaries_bars))
-        r.setup_bars;
+        return
     end
+end
+
+if length(r.boundaries_bars)~=r.n_param()
+    r.setup_bars();
 end
 
 bars=r.boundaries_bars;

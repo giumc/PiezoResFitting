@@ -6,29 +6,37 @@ classdef resonator < matlab.mixin.Copyable & handle
         optimizer_setup;
     end % optimization options
    
-    properties (Hidden,SetObservable,AbortSet)
+    properties (SetObservable,AbortSet,Hidden)
         max_samples double = 16001;
         smoothing_data double = 0;
         interp_points double =  0;
+        touchstone_file;
     end %s-par modifiers
     
-    properties (SetObservable,AbortSet)
-        touchstone_file;
-    end%vars w/ trigger
-    
+    properties (Hidden)
+        max_modes=8;
+    end %modeling params
+       
     properties (Access=private,Constant)
         dxfig= 0.4;
         dyfig= 0.35;
         x0fig=0;
         y0fig=0.3;
+        
         dxbar= 0.075;
         dybar= 0.03;
+        
         dxlabel = 0.04;
         dylabel = 0.03;
         
         dxbutton = 0.1;
         dybutton = 0.05;
         button_spacing = 0.001;
+        checkbox_spacing = 0.01;
+        
+        x0label = resonator.x0fig+resonator.dxfig-resonator.dxlabel/2;
+        y0label = resonator.y0fig+2*resonator.dyfig-3*resonator.dylabel;
+        x0bar = resonator.x0label+3*resonator.dxlabel+3*resonator.button_spacing;
         
         buttons_name={...
             "Add Mode",...
@@ -47,14 +55,16 @@ classdef resonator < matlab.mixin.Copyable & handle
             "Value",...
             "O"};
         bars_per_column=30;
+        
+        
     end %graphic positioners
     
-    properties
+    properties (Hidden)
         sparam;
         y_meas;
     end % measured vars
     
-    properties (Dependent)
+    properties (Hidden,Dependent)
         y_calc;
     end% calculated when prompted
     
@@ -70,7 +80,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_smooth double;
     end % physical parameters
     
-    properties (Hidden)
+    properties (Access=private,Hidden)
         figure;
         mag_axis;
         phase_axis;
@@ -104,10 +114,6 @@ classdef resonator < matlab.mixin.Copyable & handle
             obj.smoothing_data=0;
             obj.guess_coarse;
             obj.set_default_boundaries;
-            obj.setup_plot;
-            obj.setup_buttons;
-            obj.setup_bars;
-            obj.update_fig;
         end
         
         function delete(r)
@@ -126,33 +132,38 @@ classdef resonator < matlab.mixin.Copyable & handle
     
     methods (Access=private)
         
-        x0      =   optim_array(resonator);
-        transform_resonator(resonator,x0);
-        stop    =   out_optim(resonator,x,flag,state);
-        err     =   error_function(resonator,x0);  
-        y       =   calculate_y (resonator);
-        guess_mode(resonator,index);
-        set_freq(resonator);
-        set_sparam(resonator);
+        x0      =   optim_array(r);
+        transform_resonator(r,x0);
+        stop    =   out_optim(r,x,flag,state);
+        err     =   error_function(r,x0);  
+        y       =   calculate_y (r);
+        guess_mode(r,index);
+        set_freq(r);
+        set_sparam(r);
         
-        extract_y_from_s(resonator);
-        m   =   calculate_mot_branch(resonator,index);     
-        m   =   calculate_all_mot(resonator);
-        prompt_touchstone(resonator);
-        c0      =   fit_c0(resonator);
+        extract_y_from_s(r);
+        m   =   calculate_mot_branch(r,index);     
+        m   =   calculate_all_mot(r);
+        prompt_touchstone(r);
+        c0      =   fit_c0(r);
         
-        add_mode(resonator,varargin);
-        remove_mode(resonator,varargin);
+        add_mode(r,varargin);
+        remove_mode(r,varargin);
         
-        set_param(resonator,index,value,varargin);
-        num =   get_param(resonator,index);
+        set_param(r,index,value,varargin);
+        num =   get_param(r,index);
         
-        [min,max]   =   get_boundary(resonator,index);
-        set_boundary(resonator,index,value,type);
+        [min,max]   =   get_boundary(r,index);
+        set_boundary(r,index,value,type);
         
-        function y = n_param(resonator)
-            y= length(resonator.mode)*3+3;
+        function y = n_param(r)
+            y= length(r.mode)*3+3;
         end
+        
+        set_default_param(r);
+        set_default_boundaries(r);
+        
+        flag=run_optim(r);
         
     end % internal functions
     
@@ -164,30 +175,36 @@ classdef resonator < matlab.mixin.Copyable & handle
     end
     
     methods
-        fit_routine(resonator);
-        flag=fit_resonance(resonator);
-        guess_coarse(resonator);   
+        fit_routine(r);
         
-        function y = get.y_calc(resonator)
-            y=calculate_y(resonator);          
+        guess_coarse(r);   
+        
+        function y = get.y_calc(r)
+            y=calculate_y(r);          
             return;
-        end
-        
-        set_default_param(resonator);
-        set_default_boundaries(resonator);
-        
+        end        
     end % main tools
     
     methods
-        setup_plot(resonator);
-        plot_data(resonator);
-        setup_bars(resonator);
-        populate_bars(resonator);
-        populate_boundaries_edit(resonator);
-        populate_labels(resonator);
-        populate_checkbox(resonator);
-        update_fig(resonator);
-        setup_buttons(resonator);
+        setup_gui(r);
+        setup_plot(r);
+        setup_bars(r);
+        setup_boundaries_edit(r);
+        setup_name_labels(r);
+        setup_value_labels(r);
+        setup_optim_checkbox(r);
+        setup_headings_checkbox(r);
+ 
+        plot_data(r);
+        populate_bars(r);
+        populate_boundaries_edit(r);
+        populate_value_labels(r);
+        populate_name_labels(r);
+        populate_checkbox(r);
+        update_fig(r);
+        setup_buttons(r);
+        
+        delete_gui(r);
     end % Graphic Tools
 
     methods (Static,Access=private)
@@ -211,10 +228,10 @@ classdef resonator < matlab.mixin.Copyable & handle
             res.extract_y_from_s;
         end
         
-        bar_callback(src_event,event,resonator);       
-        edit_callback(src_event,event,resonator);
-        button_callback(src_event,event,resonator);
-        checkbox_callback(src_event,event,resonator);
+        bar_callback(src_event,event,r);       
+        edit_callback(src_event,event,r);
+        button_callback(src_event,event,r);
+        checkbox_callback(src_event,event,r);
     end %Listeners callback
     
 end

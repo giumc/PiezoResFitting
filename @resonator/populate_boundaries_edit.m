@@ -1,11 +1,14 @@
 function populate_boundaries_edit(r)
 
 if isempty(r.boundaries_edit)
-    r.setup_bars;
+    return
 else
     if any(~isvalid([r.boundaries_edit{:}]))
-        r.setup_bars;
+        return
     end
+end
+if length(r.boundaries_edit)~=r.n_param()
+    r.setup_boundaries_edit
 end
     for i=1:length(r.boundaries_edit)
 

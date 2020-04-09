@@ -10,13 +10,11 @@ function plot_data(r)
     
     y_calc  =   r.y_calc; 
 
-    if isempty(r.figure)
-        r.setup_plot;
+    if isempty(r.mag_axis)||isempty(r.phase_axis)
+        return
     else
-        if isobject(r.figure)
-            if ~isvalid(r.figure)
-                r.setup_plot;
-            end
+        if ~isvalid(r.mag_axis)||(~isvalid(r.phase_axis))
+            return
         end
     end
 
