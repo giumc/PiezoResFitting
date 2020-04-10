@@ -242,7 +242,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         function update_sparam(~,event)
             
             res=event.AffectedObject;
-            fprintf("\n Init of resonator located in %s \n",res.touchstone_file);
+            fprintf("\n Init of resonator located in\n %s \n",res.touchstone_file);
             res.set_sparam;
             res.set_freq;
             res.extract_y_from_s;

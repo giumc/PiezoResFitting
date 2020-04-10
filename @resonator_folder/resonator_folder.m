@@ -1,40 +1,40 @@
-classdef fit_resonators_group <handle
+classdef resonator_folder <handle
     
-    properties (Constant)
+    properties (Constant,Access=private)
         format_files=[".s1p";".s2p";".S1P";".S2P"];
     end
     
     properties(SetObservable,AbortSet)
-        folder='';       
+        folder char ;       
     end
-    
+     
     properties (SetAccess=private)
         resonators resonator;
-        summary_table=table();
+        res_files;
     end
     
     methods 
         
-        function obj=fit_resonators_group()
+        function obj=resonator_folder()
         
         addlistener(obj,'folder','PostSet',@(x,y)obj.folder_set_callback(x,y,obj));
         obj.prompt_folder;
         end
         
         function set.folder(obj,name)
-            obj.folder=[];
-            obj.folder=obj.gen_subfolders(name,obj.folder);
-            %clear folders with no sparam
-            
-            formats=obj.format_files;
-            tbrem=[];
-            for k=1:length(obj.folder)
-                folderfiles=dir(obj.folder(k));
-                if ~any(contains(string({folderfiles.name}),formats))
-                    tbrem=[tbrem,k];
+        
+            safestr=fileparts(which('fit_resonators_group.m'));   
+            if isempty(name)
+                fprintf("Wrong input, set to default folder\n");
+                obj.folder=safestr;
+            else
+                if ~isfolder(name)
+                    fprintf("Wrong input, set to default folder\n");
+                    obj.folder=safestr;
+                else
+                    obj.folder=name;
                 end
-            end
-            obj.folder(tbrem)=[];
+            end       
         end
         
     end %Constructor, Setters, Getters, Destructors
@@ -42,8 +42,8 @@ classdef fit_resonators_group <handle
     methods 
         
         prompt_folder(r);
-        folders=gen_subfolders(r,name,folders);
         files=find_files(r,folder);
+        
     end %Utils
     
     methods (Static) 
