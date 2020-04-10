@@ -1,4 +1,5 @@
 classdef resonator_folder <handle
+    %% properties    
     
     properties (Constant,Access=private)
         format_files=[".s1p";".s2p";".S1P";".S2P"];
@@ -13,12 +14,23 @@ classdef resonator_folder <handle
         res_files;
     end
     
+    %% methods
+    
     methods 
         
-        function obj=resonator_folder()
+        function obj=resonator_folder(varargin)
         
-        addlistener(obj,'folder','PostSet',@(x,y)obj.folder_set_callback(x,y,obj));
-        obj.prompt_folder;
+            addlistener(obj,'folder','PostSet',@(x,y)obj.folder_set_callback(x,y,obj));
+
+             if ~isempty(varargin)
+                if strcmp(varargin{1},'folder')
+                    if length(varargin)>1
+                    obj.folder=varargin{2};
+                    end
+                end
+             else
+                 obj.prompt_folder;
+             end
         end
         
         function set.folder(obj,name)

@@ -8,6 +8,7 @@ function prompt_folder(f)
     outcome=uigetdir(start_folder,title);
 
     %add folders and subfolders
+    
     if ~outcome
         return
     else
