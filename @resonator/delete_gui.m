@@ -9,7 +9,9 @@ end
     r.phase_axis=[];
     mydelete(r.boundaries_bars);
     r.boundaries_bars=[];
-    mydelete([r.boundaries_edit{:}]);
+    if ~isempty(r.boundaries_edit)
+        mydelete([r.boundaries_edit{:}]);
+    end
     r.boundaries_edit=[];
     mydelete(r.param_value_labels);
     r.param_value_labels=[];
@@ -19,6 +21,8 @@ end
     r.optim_checkbox=[];
     mydelete(r.action_buttons);
     r.action_buttons=[];
+    mydelete(r.headings);
+    r.headings=[];
     mydelete(r.figure);
     r.figure=[];
 

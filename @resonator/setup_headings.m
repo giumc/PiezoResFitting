@@ -50,21 +50,6 @@ function setup_headings(r)
     p(6).Position([3 4])=[dxcheckbox dylabel];
     r.headings=p;
     drawnow;
-    
-    
-    bars_per_column=r.bars_per_column+1;    
-
-    dx=4*dxlabel+dxbars+dxcheckbox+8*spacing;
-    
-    if r.n_param>bars_per_column
-        if length(r.headings)<=5
-            %move labels
-            labels2=copyobj(r.headings,r.figure);
-            for i=1:length(labels2)
-                labels2(i).Position([1 2])=labels2(i).Position([1 2])+[dx 0];
-            end
-            r.headings=[r.headings labels2.'];
-        end
+   
     end
-end
         

@@ -17,8 +17,8 @@ function fit_routine(r)
         for i=1:r.n_param
             if i<=init_param
                 r.get_param(i).optimizable=isoptim(i); 
-            else
-                r.get_param(i).optimizable=true; 
+%             else
+%                 r.get_param(i).optimizable=true; 
             end
         end
 
@@ -54,7 +54,6 @@ function fit_routine(r)
 
             %get final array of optimizands value
             xnew  = r.optim_array;
-
 
             for i=1:length(opt_par)
                 %if values don't change, don't optimize later

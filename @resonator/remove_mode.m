@@ -29,18 +29,17 @@ function remove_mode(res,varargin)
             if mydelete(res.optim_checkbox(end-2:end))
                 res.optim_checkbox(end-2:end)=[];
             end
-            res.update_fig;
-            
+                        
         end
         
     end
-    
+    res.update_fig;
     function flag=mydelete(obj)
         flag=false;
         if ~isempty(obj)
             if isvalid(obj)
                 delete(obj);
-                flag=true
+                flag=true;
             end
         end
     end

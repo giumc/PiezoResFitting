@@ -6,5 +6,5 @@ r.populate_boundaries_edit;
 r.populate_name_labels;
 r.populate_value_labels;
 r.populate_checkbox;
-r.setup_headings; % in case there are 2 columns
+r.update_headings; 
 end

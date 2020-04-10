@@ -20,6 +20,7 @@ function button_callback(caller,~,r)
                     break
                 case 5 %reset
                     r.reset;
+                    r.setup_gui;
                     break
                 case 6
                     r.guess_coarse;
