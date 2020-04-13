@@ -1,8 +1,10 @@
 classdef resonator_folder <handle
-    %% properties    
+
+    %% properties
     
     properties (Constant,Access=private)
         format_files=[".s1p";".s2p";".S1P";".S2P"];
+        result_tag='Fit_Result';
     end
     
     properties(SetObservable,AbortSet)
@@ -51,10 +53,16 @@ classdef resonator_folder <handle
         
     end %Constructor, Setters, Getters, Destructors
     
-    methods 
-        
+    methods
         prompt_folder(r);
+        fit_all(r);
+        save_results(r);
+    end %main tools
+    
+    methods (Access=private) 
+        
         files=find_files(r,folder);
+        
         
     end %Utils
     

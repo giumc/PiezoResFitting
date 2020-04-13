@@ -17,7 +17,7 @@ function stop   =     out_optim (res, x,~,state)
             end
         end
 
-        if ~isempty([res.boundaries_edit{:}])
+        if ~isempty(res.boundaries_edit)
             if isvalid([res.boundaries_edit{:}])
                 for i=1:length(res.boundaries_edit)
 

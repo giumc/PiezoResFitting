@@ -22,19 +22,22 @@ function button_callback(caller,~,r)
                     r.reset;
                     r.setup_gui;
                     break
-                case 6
+                case 6 %guess shape
                     r.guess_coarse;
                     r.update_fig;
                     break
-                case 7
+                case 7 % Set boundaries
                     r.set_default_boundaries;
                     r.update_fig;
                     break
-                case 8
+                case 8 % optimize all
                     for i=1:r.n_param
                         r.get_param(i).optimizable=true;
                     end
                     r.update_fig;
+                case 9 %save
+                    r.save_results;
+                    
             end
         end
     end

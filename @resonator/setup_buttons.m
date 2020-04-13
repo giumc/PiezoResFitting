@@ -37,4 +37,5 @@ b(6).Position([1,2])=[x0+dx y0-2*dy];
 b(7).Position([1,2])=[x0+2*dx y0];
 b(4).Enable='off';
 b(8).Position([1 2])=[x0+2*dx y0-dy];
+b(9).Position([1 2])=[x0+2*dx y0-2*dy];
 r.action_buttons=b;

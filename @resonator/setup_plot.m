@@ -1,4 +1,4 @@
-function setup_plot(res)
+function setup_plot(res,varargin)
 
 dxfig= res.dxfig;
 dyfig= res.dyfig;
@@ -12,13 +12,13 @@ if ~isempty(res.figure)
         if isvalid(res.figure)
             delete(res.figure.Children);
         else
-            res.figure=figure;
+            res.figure=figure(varargin{:});
         end
     else
-        res.figure=figure;
+        res.figure=figure(varargin{:});
     end
 else
-    res.figure=figure;
+    res.figure=figure(varargin{:});
 end
 
     res.figure.Name='Resonator Optimizer';
@@ -45,7 +45,6 @@ mag_legend.Color        =   'none';
 mag_legend.Box          =   'off';
 mag_legend.Location     =   'southeast';
 
-figure(res.figure);
 phase_axis              =   axes(res.figure);
 phase_axis.Title.String =   phase_axis_name;
 phase_axis.OuterPosition     =   [x0fig y0fig dxfig dyfig];

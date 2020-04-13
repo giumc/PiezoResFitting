@@ -2,7 +2,7 @@ classdef resonator < matlab.mixin.Copyable & handle
     
     %% properties
     
-    properties (Access=private,Hidden)
+    properties (Access=private)
         optimizer_setup;
     end % optimization options
    
@@ -18,10 +18,12 @@ classdef resonator < matlab.mixin.Copyable & handle
     end
     
     properties
-        max_modes=8;
         tag='Default';
-    end %modeling params
-       
+        save_folder;
+        data_table;
+        max_modes=8;
+    end %output params
+    
     properties (Constant,Access=private)
         dxfig= 0.4;
         dyfig= 0.35;
@@ -51,7 +53,8 @@ classdef resonator < matlab.mixin.Copyable & handle
             "Reset",...
             "Guess Shape",...
             "Rescale Boundaries",...
-            "OptimizeAll"};
+            "OptimizeAll",...
+            "Save"};
         name_headings={...
             "Control",...
             "Min",...
@@ -85,7 +88,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         y_smooth double;
     end % physical parameters
     
-    properties (Access=private,Hidden)
+    properties (Access=private)
         figure;
         mag_axis;
         phase_axis;
@@ -109,7 +112,6 @@ classdef resonator < matlab.mixin.Copyable & handle
             
             obj.set_default_param;
             obj.set_freq;
-            
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
             addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
             addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
@@ -119,6 +121,7 @@ classdef resonator < matlab.mixin.Copyable & handle
                 if strcmp(varargin{1},'file')
                     if length(varargin)>1
                     obj.touchstone_file=varargin{2};
+                    obj.save_folder=fileparts(varargin{2});
                     obj.guess_coarse;
                     obj.set_default_boundaries;
                     end
@@ -136,12 +139,10 @@ classdef resonator < matlab.mixin.Copyable & handle
                 end
             end        
         end
-        
-        reset(r);
-        
+               
     end %Constructor/Destructor
     
-    methods (Access=private,Hidden)
+    methods (Access=private)
         
         x0      =   optim_array(r);
         transform_resonator(r,x0);
@@ -151,15 +152,15 @@ classdef resonator < matlab.mixin.Copyable & handle
         guess_mode(r,index);
         set_freq(r);
         set_sparam(r);
-        
+
         extract_y_from_s(r);
         m   =   calculate_mot_branch(r,index);     
         m   =   calculate_all_mot(r);
-        prompt_touchstone(r);
         c0      =   fit_c0(r);
         
         add_mode(r,varargin);
         remove_mode(r,varargin);
+        reset(r);
         
         set_param(r,index,value,varargin);
         num =   get_param(r,index);
@@ -176,9 +177,11 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         flag=run_optim(r);
         
+        table=gen_table(r);
+        
     end % internal functions
     
-    methods (Static,Access=private,Hidden) %const definition
+    methods (Static,Access=private) %const definition
         str= param_name(index);
         str= param_unit(index);
         n  = param_global_min(index) ;
@@ -189,22 +192,26 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         fit_routine(r);
         
-        guess_coarse(r);   
+        guess_coarse(r);
+        
+        prompt_touchstone(r);
         
         function y = get.y_calc(r)
             y=calculate_y(r);          
             return;
-        end    
+        end  
         
-        setup_gui(r);
+        setup_gui(r,varargin);
         
         delete_gui(r);
+        
+        save_results(r);
+              
     end % main tools
     
-    methods (Access=private,Hidden)
+    methods (Access=private)
 
-        setup_minimal_gui(r);
-        setup_plot(r);
+        setup_plot(r,varargin);
         setup_bars(r);
         setup_boundaries_edit(r);
         setup_name_labels(r);
@@ -225,7 +232,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end % Graphic Tools
 
-    methods (Static,Access=private,Hidden)
+    methods (Static,Access=private)
         
         function y = db(x)
             y = 20 .* log10 ( abs(x) );
@@ -237,15 +244,18 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end %Mathematical Functions
    
-    methods (Static,Access=private,Hidden)
+    methods (Static,Access=private)
         
         function update_sparam(~,event)
             
             res=event.AffectedObject;
-            fprintf("\n Init of resonator located in\n %s \n",res.touchstone_file);
+            [~,name]=fileparts(res.touchstone_file);
+            fprintf("Init of %s resonator \n",name);
+            res.tag=strcat(name,'_FIT');
             res.set_sparam;
             res.set_freq;
             res.extract_y_from_s;
+            res.guess_coarse;
         end
         
         bar_callback(src_event,event,r);       
