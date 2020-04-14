@@ -65,7 +65,7 @@ classdef resonator_folder <handle
         
         prompt_folder(r);
         fit_all(r);
-        save_results(r);
+        save_results(r,varargin);
  
     end %main tools
     
