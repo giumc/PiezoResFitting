@@ -1,6 +1,6 @@
 function reset(r)
             
-            while length(r.mode)>1
+            while ~isempty(r.mode)
                 r.remove_mode;
             end
             

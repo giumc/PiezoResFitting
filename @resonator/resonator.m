@@ -109,7 +109,7 @@ classdef resonator < matlab.mixin.Copyable & handle
     methods 
         
         function obj =  resonator(varargin)
-            
+            obj.mode=[];%start without modes?
             obj.set_default_param;
             obj.set_freq;
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
@@ -149,7 +149,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         stop    =   out_optim(r,x,flag,state);
         err     =   error_function(r,x0);  
         y       =   calculate_y (r);
-        guess_mode(r,index);
+        flag    =   guess_mode(r,index);
         set_freq(r);
         set_sparam(r);
 
@@ -158,7 +158,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         m   =   calculate_all_mot(r);
         c0      =   fit_c0(r);
         
-        add_mode(r,varargin);
+        flag    =   add_mode(r,varargin);
         remove_mode(r,varargin);
         reset(r);
         
@@ -172,7 +172,7 @@ classdef resonator < matlab.mixin.Copyable & handle
             y= length(r.mode)*3+3;
         end
         
-        set_default_param(r);
+        def_par=set_default_param(r,varargin);
         set_default_boundaries(r);
         
         flag=run_optim(r);
@@ -192,6 +192,8 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         fit_routine(r);
         
+        fit_all_modes(r);
+        
         guess_coarse(r);
         
         prompt_touchstone(r);
@@ -205,7 +207,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         delete_gui(r);
         
-        save_results(r);
+        save_results(r,varargin);
               
     end % main tools
     

@@ -1,5 +1,5 @@
 function flag=run_optim(res)
-    clc
+%     clc
     
     
     problem.options                             =optimoptions('fmincon');

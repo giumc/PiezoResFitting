@@ -17,6 +17,7 @@ function folder_set_callback(~,~,obj)
         fullpath=strcat(files(k).folder,filesep,files(k).name);
         obj.resonators(k)=resonator('file',fullpath);
         obj.resonators(k).tag=files(k).name;
+        obj.resonators(k).max_modes=obj.max_modes;
     end
 end
 

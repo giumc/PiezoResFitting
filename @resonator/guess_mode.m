@@ -1,5 +1,6 @@
-function guess_mode(r,i)
-    y_meas =    r.y_smooth;
+function flag=guess_mode(r,i)
+    flag    =   true;
+    y_meas  =    r.y_smooth;
     freq    =   r.freq_smooth;
     
     tag = 'override'; % override previous values / bounds
@@ -12,7 +13,7 @@ function guess_mode(r,i)
     
     [~,i_max_2 ] = findpeaks(r.db(y_meas),...
             'SortStr','descend',...
-            'MinPeakProminence',5,...
+            'MinPeakProminence',0.1,...
             'NPeaks',max([1,length(r.mode)]));
     i_max_1=i_max_1(1);
     i_max_2(1)=[];
@@ -26,18 +27,23 @@ function guess_mode(r,i)
     if i==1
         r.mode(i).fres.set_value(freq(i_max(i)),tag);
 
-        r.mode(i).q.set_value(q(i) * ...
-            (freq(2)-freq(1)),tag);
+        r.mode(i).q.set_value(r.mode(i).fres.value/...
+            (q(i)*(freq(2)-freq(1))),tag);
 
         r.mode(i).kt2.set_value(...
             r.calculate_kt2(...
             freq(i_max(1)),freq(i_min)),tag);
     else
-        r.mode(i).fres.set_value(freq(i_max(i)),tag);
+        if ~(length(i_max)<length(r.mode))
+            r.mode(i).fres.set_value(freq(i_max(i)),tag);
 
-        r.mode(i).q.set_value(1000,tag);
+            %r.mode(i).q.set_value(1000,tag);
 
-        r.mode(i).kt2.set_value(0.01,tag);
+            %r.mode(i).kt2.set_value(0.01,tag);
+        else
+            flag=false;
+        end
+            
     end
 
     

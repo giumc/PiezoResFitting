@@ -1,30 +1,39 @@
 function fit_routine(r)
-
+    fprintf("Start fitting %s resonator \n",r.tag);
     max_modes=r.max_modes;
 
     loop=true;
     iter=0;
-
+    flag=1;
+    
     %get who's optimizable at the beginning
     for i=1:r.n_param
+        
         isoptim(i)=r.get_param(i).optimizable; 
+        
     end
 
     init_param=r.n_param;
-
+    
     while loop
+        
         % re-set optimizability of parameters
         for i=1:r.n_param
+            
             if i<=init_param
+                
                 r.get_param(i).optimizable=isoptim(i); 
 %             else
 %                 r.get_param(i).optimizable=true; 
             end
+            
         end
 
         % set fres non optimizable for all modes fres
         for i=1:length(r.mode)
+            
             r.mode(i).fres.optimizable=false;
+            
         end
         
         r.update_fig;
@@ -32,25 +41,48 @@ function fit_routine(r)
 
         %keep optimizing until boundaries are stable
         subloop=true;
+        
         while subloop
-            j=1;
+        
+            opt_num=0;
             opt_par=[];
 
             %check who's optimizable now
             for i=1:r.n_param
+                
                 tot_param(i)=r.get_param(i);
                 if tot_param(i).optimizable
-                    opt_par(j)=i;
-                    j=j+1;
+                    
+                    opt_num=opt_num+1;
+                    opt_par(opt_num)=i;
+                    
                 end
+                
             end
+            
             %get initial array of optimizands value
             x0=r.optim_array;
+            
             if isempty(x0)
+            
                 break;
+            
             end
-            flag=r.run_optim();
+            
+            if(iter>0)
+            
+                fprintf(repmat('\b',1,startmsg));
+                drawnow;
+            
+            end
+            
             iter=iter+1;
+            startmsg=fprintf("Iteration n %d\n",iter);
+            drawnow;
+            
+            flag=r.run_optim();
+            
+            
 
             %get final array of optimizands value
             xnew  = r.optim_array;
@@ -79,7 +111,12 @@ function fit_routine(r)
                         if length(r.mode)>max_modes
                             loop=false;      
                         else
-                            r.add_mode();
+                            
+                            mode_flag=r.add_mode();
+                            
+                            if ~mode_flag
+                                loop=false;
+                            end
                             
                         end
                     end
@@ -96,7 +133,7 @@ function fit_routine(r)
         if flag==-1
             loop=false;
         end
-
+    
     end
-
+    r.gen_table();
 end

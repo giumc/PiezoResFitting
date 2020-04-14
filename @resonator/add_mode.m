@@ -1,4 +1,5 @@
-function add_mode(res,varargin)
+function flag=add_mode(res,varargin)
+    flag    =   true;
     n=1;
     if ~isempty(varargin)
         if isnumeric(varargin{1})
@@ -9,9 +10,16 @@ function add_mode(res,varargin)
     n_old     =   length(res.mode);
     for i=1:n
         new_mode=n_old+i;
-        res.mode(new_mode).fres=copy(res.mode(new_mode-1).fres);
-        res.mode(new_mode).q=copy(res.mode(new_mode-1).q);
-        res.mode(new_mode).kt2=copy(res.mode(new_mode-1).kt2);
+        if new_mode==1
+            res.mode = struct (...
+                'fres',res.set_default_param(4),...
+                'q',res.set_default_param(5),...
+                'kt2',res.set_default_param(6));
+        else
+            res.mode(new_mode).fres=copy(res.mode(new_mode-1).fres);
+            res.mode(new_mode).q=copy(res.mode(new_mode-1).q);
+            res.mode(new_mode).kt2=copy(res.mode(new_mode-1).kt2);
+        end
         
         %update name
         for k=res.n_param-2:res.n_param
@@ -25,7 +33,13 @@ function add_mode(res,varargin)
             opt_param=res.get_param(k);
             opt_param.optimizable=true;
         end
-        res.guess_mode(new_mode);
+        
+        flag    =  res.guess_mode(new_mode);
+        if ~flag
+%             fprintf("Cannot find another mode\n");
+            res.remove_mode;
+            break
+        end
         
     end        
     

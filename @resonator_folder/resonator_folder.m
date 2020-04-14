@@ -7,13 +7,21 @@ classdef resonator_folder <handle
         result_tag='Fit_Result';
     end
     
-    properties(SetObservable,AbortSet)
+    properties(SetObservable,AbortSet)  
         folder char ;       
     end
      
     properties (SetAccess=private)
+        
         resonators resonator;
         res_files;
+        data_table;
+
+    end
+    
+    properties
+        max_modes=10;
+        
     end
     
     %% methods
@@ -54,20 +62,23 @@ classdef resonator_folder <handle
     end %Constructor, Setters, Getters, Destructors
     
     methods
+        
         prompt_folder(r);
         fit_all(r);
         save_results(r);
+ 
     end %main tools
     
     methods (Access=private) 
         
-        files=find_files(r,folder);
-        
+        files=find_files(r,folder);      
         
     end %Utils
     
     methods (Static) 
+        
         folder_set_callback(src,event,obj);
+        
     end % listeners callbacks
         
 end

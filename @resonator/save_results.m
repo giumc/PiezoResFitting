@@ -1,4 +1,4 @@
-function save_results (r)
+function save_results (r,varargin)
 
     if isempty(r.data_table)
         r.data_table=gen_table(r);
@@ -19,7 +19,8 @@ function save_results (r)
     end
     
     r.save_folder=savepath;
-    filename=regexprep(r.touchstone_file,'.s[12]p','');
+    [~,filename]=fileparts(which(r.touchstone_file));
+    filename=regexprep(filename,'.[sS][12][pP]','');
     folder_tag=strcat(filename,'_Fit_Data');
     
     filelist=dir(savepath);
@@ -29,6 +30,7 @@ function save_results (r)
         
         if filelist(i).isdir==true && strcmp({filelist(i).name},folder_tag)
             token=1;
+            break
         end
     end
     
@@ -38,12 +40,32 @@ function save_results (r)
         
         mkdir(savepath);
     
+    else
+        
+        rmdir(savepath,'s');
+        
     end
     
     filepath=strcat(savepath,filesep,filename);
     
+    fprintf('Saving %s resonator data\n',filename);
+    
+    printfig=false;
+    if ~isempty(varargin)
+        options=string(varargin{:});
+        if any(contains(options,'printfig'))
+            printfig=true;
+        end
+    end
+    
     r.setup_gui('Visible','off');
-    savefig(r.figure,filepath);
+    
+    if printfig
+        
+        savefig(r.figure,filepath);
+        
+    end    
+    
     resobj=r;
     
     print(r.figure,filepath,'-dpng','-r150');
@@ -52,4 +74,5 @@ function save_results (r)
     save(strcat(filepath,'.mat'),'resobj');
     tablename=strcat(filepath,'.csv');
     writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
+ 
 end
