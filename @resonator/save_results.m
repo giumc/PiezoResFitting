@@ -52,25 +52,22 @@ function save_results (r,varargin)
     
     printfig=false;
     if ~isempty(varargin)
-        options=string(varargin{:});
+        options=string(varargin(:));
         if any(contains(options,'printfig'))
             printfig=true;
         end
     end
-    
-    r.setup_gui('Visible','off');
-    
+     
     if printfig
-        
+        r.setup_gui('Visible','off');
         savefig(r.figure,filepath);
-        
+        print(r.figure,filepath,'-dpng','-r150');
+        print(r.figure,filepath,'-depsc','-r0','-painters');
+        r.delete_gui;
     end    
     
     resobj=r;
     
-    print(r.figure,filepath,'-dpng','-r150');
-    print(r.figure,filepath,'-depsc','-r0','-painters');
-    r.delete_gui;
     save(strcat(filepath,'.mat'),'resobj');
     tablename=strcat(filepath,'.csv');
     writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');

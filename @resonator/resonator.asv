@@ -1,38 +1,39 @@
 classdef resonator < matlab.mixin.Copyable & handle
-% 
-% used to read , fit and store resonators with variable number of modes
-% 
-% properties:
-% (*SETtable parameters*)
-%     touchstone_file -> full path of sparameter file (S1P or S2P)
-%         (*modifiers*)
-%         max_samples -> to cap freq points (default 16001)
-%         interp_points -> to increase freq points (default 0)
-%         smoothing_data -> to filter out noisy points (default 0)
-%         
-%     max_modes   -> default 10
-%     tag         -> name used to store (default based on touchstone)
-%     save_folder 
-%     
-% (*GETtable parameters*)
-%     sparam 
-%     y_meas
-%     y_calc
-%     data_table
-%     y_smooth    -> used as reference in fit
-%     freq_smooth -> used as reference in fit
-%     
-% methods:
-%     
-%     fit_routine         -> fit resonator, by adding one mode at a time
-%     fit_all_modes       -> fit resonator with all modes at the same time
-%     guess_coarse        -> initial guess for resonator shape (eqn based)
-%     prompt_touchstone   -> UI to input touchstone file
-%     setup_gui           -> open interactive UI
-%     delete_gui          -> close interactive UI
-%     save_results(opt)   -> save data
-%           opt : 'printfig' , to include a fig file for each res
-%     
+
+used to read , fit and store resonators with variable number of modes
+
+properties:
+    (*S-PARAMETERS related*)
+    touchstone_file -> full path of sparameter file (S1P or S2P)
+        (*modifiers*)
+        max_samples -> to cap freq points (default 16001)
+        interp_points -> to increase freq points (default 0)
+        smoothing_data -> to filter out noisy points (default 0)
+        
+    (*SETtable parameters*)
+    max_modes   -> default 10
+    tag         -> name used to store (default based on touchstone)
+    save_folder 
+    
+    (*GETtable parameters*)
+    sparam 
+    y_meas
+    y_calc
+    data_table
+    y_smooth    -> used as reference in fit
+    freq_smooth -> used as reference in fit
+    
+methods:
+    
+    fit_routine         -> fit resonator, by adding one mode at a time
+    fit_all_modes       -> fit resonator with all modes at the same time
+    guess_coarse        -> initial guess for resonator shape (eqn based)
+    prompt_touchstone   -> UI to input touchstone file
+    setup_gui           -> open interactive UI
+    delete_gui          -> close interactive UI
+    save_results(opt)   -> save data
+    opt : 'printfig' , to include a fig file for each res
+    
     
     
     %% properties

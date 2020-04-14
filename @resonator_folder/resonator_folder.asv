@@ -21,7 +21,7 @@ classdef resonator_folder <handle
 %         and folder can be selected from user interface;
 %     3) manually setting it with obj.folder='...';
 %
-% once folder is set, the following are exec in auto:
+% once folder is set, the following are exec in
 %     1)array of resonator is created
 %     2)resonators are fitted
 %     3)datas are saved
@@ -47,6 +47,7 @@ classdef resonator_folder <handle
     
     properties
         max_modes=10;
+        
     end
     
     %% methods

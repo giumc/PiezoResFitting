@@ -19,5 +19,9 @@ function folder_set_callback(~,~,obj)
         obj.resonators(k).tag=files(k).name;
         obj.resonators(k).max_modes=obj.max_modes;
     end
+    
+    obj.fit_all;
+    obj.save_results;
+    
 end
 

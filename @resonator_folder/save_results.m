@@ -23,7 +23,7 @@ function save_results(rf,varargin)
         
         mkdir(savefolder);
     
-    end
+    end  
     
     % save results and get summary from resonators
     tab=[];
@@ -34,6 +34,7 @@ function save_results(rf,varargin)
         rf.resonators(i).save_results(varargin{:});
         
     end
+    
     rf.data_table=tab;
     tablename=strcat(savefolder,filesep,'Summary.csv');
     writetable(rf.data_table,tablename,'WriteRowNames',true);
