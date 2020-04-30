@@ -8,7 +8,7 @@ function fit_all_modes(r)
     for i=1:max_modes
         n0=length(r.mode);
         r.add_mode;
-        r.mode(end).kt2.set_value(0.005,'override');
+        r.mode(ne).kt2.set_value(0.005,'override');
         nnew=length(r.mode);
         if nnew==n0
             break

@@ -1,5 +1,5 @@
 classdef resonator < matlab.mixin.Copyable & handle
-% 
+% -- resonator class doc --
 % used to read , fit and store resonators with variable number of modes
 % 
 % properties:
@@ -33,8 +33,7 @@ classdef resonator < matlab.mixin.Copyable & handle
 %     save_results(opt)   -> save data
 %           opt : 'printfig' , to include a fig file for each res
 %     
-    
-    
+        
     %% properties
     
     properties (Access=private)
@@ -121,6 +120,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         freq double;
         freq_smooth double;
         y_smooth double;
+        respeak;
     end % physical parameters
     
     properties (Access=private)
@@ -137,6 +137,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         optim_checkbox;
         headings;
         num_cols=1;
+        
     end % graphic objects
 
     %% methods 
@@ -144,7 +145,7 @@ classdef resonator < matlab.mixin.Copyable & handle
     methods 
         
         function obj =  resonator(varargin)
-            obj.mode=[];%start without modes?
+%             obj.mode=[];%start without modes?
             obj.set_default_param;
             obj.set_freq;
             addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
@@ -163,6 +164,9 @@ classdef resonator < matlab.mixin.Copyable & handle
                 end
             end
             
+            if isempty(obj.touchstone_file)
+                obj.prompt_touchstone;
+            end
         end
         
         function delete(r)
@@ -195,7 +199,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         flag    =   add_mode(r,varargin);
         remove_mode(r,varargin);
-        reset(r);
+        
         
         set_param(r,index,value,varargin);
         num =   get_param(r,index);
@@ -243,7 +247,9 @@ classdef resonator < matlab.mixin.Copyable & handle
         delete_gui(r);
         
         save_results(r,varargin);
-              
+        
+        reset(r);
+        
     end % main tools
     
     methods (Access=private)
@@ -287,12 +293,13 @@ classdef resonator < matlab.mixin.Copyable & handle
             
             res=event.AffectedObject;
             [~,name]=fileparts(res.touchstone_file);
-            fprintf("Init of %s resonator \n",name);
+            msg=fprintf("Init of %s resonator",name);
             res.tag=strcat(name,'_FIT');
             res.set_sparam;
             res.set_freq;
             res.extract_y_from_s;
             res.guess_coarse;
+            fprintf(repmat('\b',1,msg))
         end
         
         bar_callback(src_event,event,r);       

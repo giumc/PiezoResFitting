@@ -4,14 +4,13 @@ function flag=run_optim(res)
     
     problem.options                             =optimoptions('fmincon');
     problem.options.Display                     ='none';
-%     problem.options.MaxIterations               =50e3;
+    problem.options.MaxIterations               =50e3;
     problem.options.Algorithm                   ='interior-point';
 %     problem.options.FiniteDifferenceType        ='central';
-    problem.options.FunctionTolerance           =50;
-    problem.options.StepTolerance               =1e-4;
-    problem.options.ConstraintTolerance         =1e-15;
+    problem.options.FunctionTolerance           =10;
+    problem.options.StepTolerance               =1e-2;
+%     problem.options.ConstraintTolerance         =1e-15;
     problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
-
     problem.options.UseParallel                 =0;
 
     problem.objective                           =@(x) res.error_function(x);

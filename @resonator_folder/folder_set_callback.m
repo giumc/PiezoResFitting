@@ -21,8 +21,8 @@ function folder_set_callback(~,~,obj)
         obj.progressbar(k/length(files));
     end
     
-    obj.fit_all;
-    obj.save_results('printfig','minimal','Visible','off');
+%     obj.fit_all('printfig');
+%     obj.save_results('printfig','minimal','Visible','off');
     
 end
 

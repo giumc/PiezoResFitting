@@ -1,12 +1,11 @@
 function fit_routine(r)
-    fprintf("Start fitting %s resonator \n",r.tag);
+    startmsg=fprintf("Start fitting %s resonator\n",r.tag);
     max_modes=r.max_modes;
-
     loop=true;
     iter=0;
     flag=1;
     
-    %get who's optimizable at the beginning
+%     get who's optimizable at the beginning
     for i=1:r.n_param
         
         isoptim(i)=r.get_param(i).optimizable; 
@@ -23,12 +22,15 @@ function fit_routine(r)
             if i<=init_param
                 
                 r.get_param(i).optimizable=isoptim(i); 
-%             else
-%                 r.get_param(i).optimizable=true; 
+            else
+                r.get_param(i).optimizable=true; 
             end
             
         end
-
+%         r.c0.optimizable=1;
+%         r.r0.optimizable=1;
+%         r.rs.optimizable=1;
+        
         % set fres non optimizable for all modes fres
         for i=1:length(r.mode)
             
@@ -71,25 +73,23 @@ function fit_routine(r)
             
             if(iter>0)
             
-                fprintf(repmat('\b',1,startmsg));
+                fprintf(repmat('\b',1,itermsg));
                 drawnow;
             
             end
             
             iter=iter+1;
-            startmsg=fprintf("Iteration n %d\n",iter);
+            itermsg=fprintf("Iteration n %d",iter);
             drawnow;
             
             flag=r.run_optim();
             
-            
-
             %get final array of optimizands value
             xnew  = r.optim_array;
 
             for i=1:length(opt_par)
                 %if values don't change, don't optimize later
-                if abs((xnew(i)-x0(i))/x0(i))<0.01
+                if abs((xnew(i)-x0(i))/x0(i))<0.025
                     r.get_param(opt_par(i)).optimizable=0;
                 end
 
@@ -136,4 +136,6 @@ function fit_routine(r)
     
     end
     r.gen_table();
+    fprintf(repmat('\b',1,itermsg));
+    fprintf(repmat('\b',1,startmsg));
 end

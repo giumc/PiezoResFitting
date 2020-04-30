@@ -17,7 +17,11 @@ function guess_coarse(res)
     res.r0.set_value(...
         1/(2*pi*mean(res.freq)*res.c0.value)/0.01,tag);
 
-    res.rs.set_value(2,tag);         
+    res.rs.set_value(2,tag);
+    if isempty(res.mode)
+        res.add_mode;
+        res.guess_mode(1);
+    end
     res.set_default_boundaries;
     
 end

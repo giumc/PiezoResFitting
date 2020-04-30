@@ -48,13 +48,12 @@ function save_results (r,varargin)
     
     else
         
-        rmdir(savepathfile,'s');
+        delete(strcat(savepathfile,'\*'))
         
     end
     
     filepath=strcat(savepathfile,filesep,filename);
-    
-    fprintf('Saving %s resonator data\n',filename);
+    printflag=fprintf("Saving %s resonator data",filename);
     
     printfig=false;
     if ~isempty(varargin)
@@ -62,13 +61,14 @@ function save_results (r,varargin)
             if strcmp(varargin{i},'printfig')
                 printfig=true;
                 varargin(i)=[];
+                break
             end
         end
     end
      
     if printfig
         r.setup_gui(varargin{:});
-%         savefig(r.figure,filepath);
+        savefig(r.figure,filepath);
         print(r.figure,filepath,'-dpng','-r150');
         print(r.figure,filepath,'-depsc','-r0','-painters');
         r.delete_gui;
@@ -79,5 +79,5 @@ function save_results (r,varargin)
     save(strcat(filepath,'.mat'),'resobj');
     tablename=strcat(filepath,'.csv');
     writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
- 
+    fprintf(repmat('\b',1,printflag))
 end

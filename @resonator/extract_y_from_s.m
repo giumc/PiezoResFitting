@@ -22,7 +22,9 @@ adm_meas =[];
     
     interp_points       =   r.interp_points;
     
-    r.y_smooth              =   r.y_meas;
+%     r.y_smooth          =   medfilt1(real(r.y_meas),10)+...
+%         1i*medfilt1(imag(r.y_meas),10);
+    r.y_smooth          =   r.y_meas;
         if (smoothing_index==0&&interp_points==0) || isempty (r.y_smooth )
             return ;
         else

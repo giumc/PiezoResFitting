@@ -15,12 +15,12 @@ function y = error_function(res,x0)
         phase_err   =   norm_error(angle_deg);
 
         y           =   ( mag_err + phase_err ) ./ 2;
-        y=mag_err;
+%         y=mag_err;
     end
 
     function y = norm_error(func)
         y = sum ( ...
-            abs ( (func( y_meas ) - func(y_calc))) .^2  )./length(freq);
+            abs ( (func( y_meas)  - func(y_calc))) .^2 )./length(freq);
     end
 end
 
