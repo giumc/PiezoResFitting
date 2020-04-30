@@ -6,24 +6,30 @@ function save_results (r,varargin)
     
     if ~isempty(r.save_folder)
         if isfolder(r.save_folder)
-            savepath=r.save_folder;
+            savepathfile=r.save_folder;
         else
             fprintf("Invalid save folder, setting to default...\n\n");
         end
     else
         if ~isempty(r.touchstone_file)|| isempty(r.save_folder)
-        savepath=fileparts(which(r.touchstone_file));
+        savepathfile=fileparts(which(r.touchstone_file));
         else
-            savepath=fileparts(which('resonator.m'));
+            savepathfile=fileparts(which('resonator.m'));
         end
     end
     
-    r.save_folder=savepath;
+    r.save_folder=savepathfile;
     [~,filename]=fileparts(which(r.touchstone_file));
+    if isempty(filename)
+        addpath(genpath(fileparts(r.touchstone_file)));
+        savepath;
+        rehash;
+        [~,filename]=fileparts(which(r.touchstone_file));
+    end
     filename=regexprep(filename,'.[sS][12][pP]','');
     folder_tag=strcat(filename,'_Fit_Data');
     
-    filelist=dir(savepath);
+    filelist=dir(savepathfile);
     token=0;
     
     for i=1:length(filelist)
@@ -34,33 +40,35 @@ function save_results (r,varargin)
         end
     end
     
-    savepath=strcat(savepath,filesep,folder_tag);
+    savepathfile=strcat(savepathfile,filesep,folder_tag);
     
     if token==0
         
-        mkdir(savepath);
+        mkdir(savepathfile);
     
     else
         
-        rmdir(savepath,'s');
+        rmdir(savepathfile,'s');
         
     end
     
-    filepath=strcat(savepath,filesep,filename);
+    filepath=strcat(savepathfile,filesep,filename);
     
     fprintf('Saving %s resonator data\n',filename);
     
     printfig=false;
     if ~isempty(varargin)
-        options=string(varargin(:));
-        if any(contains(options,'printfig'))
-            printfig=true;
+        for i=1:length(varargin)
+            if strcmp(varargin{i},'printfig')
+                printfig=true;
+                varargin(i)=[];
+            end
         end
     end
      
     if printfig
-        r.setup_gui('Visible','off');
-        savefig(r.figure,filepath);
+        r.setup_gui(varargin{:});
+%         savefig(r.figure,filepath);
         print(r.figure,filepath,'-dpng','-r150');
         print(r.figure,filepath,'-depsc','-r0','-painters');
         r.delete_gui;

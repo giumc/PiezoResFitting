@@ -1,9 +1,10 @@
 function fit_all(r)
+r.progressbar('Fitting Resonators');
     for i=1:length(r.resonators)
         if ~isempty(r.resonators(i).touchstone_file)
-%             r.resonators(i).setup_gui;
+
             r.resonators(i).fit_all_modes;
-%             r.resonators(i).delete_gui;
+            r.progressbar(i/length(r.resonators));
         end
     end
 end

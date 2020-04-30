@@ -103,7 +103,7 @@ classdef resonator_folder <handle
     methods (Static,Access=private) 
         
         folder_set_callback(src,event,obj);
-        
+        progressbar(varargin);
     end % listeners callbacks
         
 end

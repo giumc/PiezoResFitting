@@ -1,5 +1,7 @@
 function save_results(rf,varargin)
-
+    %pass option 'printfig' to print figure
+    %pass option 'minimal' to include only sparam in figure
+    %pass extra options to figure(varargin)
     if isempty(rf.resonators)
         return
     end
@@ -27,12 +29,13 @@ function save_results(rf,varargin)
     
     % save results and get summary from resonators
     tab=[];
+    rf.progressbar('Saving Resonators')
     for i=1:length(rf.res_files)
         
         tab=[tab; rf.resonators(i).data_table];
         rf.resonators(i).save_folder=savefolder;
         rf.resonators(i).save_results(varargin{:});
-        
+        rf.progressbar(i/length(rf.res_files));
     end
     
     rf.data_table=tab;

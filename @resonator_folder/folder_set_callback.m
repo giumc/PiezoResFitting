@@ -12,16 +12,17 @@ function folder_set_callback(~,~,obj)
     end
     files=folderfiles(tbs);
    	obj.res_files=files;
-    
+    obj.progressbar('Initializing Resonators');
     for k=1:length(files)
         fullpath=strcat(files(k).folder,filesep,files(k).name);
         obj.resonators(k)=resonator('file',fullpath);
         obj.resonators(k).tag=files(k).name;
         obj.resonators(k).max_modes=obj.max_modes;
+        obj.progressbar(k/length(files));
     end
     
     obj.fit_all;
-    obj.save_results;
+    obj.save_results('printfig','minimal','Visible','off');
     
 end
 

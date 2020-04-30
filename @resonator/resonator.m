@@ -254,7 +254,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         setup_name_labels(r);
         setup_value_labels(r);
         setup_optim_checkbox(r);
-        
+        minimal_fig_setup(r);
         setup_headings(r);
         update_headings(r);
  
@@ -278,7 +278,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
-        
+        rgb(varargin);
     end %Mathematical Functions
    
     methods (Static,Access=private)
