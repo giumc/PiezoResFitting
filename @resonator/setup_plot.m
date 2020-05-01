@@ -21,10 +21,10 @@ else
     res.figure=figure(varargin{:});
 end
 
-    res.figure.Name='Resonator Optimizer';
+    res.figure.Name=sprintf('%s Fitting',res.tag);
     res.figure.Units='normalized';
     res.figure.OuterPosition=[0 0 1 1];
-    res.figure.WindowState='maximized';
+%     res.figure.WindowState='maximized';
     
 %% Axes
 

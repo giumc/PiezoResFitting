@@ -19,8 +19,8 @@ function remove_mode(res,varargin)
                 end
             end
             if ~isempty(res.boundaries_edit)
-                
-                if mydelete([res.boundaries_edit{end-2:end}])
+                x=[res.boundaries_edit{end-2:end}];
+                if mydelete(x(1:2:end)) && mydelete(x(2:2:end))
                     res.boundaries_edit(end-2:end)=[];
                 end
             end

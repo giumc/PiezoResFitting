@@ -34,6 +34,8 @@ function flag=add_mode(res,varargin)
             opt_param.optimizable=true;
         end
         
+        res.update_fig;
+        
         flag    =  res.guess_mode(new_mode);
         if ~flag
 %             fprintf("Cannot find another mode\n");
@@ -41,7 +43,5 @@ function flag=add_mode(res,varargin)
             break
         end
         
-    end        
-    
-    res.update_fig;
+    end
 end

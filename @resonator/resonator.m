@@ -57,7 +57,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         max_modes=8;
     end %output params
     
-    properties (Constant,Access=private)
+    properties (Constant)%,Access=private)
         dxfig= 0.4;
         dyfig= 0.35;
         x0fig=0;
@@ -77,6 +77,10 @@ classdef resonator < matlab.mixin.Copyable & handle
         x0label = resonator.x0fig+resonator.dxfig-resonator.dxlabel/2;
         y0label = resonator.y0fig+2*resonator.dyfig-3*resonator.dylabel;
         x0bar = resonator.x0label+3*resonator.dxlabel+3*resonator.button_spacing;
+        
+        x0optimtext=0.75;
+        y0optimtexxt=0.9;
+        textfont=20;
         
         buttons_name={...
             "Add Mode",...
@@ -123,7 +127,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         respeak;
     end % physical parameters
     
-    properties (Access=private)
+    properties%(Access=private)
         figure;
         mag_axis;
         phase_axis;
@@ -137,7 +141,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         optim_checkbox;
         headings;
         num_cols=1;
-        
+        optim_text;
     end % graphic objects
 
     %% methods 
@@ -181,7 +185,7 @@ classdef resonator < matlab.mixin.Copyable & handle
                
     end %Constructor/Destructor
     
-    methods (Access=private)
+    methods %(Access=private)
         
         x0      =   optim_array(r);
         transform_resonator(r,x0);
@@ -220,7 +224,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end % internal functions
     
-    methods (Static,Access=private) %const definition
+    methods (Static)%,Access=private) %const definition
         str= param_name(index);
         str= param_unit(index);
         n  = param_global_min(index) ;
@@ -252,7 +256,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         
     end % main tools
     
-    methods (Access=private)
+    methods %(Access=private)
 
         setup_plot(r,varargin);
         setup_bars(r);
@@ -260,6 +264,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         setup_name_labels(r);
         setup_value_labels(r);
         setup_optim_checkbox(r);
+        setup_optim_text(r);
         minimal_fig_setup(r);
         setup_headings(r);
         update_headings(r);
@@ -270,6 +275,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         populate_value_labels(r);
         populate_name_labels(r);
         populate_checkbox(r);
+        populate_optim_text(r);
         update_fig(r);
         setup_buttons(r);
         
