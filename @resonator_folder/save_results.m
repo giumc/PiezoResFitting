@@ -30,7 +30,8 @@ function save_results(rf,varargin)
     % save results and get summary from resonators
     tab=[];
     rf.progressbar('Saving Resonators')
-    for i=1:length(rf.res_files)
+    for i=1:length(rf.resonators)
+        %flush resonators to same number of modes
         
         tab=[tab; rf.resonators(i).data_table];
         rf.resonators(i).save_folder=savefolder;
