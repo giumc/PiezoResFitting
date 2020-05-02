@@ -1,7 +1,8 @@
 function tab=gen_table(r)
     
-    tot_param=length(r.max_mode)+3;
-    
+    tot_param=3*length(r.max_mode)+3;
+    vars=zeros(1,length(tot_param));
+    names=repmat("",1,length(tot_param));
     for i=1:tot_param
         if i<=r.n_param
             
