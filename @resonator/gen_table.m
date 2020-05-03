@@ -16,9 +16,6 @@ function tab=gen_table(r)
             
         end
     end
-    
-    if length(r.mode)<r.max_modes
-    end
 
     tab=array2table(vars);
     tab.Properties.VariableNames=names;

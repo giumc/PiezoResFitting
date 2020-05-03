@@ -1,4 +1,4 @@
-function setup_gui(r,varargin)
+function figure=setup_gui(r,varargin)
     %you can pass options to figure
     %if you also pass 'minimal', only plots are created
     %if you don't pass anything, full gui will be created
@@ -13,7 +13,7 @@ function setup_gui(r,varargin)
                     r.setup_plot(varargin{:});
                     r.update_fig();
                     r.minimal_fig_setup();
-                    
+                    figure=r.figure;
                     return
                 end
             end
@@ -28,5 +28,7 @@ function setup_gui(r,varargin)
         r.setup_buttons();
         r.update_fig();
     end
+    
+    figure=r.figure;
     
 end

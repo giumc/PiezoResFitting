@@ -34,9 +34,6 @@ function fit_routine(r)
             end
             
         end
-%         r.c0.optimizable=1;
-%         r.r0.optimizable=1;
-%         r.rs.optimizable=1;
         
         % set fres non optimizable for all modes fres
         for i=1:length(r.mode)

@@ -1,5 +1,7 @@
 function save_results (r,varargin)
-
+    %pass option 'printfig' to print figure
+    %pass option 'minimal' to include only sparam in figure
+    %pass extra options to figure(varargin)
     if isempty(r.data_table)
         r.data_table=gen_table(r);
     end
@@ -79,5 +81,10 @@ function save_results (r,varargin)
     save(strcat(filepath,'.mat'),'resobj');
     tablename=strcat(filepath,'.csv');
     writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
+    % assign files to outputfiles
+    
+%     files=dir(
+    
     fprintf(repmat('\b',1,printflag))
+    
 end

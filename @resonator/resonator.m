@@ -108,6 +108,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         sparam;
         y_meas;
         data_table;
+        outputfiles;
     end % measured vars
     
     properties (Dependent)
@@ -246,7 +247,7 @@ classdef resonator < matlab.mixin.Copyable & handle
             return;
         end  
         
-        setup_gui(r,varargin);
+        f=setup_gui(r,varargin);
         
         delete_gui(r);
         

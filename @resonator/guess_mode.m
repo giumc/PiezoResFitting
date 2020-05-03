@@ -14,7 +14,7 @@ function flag=guess_mode(r,i)
                     'WidthReference','halfheight');
 
         [ydb,idb,~,pdb] = findpeaks(r.db(y_meas),...
-            'SortStr','descend','MinPeakHeight',-95,'MinPeakWidth',15);
+            'SortStr','descend','MinPeakHeight',-95,'MinPeakWidth',13);
         qeff=zeros(1,length(idb));
         
         for k=1:length(idb)

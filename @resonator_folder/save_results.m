@@ -11,11 +11,13 @@ function save_results(rf,varargin)
     token=0;
     
     %make folder if there isn't one already
+    %if there is one, empty it
     for i=1:length(filelist)
         
         if filelist(i).isdir==true && strcmp({filelist(i).name},rf.result_tag)
         
             token=1;
+            delete(strcat(filelist(i).folder),filesep,filelist(i).name,filesep,'*
             break
             
         end
@@ -39,9 +41,11 @@ function save_results(rf,varargin)
         rf.progressbar(i/length(rf.res_files));
     end
     
+    %write table and resonator folder data
     rf.data_table=tab;
     tablename=strcat(savefolder,filesep,'Summary.csv');
     writetable(rf.data_table,tablename,'WriteRowNames',true);
-
+    resfold=rf;  
+    save(strcat(rf.folder,filesep,'folderdata.mat'),'resfold');
     
 end

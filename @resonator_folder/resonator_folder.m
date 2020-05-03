@@ -91,7 +91,7 @@ classdef resonator_folder <handle
         prompt_folder(r);
         fit_all(r,varargin);
         save_results(r,varargin);
-        
+        inspect(r);
         function set.max_modes(r,value)
             r.max_modes=value;
             for i=1:length(r.resonators)

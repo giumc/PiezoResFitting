@@ -21,6 +21,9 @@ function fit_all_modes(r)
         r.mode(i).fres.optimizable=false;
         
     end
+    if ~isempty(r.figure)
+        r.setup_optim_text;
+    end
 
     r.update_fig;
     drawnow;
@@ -29,6 +32,11 @@ function fit_all_modes(r)
     
     %loop optimization until values are stable
     while loop
+        
+        
+        if ~isempty(r.optim_text)
+            r.populate_optim_text;
+        end
         
         opt_num=0;
         opt_par=[];
@@ -54,52 +62,50 @@ function fit_all_modes(r)
             
             break;
             
-        end
+        else
         
-        if(iter>0)
-            
-            fprintf(repmat('\b',1,itermsg));
-            drawnow;
-            
-        end
-        
-        iter = iter+1;
-        itermsg=fprintf("Iteration n %d",iter);
-        drawnow;
-        
-        flag=r.run_optim();
-        
-        
-        %get final array of optimizands value
-        xnew  = r.optim_array;
+            if(iter>0)
 
-        %if values don't change, don't optimize later
-        for i=1:length(opt_par)
-            
-            if abs((xnew(i)-x0(i))/x0(i))<0.01
-                
-                r.get_param(opt_par(i)).optimizable=0;
-                
+                fprintf(repmat('\b',1,itermsg));
+                drawnow;
+
             end
 
-        end
+            iter = iter+1;
+            itermsg=fprintf("Iteration n %d",iter);
+            drawnow;
 
-        for i=1:length(x0)
-            %if values are too close to boundaries, update boundaries
-            %and reoptimize
-            if xnew(i)>0.95||xnew(i)<0.05
-                
-                r.set_default_boundaries;
-                r.update_fig;                  
-                break
-                
-            else
-                %otherwise, add a mode and go back to main loop
-                if i==length(x0)
+            flag=r.run_optim();
 
-                    loop=false;
-                    %if max modes reached, exit routine
-                    
+            %get final array of optimizands value
+            xnew  = r.optim_array;
+
+            %if values don't change, don't optimize later
+            for i=1:length(opt_par)
+
+                if abs((xnew(i)-x0(i))/x0(i))<0.025
+
+                    r.get_param(opt_par(i)).optimizable=0;
+
+                end
+
+            end
+
+            for i=1:length(x0)
+                %if values are too close to boundaries, update boundaries
+                %and reoptimize
+                if xnew(i)>0.95||xnew(i)<0.05
+
+                    r.set_default_boundaries;
+                    r.update_fig;                  
+                    break
+
+                else
+                    if i==length(x0)
+
+                        loop=false;
+
+                    end
                 end
             end
         end
