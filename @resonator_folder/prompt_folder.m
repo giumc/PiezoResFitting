@@ -1,9 +1,7 @@
 function prompt_folder(f)
     title='Select folder(s)';
 
-    start_folder=fileparts(which('fit_resonators_group.m'));
-    start_folder=strrep(start_folder,'\@fit_resonators_group','');
-
+    start_folder=fileparts(which('\@resonator_folder\resonator_folder.m'));
 
     outcome=uigetdir(start_folder,title);
 

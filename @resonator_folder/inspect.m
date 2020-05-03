@@ -3,9 +3,9 @@ function inspect(rf)
     reject_foldername='Rejected';
     rejected_res=[];
     for i=1:length(rf.resonators)
-        f=rf.resonators(i).setup_gui('minimal');
-        selection=uiconfirm(f, 'Keep data?', ...
-                    'Options', {'Yes','No','Cancel'});
+        rf.resonators(i).setup_gui('minimal');
+        selection=questdlg('Keep data?', ...
+                    'Inspection', {'Yes','No','Cancel'});
         switch selection
             case 'Yes'
 

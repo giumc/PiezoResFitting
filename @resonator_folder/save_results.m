@@ -17,7 +17,7 @@ function save_results(rf,varargin)
         if filelist(i).isdir==true && strcmp({filelist(i).name},rf.result_tag)
         
             token=1;
-            delete(strcat(filelist(i).folder),filesep,filelist(i).name,filesep,'*
+%             delete(strcat(filelist(i).folder),filesep,filelist(i).name,filesep,'*');
             break
             
         end
@@ -46,6 +46,6 @@ function save_results(rf,varargin)
     tablename=strcat(savefolder,filesep,'Summary.csv');
     writetable(rf.data_table,tablename,'WriteRowNames',true);
     resfold=rf;  
-    save(strcat(rf.folder,filesep,'folderdata.mat'),'resfold');
+    save(strcat(savefolder,filesep,'folderdata.mat'),'resfold');
     
 end

@@ -36,7 +36,7 @@ mag_axis.Title.String   =   mag_axis_name;
 mag_axis.OuterPosition       =   [x0fig y0fig+dyfig+spacing dxfig dyfig];
 mag_axis.YLabel.String  =   '[dB]';
 mag_axis.NextPlot       =   'replace';
-mag_axis.Color          =   rgb('white');
+mag_axis.Color          =   res.rgb('white');
 mag_axis.GridLineStyle  =   '-.';
 
 mag_legend              =   legend(mag_axis);
@@ -50,7 +50,7 @@ phase_axis.Title.String =   phase_axis_name;
 phase_axis.OuterPosition     =   [x0fig y0fig dxfig dyfig];
 phase_axis.YLabel.String=   '[\circ]';
 phase_axis.NextPlot     =   'replace';
-phase_axis.Color        =   rgb('white');
+phase_axis.Color        =   res.rgb('white');
 phase_axis.GridLineStyle  =   '-.';
 
 phase_legend            =   legend(phase_axis);
