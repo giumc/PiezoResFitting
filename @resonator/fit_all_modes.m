@@ -121,6 +121,15 @@ function fit_all_modes(r)
     fprintf(repmat('\b',1,itermsg));
     fprintf(repmat('\b',1,startmsg));
     
+    r.isoptimized=1;
+    
+    if ~isempty(r.optim_text)
+        delete(r.optim_text);
+        r.optim_text=[];
+    end
+    
+    r.isoptimized=1;
+    
 end
 
 

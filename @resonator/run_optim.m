@@ -11,7 +11,7 @@ function flag=run_optim(res)
     problem.options.StepTolerance               =1e-3;
 %     problem.options.ConstraintTolerance         =1e-15;
     problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
-    problem.options.UseParallel                 =0;
+    problem.options.UseParallel                 =false;
 
     problem.objective                           =@(x) res.error_function(x);
 

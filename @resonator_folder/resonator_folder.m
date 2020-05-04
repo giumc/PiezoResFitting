@@ -29,24 +29,23 @@ classdef resonator_folder <handle
     %% properties
     
     properties (Constant,Access=private)
+        
         format_files=[".s1p";".s2p";".S1P";".S2P"];
-        result_tag='Fit_Result';
-    end
-    
-    properties(SetObservable,AbortSet)  
-        folder char ;       
     end
      
     properties (SetAccess=private)
         
         resonators resonator;
-        res_files;
-        data_table;
-
     end
     
+    properties (Access=private)
+        res_files;
+        data_table;
+        tag='_Fit_Result';
+    end
     properties
         max_modes=10;
+        folder;
     end
     
     %% methods
@@ -55,30 +54,29 @@ classdef resonator_folder <handle
         
         function obj=resonator_folder(varargin)
         
-           addlistener(obj,'folder','PostSet',@(x,y)obj.folder_set_callback(x,y,obj));
-
-             if ~isempty(varargin)
-                if strcmp(varargin{1},'folder')
-                    if length(varargin)>1
-                    obj.folder=varargin{2};
-                    end
+            if ~isempty(varargin)
+                for i=1:length(varargin)
+                   if strcmp(varargin{i},'prompt')
+                        obj.prompt_folder();
+                        obj.read_all();
+                   end
                 end
-             else
-                 obj.prompt_folder;
-             end
+            end
         end
         
     end %Constructor, Setters, Getters, Destructors
     
     methods
         
-        prompt_folder(r);
+        folder=prompt_folder(r);
+        flag=read_all(r);
         fit_all(r,varargin);
-        save_results(r,varargin);
+        save_all(r,varargin);
         inspect(r);
+        
         function set.max_modes(r,value)
             r.max_modes=value;
-            for i=1:length(r.resonators)
+            for i=1:length(r.resonators) %#ok<*MCSUP>
                 r.resonators(i).max_modes=value;
             end
         end
@@ -93,8 +91,8 @@ classdef resonator_folder <handle
     
     methods (Static,Access=private) 
         
-        folder_set_callback(src,event,obj);
         progressbar(varargin);
-    end % listeners callbacks
+        outcome=makefolder(folderpath,name);
+    end 
         
 end

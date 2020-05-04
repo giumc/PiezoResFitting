@@ -158,4 +158,6 @@ function fit_routine(r)
         delete(r.optim_text);
         r.optim_text=[];
     end
+    
+    r.isoptimized=1;
 end

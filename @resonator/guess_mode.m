@@ -4,6 +4,10 @@ function flag=guess_mode(r,i)
     freq    =   r.freq_smooth;
     
     y_meas  =   r.y_smooth; % to avoid noise
+    
+    minwidth = ceil(2e-3*length(freq)); % filter noise peaks
+    
+    minheight = -100;
 %     print(i)
     %calculate peaks from findpeaks function (if not already done)
     if isempty(r.respeak)
@@ -14,7 +18,9 @@ function flag=guess_mode(r,i)
                     'WidthReference','halfheight');
 
         [ydb,idb,~,pdb] = findpeaks(r.db(y_meas),...
-            'SortStr','descend','MinPeakHeight',-95,'MinPeakWidth',13);
+            'SortStr','descend',...
+            'MinPeakHeight',minheight,...
+            'MinPeakWidth',minwidth);
         qeff=zeros(1,length(idb));
         
         for k=1:length(idb)

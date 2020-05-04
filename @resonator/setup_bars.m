@@ -39,7 +39,7 @@ function setup_bars(r)
         opt_param=r.get_param(i);
         b(i).String=opt_param.label;
         b(i).Tag=b(i).String;
-        b(i).BackgroundColor=rgb('LightCoral');  
+        b(i).BackgroundColor=r.rgb('LightCoral');  
         b(i).Callback={@r.bar_callback,r};
        
     end

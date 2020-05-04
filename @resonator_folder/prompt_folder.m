@@ -1,16 +1,21 @@
-function prompt_folder(f)
+function folder=prompt_folder(rf)
     title='Select folder(s)';
 
     start_folder=fileparts(which('\@resonator_folder\resonator_folder.m'));
 
-    outcome=uigetdir(start_folder,title);
+    folder=uigetdir(start_folder,title);
 
-    %add folders and subfolders
+    %add folders and subfolders to path
     
-    if ~outcome
-        return
-    else
-        f.folder=string(outcome);
+    if folder
+        
+        isonpath=which(folder);
+        if ~isonpath
+            addpath(genpath(folder));
+            savepath;
+        end
+        rf.folder=folder;
+        
     end       
     
 end
