@@ -1,9 +1,9 @@
-function save_all(rf,varargin)
+function outcome=save_all(rf,varargin)
     %creates a folder (with tag specified in rf.tag)
     %which contains a subfolder for each format
     % ---- for list of possible formats, see resonator.save ----
     %by defaults, it generates a csv and a .m with resoantor folder data
-    
+    outcome=false;
     if isempty(rf.resonators)
         return
     end
@@ -78,7 +78,7 @@ function save_all(rf,varargin)
             end
         end
     end
-        
+    outcome=true;    
     % aux function to lookup and parse right save command
     function lookallres(folder,msg,varargin)
         

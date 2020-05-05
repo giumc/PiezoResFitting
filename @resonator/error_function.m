@@ -1,6 +1,11 @@
-function y = error_function(res,x0)
-    y=[];
-    res.transform_resonator(x0);
+function y = error_function(res,varargin)
+    %if array of normalized values is passed,
+    %it is used to get error with resonator obtained with those 
+    %new variables. 
+    %(Functionality is necessary for optimization)
+    if~isempty(varargin)
+        res.transform_resonator(varargin{1});
+    end
     y_meas =  res.y_smooth;
     y_calc =  res.y_calc;
     freq   =  res.freq;
