@@ -1,9 +1,10 @@
 function save_all(rf,varargin)
     %creates a folder (with tag specified in rf.tag)
-    %which contains a subfolder for each resonator saved format
-    % ---- for list of possible formats, see resonator.save ----
-    %by defaults, it generates a csv and a .m with resoantor folder data
+    %with fitted resonator formatted data
     
+    %by defaults, it generates a csv and a .m with resoantor folder data
+    % you can pass extra options as save_all(options)
+    % ---- for list of options, help resonator.save ----
     if isempty(rf.resonators)
         return
     end

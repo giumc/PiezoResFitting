@@ -9,11 +9,11 @@ classdef resonator_folder <handle
 %     max_modes (int )-> Settable
 %
 % methods:
-%     prompt_folder()     -> to input from UI resonators
-%     fit_all()           -> fit all resonators in object
-%     save_results(opt)   -> save data
+%     prompt_folder()     -> opens UI to get folder containing resonators
+%     fit_all()           -> fit all resonators objects
+%     save_all(opt)       -> save data (type help for more info)
 %         opt : 'printfig' , to include a fig file for each res
-%     
+%     read_all()          -> initialize resonators in folder
 %    
 % full path can be passed :
 %     1) after specifier 'folder' when creating object;
