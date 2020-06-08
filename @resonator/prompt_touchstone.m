@@ -11,7 +11,7 @@ rehash;
 
 if contains(choice,'.s1p')||contains(choice,'.s2p')
     resonator.touchstone_file   =   choice; 
-    resonator.save_folder = pathname;
+    resonator.touchstone_folder = pathname;
 %     fprintf('S-Param data added\n');
 end
 

@@ -52,6 +52,10 @@ classdef resonator < matlab.mixin.Copyable & handle
         touchstone_file;
     end
     
+    properties(Access=private)
+        touchstone_folder;
+    end
+    
     properties
         tag='Default';
         save_folder;
@@ -187,7 +191,7 @@ classdef resonator < matlab.mixin.Copyable & handle
                
     end %Constructor/Destructor
     
-    methods (Access=private)
+    methods (Access=private,Hidden)
         
         x0      =   optim_array(r);
         transform_resonator(r,x0);
@@ -236,8 +240,6 @@ classdef resonator < matlab.mixin.Copyable & handle
         fit_routine(r);
         
         fit_all_modes(r);
-        
-        guess_coarse(r);
         
         prompt_touchstone(r);
         
@@ -292,8 +294,11 @@ classdef resonator < matlab.mixin.Copyable & handle
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
         end
+        
         f=rgb(varargin);
-    end %Mathematical Functions
+        outcome=makefolder(folderpath,name);
+        
+    end %Generic Functions
    
     methods (Static,Access=private)
         

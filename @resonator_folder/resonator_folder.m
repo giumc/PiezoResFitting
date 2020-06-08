@@ -93,6 +93,7 @@ classdef resonator_folder <handle
         
         progressbar(varargin);
         outcome=makefolder(folderpath,name);
+        
     end 
         
 end

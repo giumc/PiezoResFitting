@@ -2,15 +2,8 @@ function save_all(rf,varargin)
     %creates a folder (with tag specified in rf.tag)
     %with a csv and a .m with all resonator in folder
     % you can pass extra options to get more formatted data:
-    % 'png' makes a folder BitmapImages with a .png of all resonators
-    % 'vec' makes a folder VectorImages with a .eps .emf of all resonators
-    % 'fig' makes a folder MatFigures with a .fig of all resonators
-    % 'data' makes a folder ResData with a .mat of all resonators
-    % moreover, you can pass options to resonator.save as 
-    % 'guioptions','opt1','opt2' to control extra figure options
-    %
-    % es: save all resonators png with minimal setup
-    % r.save_all('png','guioptions','minimal','Visible','off');
+    % 'png' makes a folder BitmapImages with a .eps of all resonators
+    % 'fig' makes a folder VectorImages with a .eps of all resonators
     % ---- for list of options, help resonator.save ----
     if isempty(rf.resonators)
         return
@@ -65,22 +58,13 @@ function save_all(rf,varargin)
                             'Saving PNG files',...
                             'png',guioptions{:});
                     end
-                case 'vec'
+                case 'fig'
                     flag=rf.makefolder(mainfolder,'VectorImages');
                     if flag
                         savefolder=strcat(mainfolder,...
                             'VectorImages',filesep);
                         lookallres(savefolder,...
                             'Saving V files',...
-                            'vec',guioptions{:});
-                    end
-                case 'fig'
-                    flag=rf.makefolder(mainfolder,'MatFigures');
-                    if flag
-                        savefolder=strcat(mainfolder,...
-                            'MatFIgures',filesep);
-                        lookallres(savefolder,...
-                            'Saving M figures',...
                             'fig',guioptions{:});
                     end
 
