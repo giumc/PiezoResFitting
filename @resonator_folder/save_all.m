@@ -1,9 +1,9 @@
-function outcome=save_all(rf,varargin)
+function save_all(rf,varargin)
     %creates a folder (with tag specified in rf.tag)
-    %which contains a subfolder for each format
+    %which contains a subfolder for each resonator saved format
     % ---- for list of possible formats, see resonator.save ----
     %by defaults, it generates a csv and a .m with resoantor folder data
-    outcome=false;
+    
     if isempty(rf.resonators)
         return
     end
@@ -19,7 +19,9 @@ function outcome=save_all(rf,varargin)
     %write table and resonator folder data
     rf.progressbar('Saving Summary Table');
     for i=1:length(rf.resonators)
-        
+        if isempty(rf.resonators(i).data_table)
+            rf.resonators(i).gen_table;
+        end
         tab=[tab; rf.resonators(i).data_table];
         rf.progressbar(i/length(rf.res_files));
     end
@@ -78,7 +80,7 @@ function outcome=save_all(rf,varargin)
             end
         end
     end
-    outcome=true;    
+        
     % aux function to lookup and parse right save command
     function lookallres(folder,msg,varargin)
         

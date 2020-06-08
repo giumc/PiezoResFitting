@@ -39,7 +39,6 @@ classdef resonator < matlab.mixin.Copyable & handle
     properties (Access=private)
         optimizer_setup;
         isoptimized=0;
-        fiterror=0;
     end % optimization options
    
     properties (SetObservable,AbortSet,Hidden)
@@ -80,8 +79,8 @@ classdef resonator < matlab.mixin.Copyable & handle
         y0label = resonator.y0fig+2*resonator.dyfig-3*resonator.dylabel;
         x0bar = resonator.x0label+3*resonator.dxlabel+3*resonator.button_spacing;
         
-        x0optimtext=0.75;
-        y0optimtext=0.8;
+        dx0optimtext=0.1;
+        dy0optimtext=0.1;
         textfont=20;
         
         buttons_name={...
@@ -130,7 +129,7 @@ classdef resonator < matlab.mixin.Copyable & handle
         respeak;
     end % physical parameters
     
-    properties%(Access=private)
+    properties (Access=private)
         figure;
         mag_axis;
         phase_axis;
@@ -223,8 +222,6 @@ classdef resonator < matlab.mixin.Copyable & handle
         
         flag=run_optim(r);
         
-        table=gen_table(r);
-        
     end % internal functions
     
     methods (Static,Access=private) %const definition
@@ -256,6 +253,8 @@ classdef resonator < matlab.mixin.Copyable & handle
         output=save(r,varargin);
         
         reset(r);
+        
+        table=gen_table(r);
         
     end % main tools
     
@@ -302,9 +301,9 @@ classdef resonator < matlab.mixin.Copyable & handle
             
             res=event.AffectedObject;
             [path,name]=fileparts(res.touchstone_file);
-            res.tag=regexprep(name,'.[sS][12][pP]','');
-            msg=fprintf("Init of %s resonator",res.name);
+            msg=fprintf("Init of %s resonator",name);
             res.save_folder=path;
+            res.tag=regexprep(name,'.[sS][12][pP]','');
             res.set_sparam;
             res.set_freq;
             res.extract_y_from_s;

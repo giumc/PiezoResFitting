@@ -129,7 +129,7 @@ function fit_all_modes(r)
     end
     
     r.isoptimized=1;
-    r.fiterror=r.error_function();
+    
 end
 
 
