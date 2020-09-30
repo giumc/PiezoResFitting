@@ -17,8 +17,8 @@ end
 
         edits=r.boundaries_edit{i};
         
-        edits(1).String=opt_param.convert2sci(opt_param.min);
-        edits(2).String=opt_param.convert2sci(opt_param.max);
+        edits(1).String=convert2sci(opt_param.min);
+        edits(2).String=convert2sci(opt_param.max);
         
     end
 end

@@ -1,4 +1,5 @@
 function fit_routine(r)
+
     startmsg=fprintf("Start fitting %s resonator\n",r.tag);
     max_modes=r.max_modes;
     loop=true;
@@ -6,9 +7,11 @@ function fit_routine(r)
     flag=1;
     
     if ~isempty(r.figure)
+        
         r.setup_optim_text;
     end
 %     get who's optimizable at the beginning
+
     for i=1:r.n_param
         
         isoptim(i)=r.get_param(i).optimizable; 
@@ -36,13 +39,15 @@ function fit_routine(r)
         end
         
         % set fres non optimizable for all modes fres
-        for i=1:length(r.mode)
-            
-            r.mode(i).fres.optimizable=false;
-            
-        end
+        
+%         for i=1:length(r.mode)
+%             
+%             r.mode(i).fres.optimizable=false;
+%             
+%         end
         
         r.update_fig;
+        
         drawnow;
 
         %keep optimizing until boundaries are stable
@@ -67,7 +72,7 @@ function fit_routine(r)
             end
             
             %get initial array of optimizands value
-            x0=r.optim_array;
+            x0=r.get_optim_array;
             
             if isempty(x0)
             
@@ -100,7 +105,7 @@ function fit_routine(r)
                 flag=r.run_optim();
 
                 %get final array of optimizands value
-                xnew  = r.optim_array;
+                xnew  = r.get_optim_array;
 
                 for i=1:length(opt_par)
                     %if values don't change, don't optimize later

@@ -8,7 +8,7 @@ function plot_data(r)
     
     y_meas  =   r.y_smooth;
     
-    y_calc  =   r.y_calc; 
+    y_calc  =   r.get_y;
 
     if isempty(r.mag_axis)||isempty(r.phase_axis)
         return
@@ -23,7 +23,7 @@ function plot_data(r)
 
     delete(mag_axis.Children);
     delete(phase_axis.Children);
-    [freq,scale] =  r.c0.num2str_sci(freq);
+    [freq,scale] =  num2str_sci(freq);
     freq_label  =   strcat('Frequency',{' ['},scale,{'Hz]'});
     phase_axis.XLabel.String=freq_label;
     mag_axis.XLabel.String=freq_label;

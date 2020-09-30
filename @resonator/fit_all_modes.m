@@ -56,7 +56,7 @@ function fit_all_modes(r)
         end
         
         %get initial array of optimizands value
-        x0=r.optim_array;
+        x0=r.get_optim_array;
         
         if isempty(x0)
             

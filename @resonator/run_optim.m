@@ -15,7 +15,7 @@ function flag=run_optim(res)
 
     problem.objective                           =@(x) res.error_function(x);
 
-    problem.x0                                  =res.optim_array;
+    problem.x0                                  =res.get_optim_array;
     problem.lb                                  =zeros(1,length(problem.x0));
     problem.ub                                  =ones(1,length(problem.x0));
 

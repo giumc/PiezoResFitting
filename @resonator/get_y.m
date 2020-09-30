@@ -1,14 +1,16 @@
-function y= calculate_y(resonator)
-    f   =   resonator.freq_smooth;
-    c0  =   resonator.c0.value;
-    r0  =   resonator.r0.value;
-    rs  =   resonator.rs.value;
+function y= get_y(obj)
+
+    f   =   obj.freq_smooth;
+
+    c0  =   obj.c0.value;
+    r0  =   obj.r0.value;
+    rs  =   obj.rs.value;
     
     y   =   1i * 2 * pi * f * c0 + 1 / r0 ;
     
-    for j = 1 : length (resonator.mode)
+    for j = 1 : length (obj.mode)
         
-        mot_branch = calculate_mot_branch(resonator,j);
+        mot_branch = calculate_mot_branch(obj,j);
         
         Lm      =   mot_branch.Lm ;
         Cm      =   mot_branch.Cm ;
