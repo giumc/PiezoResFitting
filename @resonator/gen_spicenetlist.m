@@ -34,9 +34,13 @@ function flag=gen_spicenetlist(r)
         C=LCR.Cm;
         R=LCR.Rm;
         
-        txt=strcat(txt,gen_motional_branch_SPICE(L,C,R,"P","N",num2str(i)));
+        txt=strcat(txt,gen_motional_branch_SPICE(L,C,R,"mp","2",num2str(i)));
         
     end
+%     keyboard
+    txt=strcat(txt,"C ",num2str(r.c0.value),"mp ", "2 \n");
+    txt=strcat(txt,"R ",num2str(r.r0.value),"mp ", "2 \n");
+    txt=strcat(txt,"R ",num2str(r.rs.value),"1 ", "2 \n");
     
     fprintf(txt);
     

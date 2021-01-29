@@ -26,8 +26,8 @@ function outcome=save(r,varargin)
             if isfolder(r.save_folder)
                 savepathfile=r.save_folder;        
             else
-                fprintf("Cannot get to %s \n,abort",r.save_folder);
-                return
+                error("Cannot get to %s \n,abort",r.save_folder);
+                
             end
         end
     else
@@ -35,8 +35,8 @@ function outcome=save(r,varargin)
             r.save_folder=strcat(r.touchstone_folder,'Fit Result',filesep);
             savepathfile=r.save_folder;
         else
-            fprintf("No save folder for %s, abort\n",r.tag);
-            return
+            error("No save folder for %s, abort\n",r.tag);
+            
         end
     end
          

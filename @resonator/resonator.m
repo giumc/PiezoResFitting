@@ -167,28 +167,12 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         function obj =  Resonator(varargin)
         
-%             obj.mode=[];%start without modes?
-
-            obj.set_default_param;
-            
-            obj.set_freq;
-            
-            addlistener(obj,'touchstone_file','PostSet',@obj.update_sparam);
-            addlistener(obj,'max_samples','PostSet',@obj.update_sparam);
-            addlistener(obj,'smoothing_data','PostSet',@obj.update_sparam);
-            addlistener(obj,'interp_points','PostSet',@obj.update_sparam);  
-            
-            if check_if_string_is_present(varargin,'file')
-
-                obj.touchstone_file=varargin{2};
-                obj.save_folder=fileparts(varargin{2});
-                obj.guess_coarse;
-                obj.set_default_boundaries;
-            
-            end
-            
-            if isempty(obj.touchstone_file)
-                obj.prompt_touchstone;
+            if ~obj.init(varargin{:})
+                
+                obj.delete;
+                
+                error("Resonator Creation Failed\n");
+                
             end
             
         end
@@ -213,6 +197,8 @@ classdef Resonator < matlab.mixin.Copyable & handle
     end %Constructor/Destructor
     
     methods (Access=private,Hidden)
+        
+        flag=init(r,varargin);
         
         x0      =   get_optim_array(r);
         
@@ -279,7 +265,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         fit_all_modes(obj);
         
-        prompt_touchstone(obj);
+        flag=prompt_touchstone(obj);
 
         f=setup_gui(obj,varargin);
         
