@@ -1,4 +1,4 @@
-classdef resonator_folder <handle
+classdef Resonator_folder <handle
 %
 % Container for resonators in the same folder.
 %   
@@ -52,7 +52,7 @@ classdef resonator_folder <handle
     
     methods 
         
-        function obj=resonator_folder(varargin)
+        function obj=Resonator_folder(varargin)
         
             if ~isempty(varargin)
                 for i=1:length(varargin)
