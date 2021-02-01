@@ -11,7 +11,7 @@ function flag=init(r,varargin)
     addlistener(r,'interp_points','PostSet',@r.update_sparam);  
 
     if check_if_string_is_present(varargin,'file')
-
+        flag=true;
         r.touchstone_file=varargin{2};
         r.save_folder=fileparts(varargin{2});
         r.guess_coarse;
