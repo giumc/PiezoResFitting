@@ -17,7 +17,7 @@ function outcome=read_all(rf)
         outcome=true;
         for k=1:length(files)
             fullpath=strcat(files(k).folder,filesep,files(k).name);
-            rf.resonators(k)=resonator('file',fullpath);
+            rf.resonators(k)=Resonator('file',fullpath);
             rf.resonators(k).tag=files(k).name;
             rf.resonators(k).max_modes=rf.max_modes;
             rf.progressbar(k/length(files));

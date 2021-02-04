@@ -23,7 +23,13 @@ function fit_routine(r)
     while loop
         
         if ~isempty(r.optim_text)
-            r.populate_optim_text;
+            
+            if isvalid(r.optim_text)
+                
+                r.populate_optim_text;
+                
+            end
+                
         end
         
         % re-set optimizability of parameters

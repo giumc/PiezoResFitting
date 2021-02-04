@@ -35,7 +35,7 @@ classdef Resonator_folder <handle
      
     properties (SetAccess=private)
         
-        resonators resonator;
+        resonators Resonator;
     end
     
     properties (Access=private)

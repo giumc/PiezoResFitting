@@ -13,7 +13,8 @@ flag=false;
         savepath;
         rehash;
 
-        if contains(choice,'.s1p')||contains(choice,'.s2p')
+        if contains(choice,{'s1p','s2p','S1P','S2P'})
+            
             flag=true;
             resonator.touchstone_file   =   choice; 
             resonator.touchstone_folder = pathname;
