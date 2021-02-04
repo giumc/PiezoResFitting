@@ -21,11 +21,11 @@ function flag=init(r,varargin)
         
         flag=r.prompt_touchstone;
         
-        if flag
-            
-            r.save_folder=r.touchstone_folder;
-            
-        end
+%         if flag
+%             
+%             r.save_folder=r.touchstone_folder;
+%             
+%         end
             
     end
 

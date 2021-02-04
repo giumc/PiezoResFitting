@@ -31,8 +31,9 @@ function outcome=save(r,varargin)
             end
         end
     else
-        if r.makefolder(r.touchstone_folder,'Fit Result')
-            r.save_folder=strcat(r.touchstone_folder,'Fit Result',filesep);
+        folder_tag=strcat(r.tag," ",'Fit Result');
+        if r.makefolder(r.touchstone_folder,folder_tag)
+            r.save_folder=strcat(r.touchstone_folder,filesep,folder_tag,filesep);
             savepathfile=r.save_folder;
         else
             error("No save folder for %s, abort\n",r.tag);
