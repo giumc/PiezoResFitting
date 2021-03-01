@@ -1,4 +1,4 @@
-function outcome=save(r,varargin)
+function outcome=save(obj,varargin)
    %by default, it saves png and .m file
    %in the same folder as the s2p file
    %
@@ -7,6 +7,7 @@ function outcome=save(r,varargin)
    %'vec' to print eps and emf file
    %'fig' to print fig file
    %'tab' to print table
+   %'spice' to print a spice model of the resonator
    %'full' to print png,eps,fig,csv and mat file with res data
    %'data' to save only .m data file
    % OSS:
@@ -14,40 +15,40 @@ function outcome=save(r,varargin)
    % 'guioptions','opt1','opt2',... as last arguments
    
    outcome=false;
-    if isempty(r.data_table)
-        r.data_table=gen_table(r);
+    if isempty(obj.data_table)
+        obj.data_table=gen_table(obj);
     end
     
-    if ~isempty(r.save_folder)
-        if isfolder(r.save_folder)
-            savepathfile=r.save_folder;        
+    if ~isempty(obj.save_folder)
+        if isfolder(obj.save_folder)
+            savepathfile=obj.save_folder;        
         else
-            addpath(r.save_folder)
-            if isfolder(r.save_folder)
-                savepathfile=r.save_folder;        
+            addpath(obj.save_folder)
+            if isfolder(obj.save_folder)
+                savepathfile=obj.save_folder;        
             else
-                error("Cannot get to %s \n,abort",r.save_folder);
+                error("Cannot get to %s \n,abort",obj.save_folder);
                 
             end
         end
     else
-        folder_tag=strcat(r.tag," ",'Fit Result');
-        if r.makefolder(r.touchstone_folder,folder_tag)
-            r.save_folder=strcat(r.touchstone_folder,filesep,folder_tag,filesep);
-            savepathfile=r.save_folder;
+        folder_tag=strcat(obj.tag," ",'Fit Result');
+        if obj.makefolder(obj.touchstone_folder,folder_tag)
+            obj.save_folder=strcat(obj.touchstone_folder,filesep,folder_tag,filesep);
+            savepathfile=obj.save_folder;
         else
-            error("No save folder for %s, abort\n",r.tag);
+            error("No save folder for %s, abort\n",obj.tag);
             
         end
     end
          
-    filename=regexprep(r.tag,'.[sS][12][pP]','');
+    filename=regexprep(obj.tag,'.[sS][12][pP]','');
     
     filepath=strcat(savepathfile,filename);
     
     tablename=strcat(filepath,'.csv');
     
-    resobj=r;
+    resobj=obj;
     
     printflag=fprintf("Saving %s resonator data",filename);
     guioptions={};
@@ -67,40 +68,46 @@ function outcome=save(r,varargin)
         for i=1:length(varargin)
             switch varargin{i}
                 case 'png'
-                    r.setup_gui(guioptions{:});
-                    print(r.figure,filepath,'-dpng','-r100');
-                    r.delete_gui;
+                    obj.setup_gui(guioptions{:});
+                    print(obj.figure,filepath,'-dpng','-r100');
+                    obj.delete_gui;
                     outcome=true;
                 case 'vec'
-                    r.setup_gui(guioptions{:});
-                    print(r.figure,filepath,'-depsc','-r0','-painters');
-                    print(r.figure,filepath,'-dmeta','-r0','-painters');
-                    r.delete_gui;
+                    obj.setup_gui(guioptions{:});
+                    print(obj.figure,filepath,'-depsc','-r0','-painters');
+                    print(obj.figure,filepath,'-dmeta','-r0','-painters');
+                    obj.delete_gui;
                     outcome=true;
                 case 'fig'
-                    r.setup_gui(guioptions{:});
-                    savefig(r.figure,filepath);
-                    r.delete_gui;
+                    obj.setup_gui(guioptions{:});
+                    savefig(obj.figure,filepath);
+                    obj.delete_gui;
                     outcome=true;
                 case 'data'
                     save(strcat(filepath,'.mat'),'resobj');
                     outcome=true;
+                case 'spice'
+                    
+                    obj.gen_spicenetlist;
+                    outcome=true;
+                    
                 case 'full'
-                    r.setup_gui(guioptions{:});
-                    savefig(r.figure,filepath);
-                    print(r.figure,filepath,'-depsc','-r0','-painters');
-                    r.delete_gui;
-                    writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
+                    obj.setup_gui(guioptions{:});
+                    savefig(obj.figure,filepath);
+                    obj.gen_spicenetlist;
+                    print(obj.figure,filepath,'-depsc','-r0','-painters');
+                    obj.delete_gui;
+                    writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
                     save(strcat(filepath,'.mat'),'resobj');
                     outcome=true;
                     break
             end
         end
     else
-        r.setup_gui('minimal','Visible','off');
-        print(r.figure,filepath,'-dpng','-r100');
-        r.delete_gui;
-        writetable(r.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
+        obj.setup_gui('minimal','Visible','off');
+        print(obj.figure,filepath,'-dpng','-r100');
+        obj.delete_gui;
+        writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
         save(strcat(filepath,'.mat'),'resobj');
         outcome=true;
     end

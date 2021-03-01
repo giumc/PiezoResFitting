@@ -8,7 +8,12 @@ function fit_routine(r)
     
     if ~isempty(r.figure)
         
-        r.setup_optim_text;
+        if isvalid(r.figure)
+        
+            r.setup_optim_text;
+  
+        end
+        
     end
 %     get who's optimizable at the beginning
 

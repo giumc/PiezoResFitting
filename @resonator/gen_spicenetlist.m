@@ -1,6 +1,6 @@
-function filepointer=gen_spicenetlist(r)
+function filepointer=gen_spicenetlist(obj)
 
-    folder=r.save_folder;
+    folder=obj.save_folder;
     
     filepointer=false;
     
@@ -27,9 +27,9 @@ function filepointer=gen_spicenetlist(r)
         
     end
     
-    for i=1:length(r.mode)
+    for i=1:length(obj.mode)
     
-        LCR=r.calculate_mot_branch(i);
+        LCR=obj.calculate_mot_branch(i);
         L=LCR.Lm;
         C=LCR.Cm;
         R=LCR.Rm;
@@ -39,18 +39,18 @@ function filepointer=gen_spicenetlist(r)
     end
 
     
-    txt=strcat(txt,"C0 ","mp ", "2 ",num2str(r.c0.value)," \n");
-    txt=strcat(txt,"R0 ","mp ","2 ",num2str(r.r0.value)," \n");
-    txt=strcat(txt,"RS ","1 ", "mp ",num2str(r.rs.value)," \n");
+    txt=strcat(txt,"C0 ","mp ", "2 ",num2str(obj.c0.value)," \n");
+    txt=strcat(txt,"R0 ","mp ","2 ",num2str(obj.r0.value)," \n");
+    txt=strcat(txt,"RS ","1 ", "mp ",num2str(obj.rs.value)," \n");
 
-    txt=strcat(sprintf("** Auto-generated SPICE model for resonator %s**\n ",r.tag),...
-        "\n",".SUBCKT ",r.tag," "," 1 2 \n\n",txt,"\n.ENDS \n");
+    txt=strcat(sprintf("** Auto-generated SPICE model for resonator %s**\n ",obj.tag),...
+        "\n",".SUBCKT ",obj.tag," "," 1 2 \n\n",txt,"\n.ENDS \n");
     
-    filepointer=fopen(strcat(r.save_folder,filesep,r.tag,'.SPICE'),'w+');
+    filepointer=fopen(strcat(obj.save_folder,filesep,obj.tag,'.SPICE'),'w+');
     
     if ~filepointer
         
-        error(sprintf("Could not write in \n \s",strcat(r.save_folder,filesep,r.tag,'.SPICE')));
+        error(sprintf("Could not write in %s \n",strcat(obj.save_folder,filesep,obj.tag,'.SPICE')));
         
     else
         

@@ -78,7 +78,7 @@ function fit_all_modes(r)
             flag=r.run_optim();
 
             %get final array of optimizands value
-            xnew  = r.optim_array;
+            xnew  = r.get_optim_array;
 
             %if values don't change, don't optimize later
             for i=1:length(opt_par)

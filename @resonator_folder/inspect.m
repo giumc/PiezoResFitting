@@ -38,7 +38,7 @@ function inspect(rf)
 %         else
 %             return
 %         end
-        reject_folder=resonator_folder;
+        reject_folder=Resonator_folder;
         reject_folder.folder=rf.folder;
         reject_folder.tag=reject_foldername;
         reject_folder.res_files=rf.res_files(rejected_res);

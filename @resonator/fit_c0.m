@@ -12,7 +12,7 @@ freq    =   res.freq_smooth;
 
 y_smooth  =   res.y_smooth;
 
-res.c0.set_value(imag(y_smooth(1))/(2*pi*freq(1)),'override');
+res.c0.set_value(abs(mean(imag(y_smooth))/2/pi/mean(freq)),'override');
 
 res.c0.set_min(res.c0.value/10);
 
