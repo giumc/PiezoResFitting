@@ -39,13 +39,21 @@ classdef Resonator_folder <handle
     end
     
     properties (Access=private)
-        res_files;
-        data_table;
+        
+        res_files ;
+        
+        data_table table;
+        
         tag='_Fit_Result';
+        
     end
+    
     properties
+        
         max_modes=10;
+        
         folder;
+        
     end
     
     %% methods
@@ -54,31 +62,47 @@ classdef Resonator_folder <handle
         
         function obj=Resonator_folder(varargin)
         
-            if ~isempty(varargin)
-                for i=1:length(varargin)
-                   if strcmp(varargin{i},'prompt')
-                        obj.prompt_folder();
-                        obj.read_all();
-                   end
-                end
+            pos_prompt=check_if_string_is_present(varargin,'prompt');
+            
+            if pos_prompt
+                       
+                obj.prompt_folder();
+
+                obj.read_all();
+
             end
+            
         end
         
-    end %Constructor, Setters, Getters, Destructors
+    end
+   %Constructor, Setters, Getters, Destructors
     
     methods
         
         folder=prompt_folder(r);
+        
         flag=read_all(r);
+        
         fit_all(r,varargin);
+        
         flag=save_all(r,varargin);
+        
         inspect(r);
+        
         view_all(r,varargin);
+        
+        reset(r);
+        
         function set.max_modes(r,value)
+            
             r.max_modes=value;
+            
             for i=1:length(r.resonators) %#ok<*MCSUP>
+                
                 r.resonators(i).max_modes=value;
+                
             end
+            
         end
         
     end %main tools
@@ -92,6 +116,7 @@ classdef Resonator_folder <handle
     methods (Static,Access=private) 
         
         progressbar(varargin);
+        
         outcome=makefolder(folderpath,name);
         
     end 
