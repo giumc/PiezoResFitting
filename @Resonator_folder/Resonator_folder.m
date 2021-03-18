@@ -73,7 +73,7 @@ classdef Resonator_folder <handle
         fit_all(r,varargin);
         flag=save_all(r,varargin);
         inspect(r);
-        
+        view_all(r,varargin);
         function set.max_modes(r,value)
             r.max_modes=value;
             for i=1:length(r.resonators) %#ok<*MCSUP>

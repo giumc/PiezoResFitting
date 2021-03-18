@@ -65,30 +65,44 @@ function outcome=save(obj,varargin)
     end
         
     if ~isempty(varargin)
+        
         for i=1:length(varargin)
+            
             switch varargin{i}
+                
                 case 'png'
+                    
                     obj.setup_gui(guioptions{:});
                     print(obj.figure,filepath,'-dpng','-r100');
                     obj.delete_gui;
                     outcome=true;
+                    
                 case 'vec'
+                    
                     obj.setup_gui(guioptions{:});
                     print(obj.figure,filepath,'-depsc','-r0','-painters');
                     print(obj.figure,filepath,'-dmeta','-r0','-painters');
                     obj.delete_gui;
                     outcome=true;
+                    
                 case 'fig'
+                    
                     obj.setup_gui(guioptions{:});
                     savefig(obj.figure,filepath);
                     obj.delete_gui;
                     outcome=true;
+                    
                 case 'data'
                     save(strcat(filepath,'.mat'),'resobj');
                     outcome=true;
                 case 'spice'
                     
                     obj.gen_spicenetlist;
+                    outcome=true;
+                         
+                case 'tab'
+                    
+                    writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
                     outcome=true;
                     
                 case 'full'
@@ -100,20 +114,24 @@ function outcome=save(obj,varargin)
                     writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
                     save(strcat(filepath,'.mat'),'resobj');
                     outcome=true;
+                    
                     break
+                    
             end
+            
         end
+        
     else
+        
         obj.setup_gui('minimal','Visible','off');
         print(obj.figure,filepath,'-dpng','-r100');
         obj.delete_gui;
         writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
         save(strcat(filepath,'.mat'),'resobj');
         outcome=true;
-    end
         
-    
-    
+    end
+
     fprintf(repmat('\b',1,printflag))
     
 end
