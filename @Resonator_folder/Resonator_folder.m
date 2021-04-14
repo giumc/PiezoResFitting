@@ -105,6 +105,8 @@ classdef Resonator_folder <handle
             
         end
         
+        sort_by_tag(r);
+        
     end %main tools
     
     methods (Access=private) 

@@ -25,6 +25,8 @@ function fit_routine(r)
 
     init_param=r.n_param;
     
+    itermsg='';
+    
     while loop
         
         if ~isempty(r.optim_text)
@@ -167,8 +169,13 @@ function fit_routine(r)
     
     end
     r.gen_table();
-    fprintf(repmat('\b',1,itermsg));
-    fprintf(repmat('\b',1,startmsg));
+    
+    if ~isempty(itermsg)
+       
+        fprintf(repmat('\b',1,itermsg));
+        fprintf(repmat('\b',1,startmsg));
+        
+    end
     
     if ~isempty(r.optim_text)
         delete(r.optim_text);

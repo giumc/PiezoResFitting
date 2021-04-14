@@ -11,6 +11,7 @@ function flag=init(r,varargin)
     addlistener(r,'interp_points','PostSet',@r.update_sparam);  
 
     if check_if_string_is_present(varargin,'file')
+        
         flag=true;
         r.touchstone_file=varargin{2};
         r.save_folder=fileparts(varargin{2});
@@ -18,15 +19,16 @@ function flag=init(r,varargin)
         r.set_default_boundaries;
 
     else
-        
+
         flag=r.prompt_touchstone;
+
+    end
         
 %         if flag
 %             
 %             r.save_folder=r.touchstone_folder;
 %             
 %         end
-            
-    end
+
 
 end

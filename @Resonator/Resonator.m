@@ -279,6 +279,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         flag=gen_spicenetlist(r);
         
+        
     end % main tools
     
     methods (Access=private)

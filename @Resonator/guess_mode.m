@@ -88,11 +88,12 @@ function flag=guess_mode(r,i)
         respeak=r.respeak;
         
     end
-           
-    [~,i_min] = findpeaks(r.db(1./y_meas),...
+    
+    %main_antiresonance
+  
+    [~,i_min] = findpeaks(-r.db(y_meas),...
         'WidthReference','halfheight',...
         'SortStr','descend',...
-        'MinPeakProminence',1,...
         'NPeaks',1);
 
     tag = 'override';
@@ -102,15 +103,48 @@ function flag=guess_mode(r,i)
     if length(respeak)>=i
         
         if i==1
+            
+            kt2_try=r.calculate_kt2(...
+                respeak(i).freq,freq(i_min));
+            
+            if isnan(kt2_try)
+                
+                warning(strcat("something went wrong with kt2 a-priori ",...
+                    "estimation,\n Setting kt2_1 to 1e-6"));
+                
+                kt2_try=1e-6;
+                
+            else
+            
+                if kt2_try<=0
+
+                    peak_tmp=respeak(i);
+                    respeak(i)=respeak(i+1);
+                    respeak(i+1)=peak_tmp;
+                    
+                        kt2_try=r.calculate_kt2(...
+                    respeak(i).freq,freq(i_min));
+                
+                        if kt2_try<=0
+
+                            warning(strcat("kt2 estimated <0,\n",...
+                                "Setting kt2_1 to 1e-6"));
+
+                            kt2_try=1e-6;
+                            
+                        end
+
+                end
+                
+            end
+                
+            r.mode(i).kt2.set_value(kt2_try,tag);
+            
             r.mode(i).fres.set_value(respeak(i).freq,tag);
 
             r.mode(i).q.set_value(r.mode(i).fres.value/...
                 respeak(i).q/df,tag);
-
-            r.mode(i).kt2.set_value(...
-                r.calculate_kt2(...
-                respeak(i).freq,freq(i_min)),tag);
-       
+           
         else
 
             r.mode(i).fres.set_value(respeak(i).freq,tag);
