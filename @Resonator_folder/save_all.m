@@ -43,12 +43,8 @@ function flag=save_all(rf,varargin)
     rf.progressbar('Saving Summary Table');
     
     for i=1:length(rf.resonators)
-        
-        if isempty(rf.resonators(i).data_table)
-            
-            rf.resonators(i).gen_table;
-            
-        end
+             
+        rf.resonators(i).gen_table;
         
         tab=[tab; rf.resonators(i).data_table];
         

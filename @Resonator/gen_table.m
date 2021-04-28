@@ -36,8 +36,10 @@ function tab=gen_table(r)
         
     end
     
-    vars=[FOM, FOM_w_Rs,vars];
-    names=["FoM","FoM_with_Rs",names];
+    Z0=1/2/pi/r.mode(1).fres.value/r.c0.value;
+    
+    vars=[Z0,FOM, FOM_w_Rs,vars];
+    names=["Z0","FoM","FoM_with_Rs",names];
 
     tab=array2table(vars);
     

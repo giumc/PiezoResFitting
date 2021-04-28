@@ -119,6 +119,15 @@ function flag=guess_mode(r,i)
                 if kt2_try<=0
 
                     peak_tmp=respeak(i);
+                    
+                    if i==length(respeak)
+                        
+                        flag=false;
+                        
+                        return
+                        
+                    end
+                        
                     respeak(i)=respeak(i+1);
                     respeak(i+1)=peak_tmp;
                     
