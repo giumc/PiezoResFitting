@@ -34,14 +34,14 @@ function tab=gen_table(r)
         
         FOM=kt1*q1;
         FOM_w_Rs=FOM*rm1/(rm1+rs);
-        Q_loaded=q1*rs/(rm1+rs);
+        Q_loaded=q1*rm1/(rm1+rs);
         
     end
     
     Z0=1/2/pi/r.mode(1).fres.value/r.c0.value;
     
-    vars=[Z0,FOM, FOM_w_Rs,Q_loaded,vars];
-    names=["Z0","FoM","FoM_with_Rs","Q_loaded",names];
+    vars=[Z0,FOM, FOM_w_Rs,Q_loaded,rm1,vars];
+    names=["Z0","FoM","FoM_with_Rs","Q_loaded","Rm",names];
 
     tab=array2table(vars);
     

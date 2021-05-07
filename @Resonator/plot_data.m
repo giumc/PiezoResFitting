@@ -73,7 +73,7 @@ function plot_data(r)
     end
     
     mag_axis.YLim       = [ymag_min ymag_max];
-    mag_axis.YTick      = ymag_min:20:ymag_max;
+    mag_axis.YTick      = linspace(ymag_min,ymag_max,11);
     phase_axis.YLim     = [-95 95];
     phase_axis.YTick    = -90:30:90;
     
