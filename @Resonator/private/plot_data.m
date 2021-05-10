@@ -60,16 +60,7 @@ function plot_data(r)
 
     %adjust axis lim
     mag_axis.XLim   =   [min(freq) max(freq)];
-    xticks_raw=linspace(min(freq),max(freq),11);
-    
-    for i=1:length(xticks_raw)
-        
-        xticks(i)=sprintf("%.1f",xticks_raw(i));
-        
-    end
-    
-    mag_axis.XTick  =   xticks;
-    
+    mag_axis.XTick  =   min(freq):((max(freq)-min(freq))/10):max(freq);   
     phase_axis.XLim =   mag_axis.XLim;
     phase_axis.XTick=   mag_axis.XTick;
     
