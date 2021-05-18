@@ -128,7 +128,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
     end % measured vars
     
-    properties (SetAccess=private,Hidden)
+    properties (SetAccess=protected,Hidden)
         
         c0 OptParam;
         r0 OptParam;

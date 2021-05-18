@@ -47,23 +47,26 @@ function fit_all_modes(r)
             tot_param(i)=r.get_param(i);
             
             if tot_param(i).optimizable
+                
                 opt_num=opt_num+1;
                 opt_par(opt_num)=i;
-                
-                
+
             end
             
         end
         
         %get initial array of optimizands value
         x0=r.get_optim_array;
-        
+        iter = iter+1;
+         
+        itermsg=fprintf("Iteration n %d",iter);
+            
         if isempty(x0)
             
             break;
             
         else
-        
+
             if(iter>0)
 
                 fprintf(repmat('\b',1,itermsg));
@@ -71,8 +74,6 @@ function fit_all_modes(r)
 
             end
 
-            iter = iter+1;
-            itermsg=fprintf("Iteration n %d",iter);
             drawnow;
 
             flag=r.run_optim();
@@ -114,13 +115,13 @@ function fit_all_modes(r)
         if flag==-1
             loop=false;
         end
-
+        
+        
     end
     
     r.gen_table();
-    fprintf(repmat('\b',1,itermsg));
     fprintf(repmat('\b',1,startmsg));
-    
+        
     r.isoptimized=1;
     
     if ~isempty(r.optim_text)

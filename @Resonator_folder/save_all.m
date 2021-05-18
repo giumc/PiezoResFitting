@@ -44,9 +44,9 @@ function flag=save_all(rf,varargin)
     
     for i=1:length(rf.resonators)
              
-        rf.resonators(i).gen_table;
+        t=rf.resonators(i).gen_table;
         
-        tab=[tab; rf.resonators(i).data_table];
+        tab=[tab; t];
         
         rf.progressbar(i/length(rf.res_files));
         

@@ -28,17 +28,18 @@ classdef Resonator_folder <handle
 
     %% properties
     
-    properties (Constant,Access=private)
+    properties (Constant,Access=protected)
         
         format_files=[".s1p";".s2p";".S1P";".S2P"];
     end
      
-    properties (SetAccess=private)
+    properties (SetAccess=protected)
         
-        resonators Resonator;
+        resonators TFCapacitor;
+        
     end
     
-    properties (Access=private)
+    properties (Access=protected)
         
         res_files ;
         
@@ -72,6 +73,15 @@ classdef Resonator_folder <handle
 
             end
             
+            pos_folder=check_if_string_is_present(varargin,'folder');
+            
+            if pos_folder
+                       
+                obj.folder=varargin{pos_folder+1};
+
+                obj.read_all();
+
+            end
         end
         
     end
@@ -107,15 +117,21 @@ classdef Resonator_folder <handle
         
         sort_by_tag(r);
         
+        function x=get_resonators(obj)
+            
+            x=obj.resonators;
+            
+        end
+        
     end %main tools
     
-    methods (Access=private) 
+    methods (Access=protected) 
         
         files=find_files(r,folder);      
         
     end %Utils
     
-    methods (Static,Access=private) 
+    methods (Static,Access=protected) 
         
         progressbar(varargin);
         

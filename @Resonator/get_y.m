@@ -6,7 +6,7 @@ function y= get_y(obj)
     r0  =   obj.r0.value;
     rs  =   obj.rs.value;
     
-    y   =   1i * 2 * pi * f * c0 + 1 / r0 ;
+    y   =   1i * 2 * pi * f * c0 ;
     
     for j = 1 : length (obj.mode)
         
