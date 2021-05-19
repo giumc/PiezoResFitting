@@ -1,16 +1,16 @@
-function outcome=read_all(rf)
+function outcome=read_all(obj)
 
-    formats=rf.format_files;
+    formats=obj.format_files;
     
     tbs=[];
     
     outcome=false;
     
-    folderfiles=dir(rf.folder);
+    foldeobjiles=dir(obj.folder);
     
-    for k=1:length(folderfiles)
+    for k=1:length(foldeobjiles)
         
-        if contains(string(folderfiles(k).name),formats)
+        if contains(string(foldeobjiles(k).name),formats)
             
             tbs=[tbs,k];
             
@@ -18,27 +18,29 @@ function outcome=read_all(rf)
         
     end
     
-    files=folderfiles(tbs);
+    files=foldeobjiles(tbs);
     
-   	rf.res_files=files;
+   	obj.res_files=files;
     
-    rf.progressbar('Initializing Resonators');
+    obj.progressbar('Initializing Resonators');
     
     if ~isempty(files)
         
         outcome=true;
         
+        obj.resonators=Resonator.empty;
+        
         for k=1:length(files)
             
             fullpath=strcat(files(k).folder,filesep,files(k).name);
             
-            rf.resonators(k)=Resonator('file',fullpath);
+            obj.resonators(k)=Resonator('file',fullpath);
             
-            rf.resonators(k).tag=files(k).name;
+            obj.resonators(k).tag=files(k).name;
             
-            rf.resonators(k).max_modes=rf.max_modes;
+            obj.resonators(k).max_modes=obj.max_modes;
             
-            rf.progressbar(k/length(files));
+            obj.progressbar(k/length(files));
             
         end
         
