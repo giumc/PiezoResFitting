@@ -1,4 +1,4 @@
-function flag=guess_mode(r,i)
+function flag=guess_mode(r,mode_index)
 
     flag    =   true;
     
@@ -91,7 +91,21 @@ function flag=guess_mode(r,i)
     
     %main_antiresonance
   
-    [~,i_min] = findpeaks(-r.db(y_meas),...
+    %filter around resonance
+    freq_window_min=max([respeak(1).freq/1.5,min(freq)]);
+    freq_window_max=min([respeak(1).freq*1.5,max(freq)]);
+    freq_window_step=mean(diff(freq));
+    
+    freq_window=freq_window_min:freq_window_step:freq_window_max;
+    
+    for i=1:length(freq_window)
+        
+        [~,min_index]=min(abs(freq-freq_window(i)));
+        y_window(i)=y_meas(min_index);
+    
+    end
+    
+    [~,i_min] = findpeaks(-r.db(y_window),...
         'WidthReference','halfheight',...
         'SortStr','descend',...
         'NPeaks',1);
@@ -100,27 +114,27 @@ function flag=guess_mode(r,i)
     
     df= (freq(2)-freq(1));
     
-    if length(respeak)>=i
+    if length(respeak)>=mode_index
         
-        if i==1
+        if mode_index==1
             
             kt2_try=r.calculate_kt2(...
-                respeak(i).freq,freq(i_min));
+                respeak(mode_index).freq,freq_window(i_min));
             
             if isnan(kt2_try)
                 
                 warning(strcat("something went wrong with kt2 a-priori ",...
                     "estimation,\n Setting kt2_1 to 1e-6"));
                 
-                kt2_try=1e-6;
+                kt2_try=1e-2;
                 
             else
             
                 if kt2_try<=0
 
-                    peak_tmp=respeak(i);
+                    peak_tmp=respeak(mode_index);
                     
-                    if i==length(respeak)
+                    if mode_index==length(respeak)
                         
                         flag=false;
                         
@@ -128,18 +142,18 @@ function flag=guess_mode(r,i)
                         
                     end
                         
-                    respeak(i)=respeak(i+1);
-                    respeak(i+1)=peak_tmp;
+                    respeak(mode_index)=respeak(mode_index+1);
+                    respeak(mode_index+1)=peak_tmp;
                     
                         kt2_try=r.calculate_kt2(...
-                    respeak(i).freq,freq(i_min));
+                    respeak(mode_index).freq,freq_window(i_min));
                 
                         if kt2_try<=0
 
                             warning(strcat("kt2 estimated <0,\n",...
                                 "Setting kt2_1 to 1e-6"));
 
-                            kt2_try=1e-6;
+                            kt2_try=1e-2;
                             
                         end
 
@@ -147,18 +161,16 @@ function flag=guess_mode(r,i)
                 
             end
                 
-            r.mode(i).kt2.set_value(kt2_try,tag);
+            r.mode(mode_index).kt2.set_value(kt2_try,tag);
             
-            r.mode(i).fres.set_value(respeak(i).freq,tag);
+            r.mode(mode_index).fres.set_value(respeak(mode_index).freq,tag);
 
-            r.mode(i).q.set_value(r.mode(i).fres.value/...
-                respeak(i).q/df,tag);
+            r.mode(mode_index).q.set_value(r.mode(mode_index).fres.value/...
+                respeak(mode_index).q/df,tag);
            
         else
 
-            r.mode(i).fres.set_value(respeak(i).freq,tag);
-%             r.mode(i).q.set_value(r.mode(i).fres.value/...
-%                 respeak(i).q/df,tag);
+            r.mode(mode_index).fres.set_value(respeak(mode_index).freq,tag);
             
         end
         

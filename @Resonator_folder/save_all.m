@@ -36,21 +36,12 @@ function flag=save_all(rf,varargin)
     
     mainfolder=strcat(folderpath,filesep,foldername,filesep);
     % save results and get summary from resonators
-    tab=[];
+    
     
     %write table and resonator folder data
-    
-    rf.progressbar('Saving Summary Table');
-    
-    for i=1:length(rf.resonators)
-             
-        t=rf.resonators(i).gen_table;
-        
-        tab=[tab; t];
-        
-        rf.progressbar(i/length(rf.res_files));
-        
-    end
+
+    tab=rf.gen_table();
+
     
     rf.data_table=tab;
     

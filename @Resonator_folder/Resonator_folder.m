@@ -35,7 +35,7 @@ classdef Resonator_folder <handle
      
     properties (SetAccess=protected)
         
-        resonators TFCapacitor;
+        resonators Resonator;
         
     end
     
@@ -43,9 +43,9 @@ classdef Resonator_folder <handle
         
         res_files ;
         
-        data_table table;
-        
         tag='_Fit_Result';
+        
+        data_table table;
         
     end
     
@@ -54,7 +54,7 @@ classdef Resonator_folder <handle
         max_modes=10;
         
         folder;
-        
+
     end
     
     %% methods
@@ -83,6 +83,8 @@ classdef Resonator_folder <handle
 
             end
         end
+        
+        t=gen_table(obj);
         
     end
    %Constructor, Setters, Getters, Destructors
