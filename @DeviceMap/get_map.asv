@@ -1,0 +1,24 @@
+function output=get_map(obj)
+    
+    fit_tab=obj.fit_table;
+    
+    layout_tab=obj.layout_table;
+    
+    for i=1:height(fit_table)
+        
+        elem(i).pos=fit_table.MappingDim(i,:):
+        elem(i).layout_param=l
+            ayout_tab(find(all(layout_tab.MappingDim(i,:)==elem(i).pos),1),:);
+        
+        
+    end
+    
+    for i=1:length(tmp_struct)
+    
+        output{sub2}=tmp_struct(i).data;
+        
+    end
+    
+    keyboard;
+    
+end

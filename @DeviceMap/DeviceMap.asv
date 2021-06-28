@@ -75,7 +75,7 @@ classdef DeviceMap < handle
 
        tab=read_table(obj,path);
        
-       pars=get_sweep_param(obj,varargin);
+       
           
    end
    

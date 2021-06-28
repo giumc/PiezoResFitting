@@ -1,4 +1,4 @@
-function check_table(obj)
+function view_table(obj)
 
     fig=uifigure()
     fig.Units='normalized';
