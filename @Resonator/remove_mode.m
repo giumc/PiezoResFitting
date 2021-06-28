@@ -14,7 +14,7 @@ function remove_mode(res,varargin)
     
     n_old     =   length(res.mode);
     
-    for i=0:n
+    for i=0:n-1
         
         if isempty(res.mode)
             

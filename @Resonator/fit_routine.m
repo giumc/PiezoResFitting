@@ -168,6 +168,7 @@ function fit_routine(r)
         end
     
     end
+    
     r.gen_table();
     
     if ~isempty(itermsg)

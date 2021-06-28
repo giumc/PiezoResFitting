@@ -65,8 +65,12 @@ function flag=add_mode(res,varargin)
         if ~flag
             
 %             fprintf("Cannot find another mode\n");
-
-            res.remove_mode;
+    
+            if ~(new_mode==1)
+                
+                res.remove_mode;
+            
+            end
             
             break
             
