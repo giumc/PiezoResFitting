@@ -1,23 +1,16 @@
-function pars=get_sweep_param(obj,varargin)
+function pars=get_sweep_param(obj,axis,label)
+
+    layout_table=obj.layout_table;
     
-    if ~isempty(varargin)
-        
-        x_label=varargin{1};
-        
-        if length(varargin)>1
-            
-            y_label=varargin{2};
-            
-        else 
-            
-            y_label="";
-        
-        end
+    pos=layout_table.MappingDim;
     
-    else
-        
-        x_label="";
-        
-    end
+    pos_filt=pos(:,[1:(axis-1),(axis+1:end)]);
     
+    start_index=min(pos_filt);
+    
+    pos_select=layout_table(pos_filt==start_index,:);
+    
+    pars.value=pos_select.(label);
+    
+    pars.index=pos_select.MappingDim;
 end

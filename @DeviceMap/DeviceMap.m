@@ -60,8 +60,11 @@ classdef DeviceMap < handle
           disp(obj.str2index('01x03.d2p'));
           
           disp(obj.get_map_dims);
+          obj.get_sweep_param(1,'IDTN');
           
        end
+       
+       pars=get_sweep_param(obj,axis,label);
           
    end
    
@@ -75,8 +78,12 @@ classdef DeviceMap < handle
 
        tab=read_table(obj,path);
        
-       pars=get_sweep_param(obj,varargin);
+       x=get_spurious_fom(obj,tab);
           
+   end
+   
+   methods (Static,Access=protected)
+       label=filter_sweep_param(axis,layout_param,meas_index);
    end
    
 end

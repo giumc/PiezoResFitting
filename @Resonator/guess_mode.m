@@ -6,7 +6,7 @@ function flag=guess_mode(r,mode_index)
     
     y_meas  =   r.y_smooth; % to avoid noise
     
-    minwidth = ceil(2e-3*length(freq)); % filter noise peaks
+    minwidth = ceil(0.5e-3*length(freq)); % filter noise peaks
     
     minheight = -100;
 %     print(i)

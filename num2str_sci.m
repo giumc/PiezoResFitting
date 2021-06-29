@@ -10,7 +10,7 @@ function [scaled_values,label,exp]=num2str_sci(values)
         
         scal=mval/10^i;
         
-        if ceil(scal)>=1 && ceil(scal)<1e3
+        if (ceil(scal)>=1) && (ceil(scal)<1e3)
             
             scaled_values    =   values./10^(i); 
             

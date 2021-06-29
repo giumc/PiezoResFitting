@@ -5,7 +5,9 @@ function p=plot_param(obj,Zparam,varargin)
     % if varargin is specified, 
     % it has to be a row/column parameter list to plot on X,Y axis
 
-    fig=figure;
+    fig=gcf;
+    
+    delete(fig.Children);
     
     fig.Name=Zparam;
     
@@ -23,7 +25,13 @@ function p=plot_param(obj,Zparam,varargin)
         
         Z=Z*100;
         
-    end
+    else
+        
+        if startsWith(Zparam,'Fres')
+            
+           Z=Z/1e9;
+            
+        end
     
     tab=table(X.',Y.',Z.');
     
@@ -37,8 +45,40 @@ function p=plot_param(obj,Zparam,varargin)
         
         p.Title="k_t^2[%]";
         
+    else
+ 
+        if startsWith(Zparam,'Fres')
+            
+            p.Title='Fres [GHz]';
+        
+        end
+        
     end
     
     p.CellLabelFormat='%0.3g';
     
+    if ~isempty(varargin)
+        
+        xlabel=varargin{1};
+        
+        ylabel=varargin{2};
+
+        x_ticks=obj.get_sweep_param(1,xlabel);
+
+        y_ticks=obj.get_sweep_param(2,ylabel);
+        
+        p.XDisplayLabels=obj.filter_sweep_param(1,...
+            x_ticks,p.XDisplayData);
+        
+        p.XLabel=xlabel;
+
+        p.YDisplayLabels=obj.filter_sweep_param(2,...
+            y_ticks,p.YDisplayData);
+        
+        p.YLabel=ylabel;
+        
+    end
+    
+    p.MissingDataLabel='Missing';
+
 end
