@@ -91,33 +91,35 @@ classdef Resonator_folder <handle
     
     methods
         
-        folder=prompt_folder(r);
+        folder=prompt_folder(obj);
         
-        flag=read_all(r);
+        flag=read_all(obj);
         
-        fit_all(r,varargin);
+        fit_all(obj,varargin);
         
-        flag=save_all(r,varargin);
+        flag=save_all(obj,varargin);
         
-        inspect(r);
+        inspect(obj);
         
-        view_all(r,varargin);
+        view_all(obj,varargin);
         
-        reset(r);
+        reset(obj);
         
-        function set.max_modes(r,value)
+        function set.max_modes(obj,value)
             
-            r.max_modes=value;
+            obj.max_modes=value;
             
-            for i=1:length(r.resonators) %#ok<*MCSUP>
+            for i=1:length(obj.resonators) %#ok<*MCSUP>
                 
-                r.resonators(i).max_modes=value;
+                obj.resonators(i).max_modes=value;
                 
             end
             
         end
         
-        sort_by_tag(r);
+        sort_by_tag(obj);
+        
+        res=find_by_tag(obj,tag);
         
         function x=get_resonators(obj)
             
@@ -129,7 +131,7 @@ classdef Resonator_folder <handle
     
     methods (Access=protected) 
         
-        files=find_files(r,folder);      
+        files=find_files(obj,folder);      
         
     end %Utils
     

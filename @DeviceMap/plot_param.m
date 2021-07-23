@@ -32,6 +32,8 @@ function p=plot_param(obj,Zparam,varargin)
            Z=Z/1e9;
             
         end
+        
+    end
     
     tab=table(X.',Y.',Z.');
     

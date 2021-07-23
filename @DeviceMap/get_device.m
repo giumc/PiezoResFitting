@@ -12,9 +12,22 @@ function elem=get_device(obj,varargin)
         
     end
     
-    pos=find(all((tab.MappingDim==idx).'), 1);
+    pos=find(all((obj.layout_table.MappingDim==idx).'), 1);
     
+    if isempty(pos)
+        
+        error("Indexes not found in layout table");
+        
+    end
     layout_param=obj.layout_table(pos,:);
+    
+    pos=find(all((obj.fit_table.MappingDim==idx).'), 1);
+    
+    if isempty(pos)
+        
+        error("Indexes not found in fit table");
+        
+    end
     
     fit_param=obj.fit_table(pos,:);
     

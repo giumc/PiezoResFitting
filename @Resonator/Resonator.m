@@ -248,6 +248,8 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         flag=run_optim(r);
         
+        dberr=get_error_db(obj);
+        
     end % internal functions
     
     methods (Static,Access=private) %const definition
@@ -280,6 +282,20 @@ classdef Resonator < matlab.mixin.Copyable & handle
         flag=gen_spicenetlist(r);
         
         q=get_bode_q(r,varargin);
+        
+        val=get_max_error_db(obj);
+        
+        val=get_average_error_db(obj);
+        
+        FoM=get_fom(obj,varargin);
+        
+        val=get_spurious_fom(obj);
+        
+        FoM=get_fom_with_rs(obj);
+        
+        Ql=get_qloaded(obj);
+        
+        Z0=get_Z0(obj);
         
     end % main tools
     

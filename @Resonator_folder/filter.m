@@ -47,7 +47,7 @@ else
     for i=1:length(r.resonators)
         res=r.resonators(i);
         if ~isempty(maxerror)
-            if res.fiterror>maxerror
+            if res.get_max_error_db>maxerror
                 rejected=[rejected,i];
             end
         end

@@ -205,6 +205,7 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
         ret=setup_graphics(obj,fig,pos0);
 
         update_graphics(obj);
+        val=str2num_sci(str);
         
     end %Math
     
