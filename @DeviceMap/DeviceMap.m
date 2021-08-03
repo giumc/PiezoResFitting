@@ -54,16 +54,7 @@ classdef DeviceMap < handle
        mat=get_map(obj);
        
        fig=plot_param(obj,Zpar,varargin);
-       
-       function test(obj)
-           
-          disp(obj.str2index('01x03.d2p'));
-          
-          disp(obj.get_map_dims);
-          obj.get_sweep_param(1,'IDTN');
-          
-       end
-       
+
        pars=get_sweep_param(obj,axis,label);
           
    end
