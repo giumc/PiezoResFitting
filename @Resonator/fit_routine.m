@@ -53,11 +53,11 @@ function fit_routine(r)
         
         % set fres non optimizable for all modes fres
         
-%         for i=1:length(r.mode)
-%             
-%             r.mode(i).fres.optimizable=false;
-%             
-%         end
+        for i=1:length(r.mode)
+            
+            r.mode(i).fres.optimizable=false;
+            
+        end
         
         r.update_fig;
         
@@ -110,7 +110,7 @@ function fit_routine(r)
                     drawnow;
 
                 end
-
+                
                 iter=iter+1;
                 itermsg=fprintf("Iteration n %d",iter);
                 drawnow;
@@ -123,7 +123,9 @@ function fit_routine(r)
                 for i=1:length(opt_par)
                     %if values don't change, don't optimize later
                     if abs((xnew(i)-x0(i))/x0(i))<0.025
+                        
                         r.get_param(opt_par(i)).optimizable=0;
+                        
                     end
 
                 end
@@ -132,9 +134,13 @@ function fit_routine(r)
                     %if values are too close to boundaries, update boundaries
                     %and reoptimize
                     if xnew(i)>0.95||xnew(i)<0.05
+                        
                         r.set_default_boundaries;
-                        r.update_fig;                  
+                        
+                        r.update_fig;     
+                        
                         break
+                        
                     else
                         %otherwise, add a mode and go back to main loop
                         if i==length(x0)
@@ -142,23 +148,33 @@ function fit_routine(r)
                             subloop=false;
                             %if max modes reached, exit routine
                             if length(r.mode)==max_modes
+                                
                                 loop=false;      
+                                
                             else
 
                                 mode_flag=r.add_mode();
 
                                 if ~mode_flag
+                                    
                                     loop=false;
+                                    
                                 end
 
                             end
+                            
                         end
+                        
                     end
+                    
                 end
+                
             end
             %if user stops optimization,exit routine
             if flag==-1
+                
                 subloop=false;
+                
             end
 
         end
@@ -174,14 +190,19 @@ function fit_routine(r)
     if ~isempty(itermsg)
        
         fprintf(repmat('\b',1,itermsg));
+        
         fprintf(repmat('\b',1,startmsg));
         
     end
     
     if ~isempty(r.optim_text)
+        
         delete(r.optim_text);
+        
         r.optim_text=[];
+    
     end
     
     r.isoptimized=1;
+    
 end

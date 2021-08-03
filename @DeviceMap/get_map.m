@@ -10,6 +10,18 @@ function elem=get_map(obj)
     
     layout_table=obj.layout_table;
     
+    if isempty(fit_table)
+        
+        error("Empty fit table");
+        
+    end
+    
+    if isempty(layout_table)
+
+        error("Empty layout table");
+
+    end
+    
     for i=1:height(fit_table)
         
         elem(i).pos=fit_table.MappingDim(i,:);

@@ -56,6 +56,8 @@ classdef DeviceMap < handle
        fig=plot_param(obj,Zpar,varargin);
 
        pars=get_sweep_param(obj,axis,label);
+       
+       print_all(obj,varargin);
           
    end
    

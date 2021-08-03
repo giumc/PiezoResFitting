@@ -2,7 +2,7 @@ function tab= read_table(obj,path)
     
     try
         
-        tab=readtable(path);
+        tab=readtable(path,'VariableNamingRule','preserve');
             
     catch ME
         

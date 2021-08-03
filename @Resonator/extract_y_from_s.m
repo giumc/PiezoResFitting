@@ -1,22 +1,26 @@
 function extract_y_from_s(r)
 
-adm_meas =[];
+    adm_meas =[];
 
     if isempty(r.sparam)|| ~isa(r.sparam,'sparameters')
         
         return ;
         
     else
+        
         ypar = yparameters(r.sparam);
+        
         if r.sparam.NumPorts==1
             
             adm_meas = rfparam(ypar, 1, 1);
             
-        end
-        
-        if r.sparam.NumPorts==2
+        else
             
-            adm_meas = - rfparam(ypar, 2, 1);
+            if r.sparam.NumPorts==2
+
+                adm_meas = - rfparam(ypar, 2, 1);
+
+            end
             
         end
         

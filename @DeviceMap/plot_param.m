@@ -82,5 +82,6 @@ function p=plot_param(obj,Zparam,varargin)
     end
     
     p.MissingDataLabel='Missing';
+    p.ColorMethod='max';
 
 end

@@ -10,7 +10,7 @@ function flag=guess_mode(obj,mode_index)
     
     if isempty(obj.respeak)
         
-        respeak=obj.calc_respeak;
+        respeak=obj.calc_respeak2;
         
     else
     
@@ -70,6 +70,14 @@ function flag=guess_mode(obj,mode_index)
 
             if kt2_try<=0
 
+%                 respeak(mode_index)=respeak(mode_index+1);
+%                 respeak(mode_index+1)=peak_tmp;
+% 
+%                     kt2_try=obj.calculate_kt2(...
+%                 respeak(mode_index).freq,freq_window(i_min));
+% 
+%                     if kt2_try<=0
+
                 warning(strcat("kt2 estimated <0,\n",...
                     "Setting kt2_1 to 1e-6"));
 
@@ -79,6 +87,7 @@ function flag=guess_mode(obj,mode_index)
 
         end
 
+        
         this_mode.kt2.set_value(kt2_try,tag);
 
         this_mode.fres.set_value(this_peak.freq,tag);
@@ -88,11 +97,10 @@ function flag=guess_mode(obj,mode_index)
 
     else
 
-        previous_mode=obj.mode(mode_index-1);
-        
+        previous_mode=obj.mode(
         this_mode.fres.set_value(this_peak.freq,tag);
-        
-        this_mode.q.set_value(previous_mode.q.value,tag);
+        this_mode.q.set_value(this_peak.freq/...
+           this_peak.q/df,tag)
 
     end
        

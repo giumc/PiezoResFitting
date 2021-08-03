@@ -177,15 +177,15 @@ classdef Resonator < matlab.mixin.Copyable & handle
             
         end
         
-        function delete(r)
+        function delete(obj)
             
-            if ~isempty(r.figure)
+            if ~isempty(obj.figure)
 
-                if isobject(r.figure)
+                if isobject(obj.figure)
 
-                    if isvalid(r.figure)
+                    if isvalid(obj.figure)
 
-                        delete(r.figure)
+                        delete(obj.figure)
                     end
 
                 end
@@ -198,57 +198,59 @@ classdef Resonator < matlab.mixin.Copyable & handle
     
     methods (Access=private,Hidden)
         
-        flag=init(r,varargin);
+        flag=init(obj,varargin);
+      
+        x0      =   get_optim_array(obj);
         
-        x0      =   get_optim_array(r);
+        transform_resonator(obj,x0);
         
-        transform_resonator(r,x0);
+        stop    =   out_optim(obj,x,flag,state);
         
-        stop    =   out_optim(r,x,flag,state);
+        err     =   error_function(obj,x0); 
         
-        err     =   error_function(r,x0); 
+        y       =   get_y (obj);
         
-        y       =   get_y (r);
+        flag    =   guess_mode(obj,index);
         
-        flag    =   guess_mode(r,index);
+        set_freq(obj);
         
-        set_freq(r);
-        
-        set_sparam(r);
+        set_sparam(obj);
 
-        extract_y_from_s(r);
+        extract_y_from_s(obj);
         
-        m   =   calculate_mot_branch(r,index); 
+        m   =   calculate_mot_branch(obj,index); 
         
-        m   =   calculate_all_mot(r);
+        m   =   calculate_all_mot(obj);
         
-        c0      =   fit_c0(r);
+        c0      =   fit_c0(obj);
         
-        flag    =   add_mode(r,varargin);
+        flag    =   add_mode(obj,varargin);
         
-        remove_mode(r,varargin);
+        remove_mode(obj,varargin);
         
-        set_param(r,index,value,varargin);
+        set_param(obj,index,value,varargin);
         
-        num =   get_param(r,index);
+        num =   get_param(obj,index);
         
-        [min,max]   =   get_boundary(r,index);
+        [min,max]   =   get_boundary(obj,index);
         
-        set_boundary(r,index,value,type);
+        set_boundary(obj,index,value,type);
         
-        function y = n_param(r)
+        function y = n_param(obj)
         
-            y= length(r.mode)*3+3;
+            y= length(obj.mode)*3+3;
         
         end
         
-        def_par=set_default_param(r,varargin);
+        def_par=set_default_param(obj,varargin);
         
-        set_default_boundaries(r);
+        set_default_boundaries(obj);
         
-        flag=run_optim(r);
+        flag=run_optim(obj);
         
         dberr=get_error_db(obj);
+        
+        respeak=calc_respeak(obj);
         
     end % internal functions
     
@@ -277,11 +279,13 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         reset(obj);
         
-        table=gen_table(r);
+        table=gen_table(obj);
         
-        flag=gen_spicenetlist(r);
+        re_center_freq(obj,fvec);
         
-        q=get_bode_q(r,varargin);
+        flag=gen_spicenetlist(obj);
+        
+        q=get_bode_q(obj,varargin);
         
         val=get_max_error_db(obj);
         
@@ -297,30 +301,36 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         Z0=get_Z0(obj);
         
+        function r=test(obj)
+            
+            r=obj.calc_respeak2;
+            
+        end
+        
     end % main tools
     
     methods (Access=private)
 
-        setup_plot(r,varargin);
-        setup_bars(r);
-        setup_boundaries_edit(r);
-        setup_name_labels(r);
-        setup_value_labels(r);
-        setup_optim_checkbox(r);
-        setup_optim_text(r);
-        minimal_fig_setup(r);
-        setup_headings(r);
-        update_headings(r);
+        setup_plot(obj,varargin);
+        setup_bars(obj);
+        setup_boundaries_edit(obj);
+        setup_name_labels(obj);
+        setup_value_labels(obj);
+        setup_optim_checkbox(obj);
+        setup_optim_text(obj);
+        minimal_fig_setup(obj);
+        setup_headings(obj);
+        update_headings(obj);
  
-        plot_data(r);
-        populate_bars(r);
-        populate_boundaries_edit(r);
-        populate_value_labels(r);
-        populate_name_labels(r);
-        populate_checkbox(r);
-        populate_optim_text(r);
-        update_fig(r);
-        setup_buttons(r);
+        plot_data(obj);
+        populate_bars(obj);
+        populate_boundaries_edit(obj);
+        populate_value_labels(obj);
+        populate_name_labels(obj);
+        populate_checkbox(obj);
+        populate_optim_text(obj);
+        update_fig(obj);
+        setup_buttons(obj);
         
     end % Graphic Tools
 
@@ -356,10 +366,10 @@ classdef Resonator < matlab.mixin.Copyable & handle
             
         end
         
-        bar_callback(src_event,event,r);       
-        edit_callback(src_event,event,r);
-        button_callback(src_event,event,r);
-        checkbox_callback(src_event,event,r);
+        bar_callback(src_event,event,obj);       
+        edit_callback(src_event,event,obj);
+        button_callback(src_event,event,obj);
+        checkbox_callback(src_event,event,obj);
         
     end %Listeners callback
     
