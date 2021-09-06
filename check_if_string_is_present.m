@@ -27,6 +27,10 @@ function flag=check_if_string_is_present(cell,str)
         
         end
    
+    else
+        
+        flag=0;
+        
     end
     
 end

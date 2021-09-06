@@ -53,6 +53,10 @@ function plot_data(r)
         
         p(2)=plot(phase_axis,freq,180/pi*angle(y_calc));
         
+        p(1).LineStyle='-.';
+        
+        p(2).LineStyle='-.';
+        
         p(2).DisplayName=fit_name;
         
         phase_axis.NextPlot='add';  
