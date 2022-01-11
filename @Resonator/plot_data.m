@@ -25,6 +25,7 @@ function plot_data(r)
     end
 
     mag_axis    =   r.mag_axis;
+    
     phase_axis  =   r.phase_axis;
 
     delete(mag_axis.Children);
@@ -82,7 +83,7 @@ function plot_data(r)
     %adjust plots
     for i=1:length(p)
         
-        p(i).LineWidth=1.5;
+        p(i).LineWidth=4;
         
         p(i).Marker='none';
         
@@ -99,7 +100,7 @@ function plot_data(r)
     
     for i=1:length(xticks_raw)
         
-        xticks(i)=sprintf("%.1f",xticks_raw(i));
+        xticks(i)=sprintf("%.0f",xticks_raw(i));
         
     end
     
@@ -115,21 +116,21 @@ function plot_data(r)
     
     if isempty(y_meas)
         
-        ymag_min        =   floor((min(r.db(y_calc))-10)/10)*10;
+        ymag_min        =   floor((min(r.db(y_calc)))/10)*10;
         
-        ymag_max        =   ceil((max(r.db(y_calc))+10)/10)*10;
+        ymag_max        =   ceil((max(r.db(y_calc)))/10)*10;
         
     else
         
-        ymag_min        =   floor((min(r.db(y_meas))-10)/10)*10;
+        ymag_min        =   floor((min(r.db(y_meas)))/10)*10;
         
-        ymag_max        =   ceil((max(r.db(y_meas))+10)/10)*10;
+        ymag_max        =   ceil((max(r.db(y_meas)))/10)*10;
         
     end
     
     mag_axis.YLim       = [ymag_min ymag_max];
     
-    mag_axis.YTick      = linspace(ymag_min,ymag_max,11);
+    mag_axis.YTick      = linspace(ymag_min,ymag_max,6);
     
     phase_axis.YLim     = [-95 95];
     
@@ -144,6 +145,10 @@ function plot_data(r)
     phase_axis.XGrid    = 'on';
     
     phase_axis.YGrid    = 'on';
+    
+    mag_axis.FontSize   = 20;
+    
+    phase_axis.FontSize = 20;
     
 end
    

@@ -15,7 +15,7 @@ function flag=check_if_string_is_present(cell,str)
     
     if ~isempty(cell)
         
-        for i=1:size(cell)
+        for i=1:numel(cell)
             
             if strcmp(cell{i},str)
 

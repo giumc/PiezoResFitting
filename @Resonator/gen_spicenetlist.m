@@ -1,6 +1,14 @@
-function filepointer=gen_spicenetlist(obj)
+function filepointer=gen_spicenetlist(obj,varargin)
 
+    if isempty(varargin)
+        
     folder=obj.save_folder;
+    
+    else
+        
+        folder=varargin{1};
+        
+    end
     
     filepointer=false;
     
@@ -46,15 +54,14 @@ function filepointer=gen_spicenetlist(obj)
     txt=strcat(sprintf("** Auto-generated SPICE model for resonator %s**\n ",obj.tag),...
         "\n",".SUBCKT ",obj.tag," "," 1 2 \n\n",txt,"\n.ENDS \n");
     
-    filepointer=fopen(strcat(obj.save_folder,filesep,obj.tag,'.SPICE'),'w+');
+    filepointer=fopen(strcat(folder,filesep,obj.tag,'.SPICE'),'w+');
     
     if ~filepointer
         
-        error(sprintf("Could not write in %s \n",strcat(obj.save_folder,filesep,obj.tag,'.SPICE')));
+        error(sprintf("Could not write in %s \n",strcat(folder,filesep,obj.tag,'.SPICE')));
         
     else
-        
-        
+          
         fprintf(filepointer,sprintf(txt));
         
         filepointer=fclose(filepointer);

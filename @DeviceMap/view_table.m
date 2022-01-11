@@ -1,9 +1,9 @@
 function view_table(obj)
 
-    fig=uifigure()
+    fig=uifigure();
     fig.Units='normalized';
     fig.Position=[0.3 0.1 0.5 0.5];
     
-    uitable(fig,'Data',obj.data_table);
+    uitable(fig,'Data',obj.fit_table);
    
 end

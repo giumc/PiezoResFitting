@@ -20,17 +20,27 @@ function tab=gen_table(obj)
         
     end
 
-    if length(obj.mode)>1
+    if length(obj.mode)>=1
 
-        vars=[obj.get_Z0,...
+        names_aux=["Z0","TanD","FoM","FoM_with_Rs","Q_loaded","Rm"];
+        
+        vars_aux=[obj.get_Z0,...
+            obj.get_tand,...
             obj.get_fom,...
             obj.get_fom_with_rs,...
             obj.get_qloaded,...
-            obj.calculate_mot_branch(1).Rm,...
-            obj.get_spurious_fom,...
-            vars];
-    
-        names=["Z0","FoM","FoM_with_Rs","Q_loaded","Rm","Spurious[%]",names];
+            obj.calculate_mot_branch(1).Rm];
+            
+            if length(obj.mode)>1
+                
+                vars_aux=[vars_aux,...
+                    obj.get_spurious_fom];
+                names_aux=[names_aux,"Spurious[%]"];
+                   
+            end
+           
+            vars=[vars_aux,vars];
+            names=[names_aux,names];
 
     end
     

@@ -28,11 +28,11 @@ end
     
 %% Axes
 
-mag_axis_name   = 'Y Magnitude';
-phase_axis_name = 'Y Phase';
+% mag_axis_name   = 'Y Magnitude';
+% phase_axis_name = 'Y Phase';
 
 mag_axis                =   axes(res.figure);
-mag_axis.Title.String   =   mag_axis_name;
+% mag_axis.Title.String   =   mag_axis_name;
 mag_axis.OuterPosition       =   [x0fig y0fig+dyfig+spacing dxfig dyfig];
 mag_axis.YLabel.String  =   '[dB]';
 mag_axis.NextPlot       =   'replace';
@@ -46,7 +46,7 @@ mag_legend.Box          =   'off';
 mag_legend.Location     =   'southeast';
 
 phase_axis              =   axes(res.figure);
-phase_axis.Title.String =   phase_axis_name;
+% phase_axis.Title.String =   phase_axis_name;
 phase_axis.OuterPosition     =   [x0fig y0fig dxfig dyfig];
 phase_axis.YLabel.String=   '[\circ]';
 phase_axis.NextPlot     =   'replace';

@@ -37,11 +37,9 @@ function flag=save_all(rf,varargin)
     mainfolder=strcat(folderpath,filesep,foldername,filesep);
     % save results and get summary from resonators
     
-    
     %write table and resonator folder data
 
     tab=rf.gen_table();
-
     
     rf.data_table=tab;
     

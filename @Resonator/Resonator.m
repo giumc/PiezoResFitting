@@ -283,7 +283,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         re_center_freq(obj,fvec);
         
-        flag=gen_spicenetlist(obj);
+        flag=gen_spicenetlist(obj,varargin);
         
         q=get_bode_q(obj,varargin);
         
@@ -301,13 +301,21 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         Z0=get_Z0(obj);
         
+        tand=get_tand(obj);
+        
         function r=test(obj)
             
             r=obj.calc_respeak2;
             
         end
         
-    end % main tools
+        s=get_MBVD_params(obj);
+        
+        new_res=transform_c0(obj,c0);
+        
+        new_res=translate_fres(obj,fres);
+
+        end % main tools
     
     methods (Access=private)
 

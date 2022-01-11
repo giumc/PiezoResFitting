@@ -12,6 +12,9 @@ classdef TFCapacitor < Resonator
        end
        
        t=gen_table(obj);
+       
+       tand=get_tand(obj);
+       
    end
     
 end

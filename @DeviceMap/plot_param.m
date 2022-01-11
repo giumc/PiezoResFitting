@@ -7,6 +7,8 @@ function p=plot_param(obj,Zparam,varargin)
 
     fig=gcf;
     
+    fig.WindowState='maximized';
+   
     delete(fig.Children);
     
     fig.Name=Zparam;
@@ -53,6 +55,10 @@ function p=plot_param(obj,Zparam,varargin)
             
             p.Title='Fres [GHz]';
         
+        else
+            
+            p.Title=strrep(Zparam,'_',' ');
+            
         end
         
     end
@@ -80,8 +86,9 @@ function p=plot_param(obj,Zparam,varargin)
         p.YLabel=ylabel;
         
     end
-    
+        
+    p.FontSize=36;
     p.MissingDataLabel='Missing';
     p.ColorMethod='max';
-
+    p.Colormap=GraphicTools.brewermap.brewermap([],'PuBu');
 end
