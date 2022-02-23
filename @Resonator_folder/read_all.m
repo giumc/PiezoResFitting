@@ -34,7 +34,7 @@ function outcome=read_all(obj)
             
             fullpath=strcat(files(k).folder,filesep,files(k).name);
             
-            obj.resonators(k)=Resonator('file',fullpath);
+            obj.resonators(k)=Resonator(fullpath);
             
             obj.resonators(k).tag=files(k).name;
             

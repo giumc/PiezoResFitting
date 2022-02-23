@@ -10,11 +10,11 @@ function flag=init(r,varargin)
     addlistener(r,'smoothing_data','PostSet',@r.update_sparam);
     addlistener(r,'interp_points','PostSet',@r.update_sparam);  
 
-    if check_if_string_is_present(varargin,'file')
+    if ~isempty(varargin)
         
         flag=true;
-        r.touchstone_file=varargin{2};
-        r.save_folder=fileparts(varargin{2});
+        r.touchstone_file=varargin{1};
+        r.save_folder=fileparts(varargin{1});
         r.guess_coarse;
         r.set_default_boundaries;
 

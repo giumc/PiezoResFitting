@@ -4,7 +4,7 @@ function respeak=calc_respeak(obj)
     
     y_meas  =   obj.y_smooth; % to avoid noise
     
-    minwidth = 2; % filter noise peaks
+    minwidth = 0; % filter noise peaks
     
     minheight = -100;
     

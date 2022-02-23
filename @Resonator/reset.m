@@ -16,5 +16,6 @@ function reset(r)
             r.add_mode;
             r.guess_coarse;
             r.set_default_boundaries;
+            r.isoptimized=0;
 
         end
