@@ -4,77 +4,45 @@ function respeak=calc_respeak(obj)
     
     y_meas  =   obj.y_smooth; % to avoid noise
     
-    minwidth = 0; % filter noise peaks
+        [~,i,w,p]=findpeaks(abs(y_meas).^2,...
+        'MinPeakHeight',1e-5,...
+        'MinPeakWidth',1,...
+        'MaxPeakWidth',length(freq),...
+        'MinPeakProminence',1e-5);
     
-    minheight = -100;
+    [~,s]=sort(p,"descend");
+
+    i_sorted=i(s);
+
+    [~,s]=sort(abs(i_sorted-i_sorted(1)),"ascend");
+
+    i_sorted=i_sorted(s);
+
+    w_sorted=w(s);
     
-    respeak=struct('peak',0,'freq',0,'index',0,'prom',0);%'q',0
+    p_sorted=p(s);
 
-    [~,ilin,qlin,~] = findpeaks(abs(y_meas).^2,...
-                'WidthReference','halfheight');
+    for k=1:length(i_sorted)
+    
+        i_s=i_sorted(k);
+        
+        respeak(k).peak=20*log10(abs(y_meas(i_s))); %#ok<*AGROW>
 
-    [ydb,idb,~,pdb] = findpeaks(obj.db(y_meas),...
-        'SortStr','descend',...
-        'MinPeakHeight',minheight,...
-        'MinPeakWidth',minwidth);
+        respeak(k).freq=freq(i_s);
 
-    qeff=zeros(1,length(idb));
+        respeak(k).index=i_s;
 
-    for k=1:length(idb)
+        respeak(k).q=w_sorted(i_s);
 
-        x=find(ilin==idb(k));
-
-        if length(x)>1
-
-            x=x(1);
-
-        end
-
-        qeff(k)=qlin(x);
+        respeak(k).prom=p_sorted(i_s);
 
     end
-
-    if ~isempty(idb)
-
-        for k=1:length(idb)
-
-            respeak(k).peak=ydb(k);
-
-            respeak(k).freq=freq(idb(k));
-
-            respeak(k).index=idb(k);
-
-            respeak(k).q=qeff(k);
-
-            respeak(k).prom=pdb(k);
-
-        end
-
-    else
-
-        flag=false;
-
-        return
-
-    end
-
-    %sort struct by prominence
-%     [~,idx]=sort([respeak.prom],'descend');
-    [~,idx]=sort(abs([respeak.freq]-respeak(1).freq),'ascend');
-
-    respeak=respeak(idx);
-
-    %keep only max_modes
 
     if length(respeak)>obj.max_modes
 
         respeak((obj.max_modes+1):end)=[];
 
     end
-
-%         %sort remaining by peak height
-%         [~,idx]=sort([respeak.peak],'descend');
-%         respeak=respeak(idx);
 
     obj.respeak=respeak;
 
