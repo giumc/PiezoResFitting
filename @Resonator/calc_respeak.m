@@ -16,8 +16,6 @@ function respeak=calc_respeak(obj)
 
     [~,s]=sort(abs(i_sorted-i_sorted(1)),"ascend");
 
-    i_sorted=i_sorted(s);
-
     w_sorted=w(s);
     
     p_sorted=p(s);
@@ -32,9 +30,9 @@ function respeak=calc_respeak(obj)
 
         respeak(k).index=i_s;
 
-        respeak(k).q=w_sorted(i_s);
+        respeak(k).q=w_sorted(k);
 
-        respeak(k).prom=p_sorted(i_s);
+        respeak(k).prom=p_sorted(k);
 
     end
 
