@@ -61,12 +61,17 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
         dxbar=0.2;
         dybar=0.04;
         dxlabel = 0.04;
-        
-        
+          
         textfont=10;
         units='normalized';
         
         sliderstep=[0.01 0.02];
+        
+    end
+    
+    properties (Dependent)
+       
+        normalized
         
     end
     
@@ -155,6 +160,7 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
     methods 
         
         x = normalize(obj);
+        
         x = denormalize(obj,x0);
         
         function set.optimizable(obj,value)
@@ -202,9 +208,16 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
 
         end
         
+        function y=get.normalized(obj)
+            
+            y=obj.normalize;
+            
+        end
+        
         ret=setup_graphics(obj,fig,pos0);
 
         update_graphics(obj);
+        
         val=str2num_sci(str);
         
     end %Math

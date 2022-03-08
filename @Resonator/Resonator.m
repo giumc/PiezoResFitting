@@ -200,7 +200,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         flag=init(obj,varargin);
       
-        x0      =   get_optim_array(obj);
+        x0      =   get_opt_array(obj);
         
         transform_resonator(obj,x0);
         
