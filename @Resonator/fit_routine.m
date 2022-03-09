@@ -13,12 +13,18 @@ function fit_routine(obj)
         for i=1:length(obj.mode)
             
             obj.mode(i).fres.optimizable=false;
+            obj.mode(i).kt2.optimizable=true;
+            obj.mode(i).q.optimizable=true;
             
         end
         
         obj.update_fig;
         
+        itermsg=fprintf("fitting mode %d\n",length(obj.mode));
+        
         flag=obj.fit_until_stable;
+        
+        fprintf(repmat('\b',1,itermsg));
         
         if flag==-1
             

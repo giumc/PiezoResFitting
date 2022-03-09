@@ -15,11 +15,22 @@ function flag=add_mode(obj,varargin)
 
             new_mode=n_old+i;
 
-            obj.mode(new_mode).fres=copy(obj.mode(new_mode-1).fres);
+            if new_mode==1
 
-            obj.mode(new_mode).q=copy(obj.mode(new_mode-1).q);
+                obj.mode = struct (...
+                    'fres',obj.set_default_param(4),...
+                    'q',obj.set_default_param(5),...
+                    'kt2',obj.set_default_param(6));
 
-            obj.mode(new_mode).kt2=copy(obj.mode(new_mode-1).kt2);
+            else
+
+                obj.mode(new_mode).fres=copy(obj.mode(new_mode-1).fres);
+
+                obj.mode(new_mode).q=copy(obj.mode(new_mode-1).q);
+
+                obj.mode(new_mode).kt2=copy(obj.mode(new_mode-1).kt2);
+
+            end
 
             %update name
             for k=obj.n_param-2:obj.n_param

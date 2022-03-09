@@ -224,7 +224,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         c0      =   fit_c0(obj);
         
-        flag    =   add_mode(obj,varargin);
+        flag    =   add_mode(obj);
         
         remove_mode(obj,varargin);
         
