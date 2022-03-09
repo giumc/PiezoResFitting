@@ -4,7 +4,7 @@ function x0 = get_opt_array(obj)
 
     opt_pars=pars([pars.optimizable]==1);
 
-    v=arrayfun(@(x) x.normalized,opt_pars);
+    v=arrayfun(@(x) x.normalize,opt_pars);
 
     i=find([pars.optimizable]==1);
 

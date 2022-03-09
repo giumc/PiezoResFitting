@@ -4,10 +4,12 @@ function flag=fit_until_stable(obj)
     
     params=obj.get_opt_params;
     
+    obj.make_small_fom_non_optimizable;
+    
     while true
     
         x0=obj.get_opt_array;
-
+        
         if isempty([x0.v])
 
             break
@@ -17,6 +19,8 @@ function flag=fit_until_stable(obj)
             iter=iter+1;
 
             itermsg=fprintf("Iteration n %d",iter);
+            
+            obj.update_fig;
 
             flag=obj.run_optim();
             
@@ -34,19 +38,13 @@ function flag=fit_until_stable(obj)
                 
                 if xnew(i).v>0.95||xnew(i).v<0.05
 
-                    obj.set_default_boundaries;
-
-                    obj.update_fig; 
+                    params(xnew(i).i).rescale_bounds;
                     
-                    break
+                end
 
-                else
-                    
-                    if abs((xnew(i).v-x0(i).v)/x0(i).v)<0.025
-                        
-                        params(xnew(i).i).optimizable=0;
+                if abs((xnew(i).v-x0(i).v)/x0(i).v)<0.025
 
-                    end
+                    params(xnew(i).i).optimizable=0;
 
                 end
 

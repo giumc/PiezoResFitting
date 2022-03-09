@@ -218,8 +218,6 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
 
         update_graphics(obj);
         
-        val=str2num_sci(str);
-        
     end %Math
     
     methods
@@ -236,6 +234,12 @@ classdef OptParam < matlab.mixin.Copyable & matlab.mixin.SetGet
         slider_callback(obj,src,event);
         
         init_param(obj,varargin);
+       
+    end
+    
+    methods (Static)
+                
+        val=str2num_sci(str);
         
     end
 

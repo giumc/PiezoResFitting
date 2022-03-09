@@ -19,7 +19,7 @@ function def_par=set_default_param(r,varargin)
         'global_min',r.param_global_min(i),...
         'global_max',r.param_global_max(i));
     
-    r0.set_value(100e3,'override');
+    r0.set_value(5,'override');
     
     r0.label=r.param_name(i);
     
@@ -31,7 +31,7 @@ function def_par=set_default_param(r,varargin)
         'global_min',r.param_global_min(i),...
         'global_max',r.param_global_max(i));
     
-    rs.set_value(1,'override');
+    rs.set_value(5,'override');
     
     rs.label=r.param_name(i);
     

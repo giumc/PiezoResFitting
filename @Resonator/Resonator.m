@@ -198,6 +198,8 @@ classdef Resonator < matlab.mixin.Copyable & handle
     
     methods (Access=private,Hidden)
         
+        make_small_fom_non_optimizable(obj);
+        
         flag=init(obj,varargin);
       
         x0      =   get_opt_array(obj);
@@ -222,7 +224,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         m   =   calculate_all_mot(obj);
         
-        c0      =   fit_c0(obj);
+        fit_c0(obj);
         
         flag    =   add_mode(obj);
         

@@ -1,0 +1,23 @@
+function fit_c0(obj)
+
+freq    =   obj.freq_smooth;
+
+y_smooth  =   obj.y_smooth;
+
+f_mean=mean(freq);
+
+c0_mean=abs(mean(imag(y_smooth))/2/pi/f_mean);
+
+tand=1/tan(mean(angle(y_smooth)));
+
+r_mean=1/2/pi/f_mean/obj.c0.value/tand;
+
+obj.c0.set_value(c0_mean,'override');
+
+obj.r0.set_value(r_mean/2,'override');
+
+obj.rs.set_value(r_mean/2,'override');
+
+obj.fit_until_stable;
+
+end

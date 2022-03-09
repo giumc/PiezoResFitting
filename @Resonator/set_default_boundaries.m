@@ -1,12 +1,4 @@
 function set_default_boundaries(res)
-    %fprintf('\nSetting default boundaries.\n');
-    
-    if isempty(res.y_meas)
-        
-        fprintf('Empty measure: No bounds generated\n');
-        return;
-        
-    end
     
     res.c0.rescale_factor=0.5;
     

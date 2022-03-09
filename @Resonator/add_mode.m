@@ -11,55 +11,32 @@ function flag=add_mode(obj,varargin)
             
         n_old     =   length(obj.mode);
 
-        for i=1:n_old
+        obj.mode(n_old+1).fres=copy(obj.mode(n_old).fres);
 
-            new_mode=n_old+i;
+        obj.mode(n_old+1).q=copy(obj.mode(n_old).q);
 
-            obj.mode(new_mode).fres=copy(obj.mode(new_mode-1).fres);
+        obj.mode(n_old+1).kt2=copy(obj.mode(n_old).kt2);
 
-            obj.mode(new_mode).q=copy(obj.mode(new_mode-1).q);
+    end
 
-            obj.mode(new_mode).kt2=copy(obj.mode(new_mode-1).kt2);
+    for k=obj.n_param-2:obj.n_param
 
-            %update name
-            for k=obj.n_param-2:obj.n_param
+        opt_param=obj.get_param(k);
 
-                name=obj.param_name(k);
+        opt_param.label=obj.param_name(k);
 
-                opt_param=obj.get_param(k);
+        opt_param.optimizable=true;
 
-                opt_param.label=name;
+    end
 
-            end
+    obj.update_fig;
 
-            %make new mode optimizable
+    flag    =  obj.guess_mode(length(obj.mode));
 
-            for k=obj.n_param-2:obj.n_param
+    if ~flag
 
-                opt_param=obj.get_param(k);
+        obj.remove_mode;
 
-                opt_param.optimizable=true;
-
-            end
-
-            obj.update_fig;
-
-            flag    =  obj.guess_mode(new_mode);
-
-            if ~flag
-
-    %             fprintf("Cannot find another mode\n");
-
-                if ~(new_mode==1)
-
-                    obj.remove_mode;
-
-                end
-
-                break
-
-            end
-
-        end
+    end
     
 end

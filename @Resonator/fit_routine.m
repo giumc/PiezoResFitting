@@ -8,13 +8,23 @@ function fit_routine(obj)
                 
         obj.populate_optim_text;
             
-        % set fres non optimizable for all modes fres
-        
         for i=1:length(obj.mode)
             
             obj.mode(i).fres.optimizable=false;
+            
             obj.mode(i).kt2.optimizable=true;
+            
             obj.mode(i).q.optimizable=true;
+            
+        end
+        
+        if length(obj.mode)<=3
+            
+            obj.c0.optimizable=true;
+            
+            obj.r0.optimizable=true;
+
+            obj.rs.optimizable=true;
             
         end
         

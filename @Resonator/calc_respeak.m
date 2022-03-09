@@ -2,33 +2,35 @@ function respeak=calc_respeak(obj)
 
     freq    =   obj.freq_smooth;
     
-    y_meas  =   obj.y_smooth; % to avoid noise
+    y_meas  =   obj.y_smooth;
     
         [~,i,w,p]=findpeaks(abs(y_meas).^2,...
         'MinPeakHeight',1e-5,...
         'MinPeakWidth',1,...
         'MaxPeakWidth',length(freq),...
-        'MinPeakProminence',1e-5);
+        'MinPeakProminence',1e-7);
     
     [~,s]=sort(p,"descend");
 
-    i_sorted=i(s);
-
-    [~,s]=sort(abs(i_sorted-i_sorted(1)),"ascend");
-
+    f_sorted=freq(i(s));
+    
     w_sorted=w(s);
     
     p_sorted=p(s);
 
-    for k=1:length(i_sorted)
+    [~,s2]=sort(abs(f_sorted-f_sorted(1)),"ascend");
     
-        i_s=i_sorted(k);
-        
-        respeak(k).peak=20*log10(abs(y_meas(i_s))); %#ok<*AGROW>
+    f_sorted=f_sorted(s2);
+    
+    w_sorted=w_sorted(s2);
+    
+    p_sorted=p_sorted(s2);
+    
+    respeak(length(f_sorted))=struct('freq',[],'q',[],'prom',[]);
 
-        respeak(k).freq=freq(i_s);
-
-        respeak(k).index=i_s;
+    for k=1:length(f_sorted)
+    
+        respeak(k).freq=f_sorted(k);
 
         respeak(k).q=w_sorted(k);
 

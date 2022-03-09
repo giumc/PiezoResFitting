@@ -7,7 +7,7 @@ function reset(r)
             end
             
 %             r.delete_gui();
-%             r.respeak=[];
+            r.respeak=[];
 %             r.set_sparam;
 %             r.set_freq;
 %             r.extract_y_from_s;
