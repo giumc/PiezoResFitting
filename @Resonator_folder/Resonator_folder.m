@@ -7,6 +7,10 @@ classdef Resonator_folder <handle
 %     resonators (resonator object) -> Gettable 
 %     res_files -> Gettable
 %     max_modes (int )-> Settable
+%   
+% properties (Hidden):
+%    smoothing_data;
+%    interp_points;
 %
 % methods:
 %     prompt_folder()     -> opens UI to get folder containing resonators
@@ -57,6 +61,14 @@ classdef Resonator_folder <handle
 
     end
     
+    properties (Hidden)
+        
+        smoothing_data double = 0;
+        
+        interp_points double =  0;
+        
+    end
+    
     %% methods
     
     methods 
@@ -84,7 +96,29 @@ classdef Resonator_folder <handle
             end
         end
         
-        t=gen_table(obj);
+        function set.interp_points(obj,value)
+           
+            obj.interp_points=value;
+            
+            for i=1:length(obj.resonators)
+                
+                obj.resonators(i).interp_points=value;
+                
+            end
+            
+        end
+        
+        function set.smoothing_data(obj,value)
+           
+            obj.smoothing_data=value;
+            
+            for i=1:length(obj.resonators)
+                
+                obj.resonators(i).smoothing_data=value;
+                
+            end
+            
+        end
         
     end
    %Constructor, Setters, Getters, Destructors
@@ -104,6 +138,8 @@ classdef Resonator_folder <handle
         view_all(obj,varargin);
         
         reset(obj);
+        
+        t=gen_table(obj);
         
         function set.max_modes(obj,value)
             

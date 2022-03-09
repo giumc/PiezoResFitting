@@ -17,17 +17,13 @@ function fit_routine(obj)
             obj.mode(i).q.optimizable=true;
             
         end
-        
-        if length(obj.mode)<=3
-            
-            obj.c0.optimizable=true;
-            
-            obj.r0.optimizable=true;
 
-            obj.rs.optimizable=true;
-            
-        end
-        
+        obj.c0.optimizable=true;
+
+        obj.r0.optimizable=true;
+
+        obj.rs.optimizable=true;
+
         obj.update_fig;
         
         itermsg=fprintf("fitting mode %d\n",length(obj.mode));

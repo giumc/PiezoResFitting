@@ -78,6 +78,8 @@ classdef Resonator < matlab.mixin.Copyable & handle
         x0fig=0;
         y0fig=0.3;
         
+        plotlinewidth=3;
+        
         dxbar= 0.075;
         dybar= 0.03;
         

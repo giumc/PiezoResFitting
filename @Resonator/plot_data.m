@@ -1,22 +1,22 @@
-function plot_data(r)
+function plot_data(obj)
 
     
     fit_name='Fit';
     meas_name='Meas';
    
-    freq     =   r.freq_smooth;
+    freq     =   obj.freq_smooth;
     
-    y_meas  =   r.y_smooth;
+    y_meas  =   obj.y_smooth;
     
-    y_calc  =   r.get_y;
+    y_calc  =   obj.get_y;
 
-    if isempty(r.mag_axis)||isempty(r.phase_axis)
+    if isempty(obj.mag_axis)||isempty(obj.phase_axis)
         
         return
         
     else
         
-        if ~isvalid(r.mag_axis)||(~isvalid(r.phase_axis))
+        if ~isvalid(obj.mag_axis)||(~isvalid(obj.phase_axis))
             
             return
             
@@ -24,9 +24,9 @@ function plot_data(r)
         
     end
 
-    mag_axis    =   r.mag_axis;
+    mag_axis    =   obj.mag_axis;
     
-    phase_axis  =   r.phase_axis;
+    phase_axis  =   obj.phase_axis;
 
     delete(mag_axis.Children);
     
@@ -46,7 +46,7 @@ function plot_data(r)
     
     if ~isempty(y_calc)
         
-        p(1)=plot(mag_axis,freq,r.db(y_calc));
+        p(1)=plot(mag_axis,freq,obj.db(y_calc));
         
         p(1).DisplayName=fit_name;
         
@@ -54,9 +54,9 @@ function plot_data(r)
         
         p(2)=plot(phase_axis,freq,180/pi*angle(y_calc));
         
-        p(1).LineStyle='-.';
+%         p(1).LineStyle='-.';
         
-        p(2).LineStyle='-.';
+%         p(2).LineStyle='-.';
         
         p(2).DisplayName=fit_name;
         
@@ -66,7 +66,7 @@ function plot_data(r)
     
     if ~isempty(y_meas) 
         
-        p(3)=plot(mag_axis,freq,r.db(y_meas));
+        p(3)=plot(mag_axis,freq,obj.db(y_meas));
         
         p(3).DisplayName=meas_name;
         
@@ -83,7 +83,7 @@ function plot_data(r)
     %adjust plots
     for i=1:length(p)
         
-        p(i).LineWidth=4;
+        p(i).LineWidth=obj.plotlinewidth;
         
         p(i).Marker='none';
         
@@ -116,15 +116,15 @@ function plot_data(r)
     
     if isempty(y_meas)
         
-        ymag_min        =   floor((min(r.db(y_calc)))/10)*10;
+        ymag_min        =   floor((min(obj.db(y_calc)))/10)*10;
         
-        ymag_max        =   ceil((max(r.db(y_calc)))/10)*10;
+        ymag_max        =   ceil((max(obj.db(y_calc)))/10)*10;
         
     else
         
-        ymag_min        =   floor((min(r.db(y_meas)))/10)*10;
+        ymag_min        =   floor((min(obj.db(y_meas)))/10)*10;
         
-        ymag_max        =   ceil((max(r.db(y_meas)))/10)*10;
+        ymag_max        =   ceil((max(obj.db(y_meas)))/10)*10;
         
     end
     
