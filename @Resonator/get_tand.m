@@ -14,8 +14,10 @@ function y=get_tand(obj)
 
        r0=obj.r0.value;
 
-       y=z0/r0;
-
+       q=z0/r0;
+       
+       y=1/q;
+   
    end
    
 end

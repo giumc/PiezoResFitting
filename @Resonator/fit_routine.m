@@ -20,9 +20,9 @@ function fit_routine(obj)
 
         obj.c0.optimizable=true;
 
-        obj.r0.optimizable=true;
+%         obj.r0.optimizable=true;
 
-        obj.rs.optimizable=true;
+%         obj.rs.optimizable=true;
 
         obj.update_fig;
         

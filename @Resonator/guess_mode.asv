@@ -61,22 +61,28 @@ function flag=guess_mode(obj,mode_index)
     
     if mode_index==1
 
-        kt2=obj.calculate_kt2(...
+        kt2_try=obj.calculate_kt2(...
             fund_peak.freq,fund_antipeak);
 
-        this_mode.kt2.set_value(kt2,tag);
+        this_mode.kt2.set_value(kt2_try,tag);
+
+        this_mode.fres.set_value(this_peak.freq,tag);
+
+        this_mode.q.set_value(this_peak.freq/...
+           this_peak.q/df,tag);
 
     else
 
-        kt2=obj.mode(mode_index-1).kt2.value;
+        kt2_try=obj.calculate_kt2(...
+            this_peak.freq,fund_antipeak);
         
+        this_mode.fres.set_value(this_peak.freq,tag);
+        
+        this_mode.q.set_value(this_peak.freq/...
+           this_peak.q/df,tag);
+
+       this_mode.kt2.set_value(kt2_try,tag);
+       
     end
        
-    this_mode.fres.set_value(this_peak.freq,tag);
-        
-    this_mode.q.set_value(this_peak.freq/...
-       this_peak.q/df,tag);
-
-    this_mode.kt2.set_value(kt2,tag);
-
 end

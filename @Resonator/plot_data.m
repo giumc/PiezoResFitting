@@ -1,7 +1,7 @@
 function plot_data(obj)
 
-    
     fit_name='Fit';
+    
     meas_name='Meas';
    
     freq     =   obj.freq_smooth;
@@ -112,7 +112,7 @@ function plot_data(obj)
     
     phase_axis.XTick =   mag_axis.XTick;
     
-    phase_axis.XTickLabel = mag_axis.XTick; 
+    phase_axis.XTickLabel = mag_axis.XTickLabel; 
     
     if isempty(y_meas)
         

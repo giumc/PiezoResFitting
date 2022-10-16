@@ -2,13 +2,19 @@ function make_small_fom_non_optimizable(obj)
     
     for i=1:length(obj.mode)
         
-        fom=obj.get_fom(i);
+        q=obj.mode(i).q;
         
-        if fom<0.1
+        kt2=obj.mode(i).kt2;
+        
+        if q.value<1
             
-            obj.mode(i).q.optimizable=false;
+            q.optimizable=false;
+            
+        end
+        
+        if kt2.value<0.001
            
-            obj.mode(i).kt2.optimizable=false;
+            kt2.optimizable=false;
             
         end
         

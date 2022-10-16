@@ -37,6 +37,10 @@ function flag=save_all(rf,varargin)
     mainfolder=strcat(folderpath,filesep,foldername,filesep);
     % save results and get summary from resonators
     
+    resfold=rf;  
+    
+    save(strcat(mainfolder,'folderdata.mat'),'resfold');
+    
     %write table and resonator folder data
 
     tab=rf.gen_table();
@@ -46,10 +50,6 @@ function flag=save_all(rf,varargin)
     tablename=strcat(mainfolder,'Summary.csv');
     
     writetable(rf.data_table,tablename,'WriteRowNames',true);
-    
-    resfold=rf;  
-    
-    save(strcat(mainfolder,'folderdata.mat'),'resfold');
     
     %look for save options and pass to resonator.save
    

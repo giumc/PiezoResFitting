@@ -1,13 +1,18 @@
 function def_par=set_default_param(r,varargin)
 
     def_par=OptParam();
+    
     i=1;
+        
+    rescale_f=0.25;
     
     c0 = OptParam(1,...
         'global_min',r.param_global_min(i),...
         'global_max',r.param_global_max(i));
     
     c0.set_value(100e-15,'override');
+    
+    c0.rescale_factor=rescale_f;
     
     c0.label=r.param_name(i);
     
@@ -21,6 +26,8 @@ function def_par=set_default_param(r,varargin)
     
     r0.set_value(5,'override');
     
+    r0.rescale_factor=rescale_f;
+    
     r0.label=r.param_name(i);
     
     r0.unit=r.param_unit(i);
@@ -32,6 +39,8 @@ function def_par=set_default_param(r,varargin)
         'global_max',r.param_global_max(i));
     
     rs.set_value(5,'override');
+    
+    rs.rescale_factor=rescale_f;
     
     rs.label=r.param_name(i);
     
@@ -45,6 +54,8 @@ function def_par=set_default_param(r,varargin)
     
     mode.fres.set_value(1e9,'override');
     
+    mode.fres.rescale_factor=rescale_f;
+    
     mode.fres.label=r.param_name(i);
     
     mode.fres.unit=r.param_unit(i);
@@ -57,6 +68,8 @@ function def_par=set_default_param(r,varargin)
     
     mode.q.set_value(1e3,'override');
     
+    mode.q.rescale_factor=rescale_f;
+    
     mode.q.label=r.param_name(i);
     
     mode.q.unit=r.param_unit(i);
@@ -68,6 +81,8 @@ function def_par=set_default_param(r,varargin)
         'global_max',r.param_global_max(i));
     
     mode.kt2.set_value(0.01,'override');
+    
+    mode.kt2.rescale_factor=rescale_f;
     
     mode.kt2.label=r.param_name(i);
     

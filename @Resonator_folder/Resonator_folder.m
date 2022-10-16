@@ -141,6 +141,8 @@ classdef Resonator_folder <handle
         
         t=gen_table(obj);
         
+        re_center_freq(obj,fmin,fmax);
+        
         function set.max_modes(obj,value)
             
             obj.max_modes=value;

@@ -1,4 +1,4 @@
-function flag=run_optim(res)
+function flag=run_optim(obj)
 
     problem.options                             =optimoptions('fmincon');
     
@@ -16,13 +16,13 @@ function flag=run_optim(res)
 
 %     problem.options.ConstraintTolerance         =1e-15;
     
-    problem.options.OutputFcn                   =@(x,y,z) res.out_optim(x,y,z);
+    problem.options.OutputFcn                   =@(x,y,z) obj.out_optim(x,y,z);
     
     problem.options.UseParallel                 =false;
 
-    problem.objective                           =@(x) res.error_function(x);
+    problem.objective                           =@(x) obj.error_function(x);
 
-    problem.x0                                  =[res.get_opt_array.v];
+    problem.x0                                  =[obj.get_opt_array.v];
 
     problem.lb                                  =zeros(1,length(problem.x0));
     
@@ -30,15 +30,15 @@ function flag=run_optim(res)
 
     problem.solver                              ='fmincon';
     
-    res.optimizer_setup                         =problem;
+    obj.optimizer_setup                         =problem;
     
-    res.optimizer_setup.stop                    =0;
+    obj.optimizer_setup.stop                    =0;
     
-    [xa,~,flag]                                 =fmincon(res.optimizer_setup);
+    [xa,~,flag]                                 =fmincon(obj.optimizer_setup);
     
-    res.transform_resonator(xa);
+    obj.transform_resonator(xa);
     
-%     res.update_fig;
+%     obj.update_fig;
     
 end
 

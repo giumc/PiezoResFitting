@@ -4,8 +4,6 @@ function flag=fit_until_stable(obj)
     
     params=obj.get_opt_params;
     
-%     obj.make_small_fom_non_optimizable;
-    
     while true
     
         x0=obj.get_opt_array;
@@ -49,7 +47,9 @@ function flag=fit_until_stable(obj)
                 end
 
             end
-
+            
+            obj.make_small_fom_non_optimizable;
+    
         end
         
     end

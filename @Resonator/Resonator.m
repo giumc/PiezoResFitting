@@ -281,11 +281,11 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         output=save(obj,varargin);
         
+        re_scale_freq(obj,fmin,fmax);
+        
         reset(obj);
         
         table=gen_table(obj);
-        
-        re_center_freq(obj,fvec);
         
         flag=gen_spicenetlist(obj,varargin);
         
@@ -319,6 +319,10 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         new_res=translate_fres(obj,fres);
 
+        add_label(obj);
+
+        delete_label(obj);
+        
         end % main tools
     
     methods (Access=private)
@@ -354,6 +358,16 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         function y = calculate_kt2(fseries,fshunt)
             y   =   pi* fseries/2/fshunt/(tan(pi*fseries/2/fshunt));
+            
+            if (isnan(y)||y<=0)
+
+                warning(strcat("something went wrong with kt2 a-priori ",...
+                    "estimation, Setting kt2_1 to 1e-2"));
+
+                y=1e-2;
+                
+            end
+            
         end
         
         f=rgb(varargin);
