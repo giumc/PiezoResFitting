@@ -1,18 +1,18 @@
-
-    %creates a folder (with tag specified in rf.tag)
-    %with a csv and a .m with all resonator in folder
-    % you can pass extra options to get more formatted data:
-    % 'png' makes a folder BitmapImages with a .png of all resonators
-    % 'vec' makes a folder VectorImages with a .eps .emf of all resonators
-    % 'fig' makes a folder MatFigures with a .fig of all resonators
-    % 'spice' to print a spice model of the resonator
-    % 'data' makes a folder ResData with a .mat of all resonators
-    % moreover, you can pass options to resonator.save as 
-    % 'guioptions','opt1','opt2' to control extra figure options
-    %
-    % es: save all resonators png with minimal setup
-    % r.save_all('png','guioptions','minimal','Visible','off');
-    % ---- for list of options, help resonator.save ----
+%creates a folder (with tag specified in rf.tag)
+%with a csv and a .m with all resonator in folder
+% you can pass extra options to get more formatted data:
+% 'png' makes a folder BitmapImages with a .png of all resonators
+% 'vec' makes a folder VectorImages with a .eps .emf of all resonators
+% 'fig' makes a folder MatFigures with a .fig of all resonators
+% 'spice' to print a spice model of the resonator
+% 'adm' to save admittance data
+% 'data' makes a folder ResData with a .mat of all resonators
+% moreover, you can pass options to resonator.save as 
+% 'guioptions','opt1','opt2' to control extra figure options
+%
+% es: save all resonators png with minimal setup
+% r.save_all('png','guioptions','minimal','Visible','off');
+% ---- for list of options, help resonator.save ----
     
 function flag=save_all(rf,varargin)
 
@@ -119,6 +119,7 @@ function flag=save_all(rf,varargin)
                         flag=true;
                         
                     end
+                    
                 case 'spice'
                     
                     if rf.makefolder(mainfolder,'SPICEfiles')
@@ -142,8 +143,23 @@ function flag=save_all(rf,varargin)
                             'ResData',filesep);
                         
                         lookallres(savefolder,...
-                            'Saving Resonator Data',...
+                            'Saving Resonator Admittance',...
                             'data',guioptions{:});
+                        
+                        flag=true;
+                        
+                    end
+                    
+                case 'adm'
+                    
+                    if rf.makefolder(mainfolder,'ResAdmData')
+                        
+                        savefolder=strcat(mainfolder,...
+                            'ResAdmData',filesep);
+                        
+                        lookallres(savefolder,...
+                            'Saving Resonator Data',...
+                            'adm',guioptions{:});
                         
                         flag=true;
                         
