@@ -34,13 +34,13 @@ function flag=fit_until_stable(obj)
 
             for i=1:length([xnew.v])
                 
-                if xnew(i).v>0.95||xnew(i).v<0.05
+                if xnew(i).v>(1-obj.opt_threshold)||xnew(i).v<obj.opt_threshold
 
                     params(xnew(i).i).rescale_bounds;
                     
                 end
 
-                if abs((xnew(i).v-x0(i).v)/x0(i).v)<0.025
+                if abs((xnew(i).v-x0(i).v)/x0(i).v)<obj.opt_threshold/2
 
                     params(xnew(i).i).optimizable=0;
 

@@ -48,6 +48,9 @@ classdef Resonator < matlab.mixin.Copyable & handle
         max_samples double = 16001;
         smoothing_data double = 0;
         interp_points double =  0;
+        y_peak_threshold_low=-90;
+        y_peak_threshold_prom=1;
+        opt_threshold=0.05;
         
     end %s-par modifiers
     
@@ -281,8 +284,6 @@ classdef Resonator < matlab.mixin.Copyable & handle
         
         output=save(obj,varargin);
         
-        re_scale_freq(obj,fmin,fmax);
-        
         reset(obj);
         
         table=gen_table(obj);
@@ -361,8 +362,8 @@ classdef Resonator < matlab.mixin.Copyable & handle
             
             if (isnan(y)||y<=0)
 
-                warning(strcat("something went wrong with kt2 a-priori ",...
-                    "estimation, Setting kt2_1 to 1e-2"));
+%                 warning(strcat("something went wrong with kt2 a-priori ",...
+%                     "estimation, Setting kt2_1 to 1e-2"));
 
                 y=1e-2;
                 
@@ -377,21 +378,7 @@ classdef Resonator < matlab.mixin.Copyable & handle
    
     methods (Static,Access=private)
         
-        function update_sparam(~,event)
-            
-            res=event.AffectedObject;
-            [path,name]=fileparts(res.touchstone_file);
-            msg=fprintf("Init of %s Resonator",name);
-            res.save_folder=path;
-            res.tag=regexprep(name,'.[sS][12][pP]','');
-            res.set_sparam;
-            res.set_freq;
-            res.extract_y_from_s;
-            res.guess_coarse;
-            fprintf(repmat('\b',1,msg))
-            
-        end
-        
+        update_sparam(src_event,event);
         bar_callback(src_event,event,obj);       
         edit_callback(src_event,event,obj);
         button_callback(src_event,event,obj);

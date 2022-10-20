@@ -22,5 +22,6 @@ function flag=prompt_touchstone(resonator)
             %     fprintf('S-Param data added\n');
             end
 
-        end
+    end
+   
 end

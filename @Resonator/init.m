@@ -1,6 +1,7 @@
 function flag=init(r,varargin)
 
     flag=false;
+    
     r.set_default_param;
 
     r.set_freq;
@@ -14,7 +15,8 @@ function flag=init(r,varargin)
         
         flag=true;
         r.touchstone_file=varargin{1};
-        r.save_folder=fileparts(varargin{1});
+        r.touchstone_folder = fileparts(varargin{1});
+        r.save_folder=r.touchstone_folder;
         r.guess_coarse;
         r.set_default_boundaries;
 

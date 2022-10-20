@@ -100,7 +100,7 @@ function plot_data(obj)
     
     for i=1:length(xticks_raw)
         
-        xticks(i)=sprintf("%.0f",xticks_raw(i));
+        xticks(i)=sprintf("%.3g",round(xticks_raw(i),3,'significant'));
         
     end
     

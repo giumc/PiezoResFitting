@@ -113,11 +113,15 @@ function outcome=save(obj,varargin)
                             obj.freq,...
                             obj.db(obj.y_meas),...
                             obj.db(obj.get_y),...
+                            180/pi*angle(obj.y_meas),...
+                            180/pi*angle(obj.get_y),...
                             'VariableNames',...
-                            {'freq','y_meas','y_fit'}),...
+                            {'freq','y_meas','y_fit',...
+                                'y_meas_phase','y_fit_phase'}),...
                             tablename,...
                             'WriteRowNames',true,...
                             'FileType','text');
+                        
                      outcome=true;
                     
                 case 'full'
@@ -132,6 +136,7 @@ function outcome=save(obj,varargin)
                     
                     break
                     
+                    
             end
             
         end
@@ -144,9 +149,9 @@ function outcome=save(obj,varargin)
         writetable(obj.data_table,tablename,'WriteRowNames',true);%,'FileType','.csv');
         save(strcat(filepath,'.mat'),'resobj');
         outcome=true;
-        
+       
     end
-
+    
     fprintf(repmat('\b',1,printflag))
     
 end

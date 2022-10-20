@@ -4,17 +4,57 @@ function respeak=calc_respeak(obj)
     
     y_meas  =   obj.y_smooth;
     
-        [~,i,w,p]=findpeaks(abs(y_meas).^2,...
-        'MinPeakHeight',1e-7,...
+        [~,i,w,p]=findpeaks(obj.db(y_meas),...
+        'MinPeakHeight',obj.y_peak_threshold_low,...
         'MinPeakWidth',1,...
         'MaxPeakWidth',length(freq),...
-        'MinPeakProminence',1e-7);
+        'MinPeakProminence',obj.y_peak_threshold_prom);
     
     if isempty(i)
         
         error("device is not a resonator, there are no peaks");
         
     else
+        
+        %auxiliary findpeaks to find linear width
+        [~,i_aux,w_aux,p_aux]=findpeaks(abs(y_meas).^2,...
+        'MinPeakHeight',10^(obj.y_peak_threshold_low/10),...
+        'MinPeakWidth',1,...
+        'MaxPeakWidth',length(freq),...
+        'MinPeakProminence',1e-8,...
+        'WidthReference','halfheight');
+    
+        for k=1:length(w)
+            
+            flag(k)=false;
+            
+            for h=1:length(i_aux)
+            
+                if i_aux(h)==i(k)
+                
+                    w(k)=w_aux(h);
+                    
+                    flag(k)=true;
+                
+                end
+                
+            end
+
+        end
+        
+        % if a mode is not in the auxiliary list, assume the worst case and
+        % assign the lowest w 
+        w_worst=max(w);
+        
+        for k=1:length(w)
+            
+            if flag(k)==false
+                
+                w(k)=w_worst;
+                
+            end
+            
+        end
     
         [~,s]=sort(p,"descend");
 

@@ -12,7 +12,7 @@ function edit_callback(src,~,res)
     end
     param=res.get_param(tag);
     res.set_boundary(...
-        param,param.str2num_sci(src.String),caller_type);
+        param,str2num_sci(src.String),caller_type);
     res.populate_bars;
     res.populate_boundaries_edit;
 end

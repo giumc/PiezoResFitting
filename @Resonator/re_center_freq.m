@@ -1,8 +1,8 @@
 function re_center_freq(obj,fmin_new,fmax_new)
-    
-    old_f=obj.freq;
-    
-    old_spar=obj.sparam;
+   % pass fmin and fmax to rescale measured data
+   % a new sparameter will be associated to this resonator
+   
+    freq=obj.freq;
 
     if fmin_new>=fmax_new
 
@@ -10,7 +10,7 @@ function re_center_freq(obj,fmin_new,fmax_new)
 
     else
 
-        if fmin_new>max(old_f)||fmax_new<min(old_f)
+        if fmin_new>max(freq)||fmax_new<min(freq)
 
             error("Pass a vector within initial freq constraints");
 
@@ -22,21 +22,21 @@ function re_center_freq(obj,fmin_new,fmax_new)
 
     new_s=[];
     
-    for i=1:length(old_f)
+    good_indexes=[];
+    
+    for i=1:length(freq)
         
-        if old_f(i)>=fmin_new && old_f(i)<=fmax_new
+        if freq(i)>=fmin_new && freq(i)<=fmax_new
             
-            new_f=[new_f old_f(i)];
-            
-            new_s=[new_s old_spar.Parameters(:,:,i)];
-            
+            good_indexes=[good_indexes i];
+      
         end
         
     end
-    
-    obj.freq=new_f;
-    
-    obj.sparam=sparameters(new_s,new_f,obj.sparam.Impedance);
+
+    obj.sparam=sparameters(...
+        obj.sparam.Parameters(:,:,good_indexes),...
+        obj.freq(good_indexes));
     
     obj.set_freq;
     
